@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <!--
-    Adapted from Examples at
+    Bar Chart was Adapted from Examples at
     https://css-tricks.com/how-to-make-charts-with-svg/
   -->
 <HTML lang="en">
@@ -22,15 +22,33 @@
           text-align: center;
           font-size: 2em;
         }
+      #email
+        {
+          font-weight: bold;
+          color: black;
+          text-align: center;
+          font-size: 1.5em;
+        }
         .bars
         { fill:steelblue; }
+        .path_empty
+        {
+          stroke: green;
+          fill: none;
+        }
+        .path_fill
+        {
+          stoke: green;
+          fill: green;
+        }
         .circles
-          { fill:orange; }
+        { fill: orange; }
     </STYLE>
   </HEAD>
   <BODY>
     <div id="header">CS 6630 - Homework 1</div>
     <div id="uID">Christopher Mertin: u1010077</div>
+    <div id="email">cmertin <sub>[at]</sub> cs <sub>[dot]</sub> utah <sub>[dot]</sub> edu</div>
     <table>
       <tr>
         <th>x</th>
@@ -82,6 +100,7 @@
       </tr>
     </table>
   <br/><br/><br/>
+  <h3>Bar Chart</h3>
     <svg class="chart" width="500" height="220" role="img">
       <title>Bar Chart of Anscombe's Quartett (scaled all values by a factor of 42)</title>
       <g class="bar">
@@ -118,22 +137,26 @@
         <rect class="bars" width="418" height="19" y="200"></rect>
       </g>
     </svg>
-
+    <br/>
+    <h3>Line Chart</h3>
   <svg width="500" height="250">
     <title>Bar Chart of Anscombe's Quartett (scaled all values by a factor of 10)</title>
     <g transform="translate(0,350) scale(3,-3)">
-    <path style="stroke:green; fill:none;" d="M 40.0 42.6 L 50.0 56.8 L 60.0 72.4 L 70.0 48.2 L 80.0 69.5 L 90.0 88.1 L 100.0 80.4 L 110.0 83.3 L 120.0 108.4 L 130.0 75.8 L 140.0 99.6"/>
+    <path class="path_empty" d="M 40.0 42.6 L 50.0 56.8 L 60.0 72.4 L 70.0 48.2 L 80.0 69.5 L 90.0 88.1 L 100.0 80.4 L 110.0 83.3 L 120.0 108.4 L 130.0 75.8 L 140.0 99.6"/>
   </g>
 </svg>
-
+  <br/>
+  <h3>Filled Line Chart</h3>
 <svg width="500" height="250">
   <title>Bar Chart of Anscombe's Quartett (scaled all values by a factor of 10)</title>
   <g transform="translate(0,350) scale(3,-3)">
-  <path style="stroke:green; fill:green;" d="M 40.0 42.6 L 50.0 56.8 L 60.0 72.4 L 70.0 48.2 L 80.0 69.5 L 90.0 88.1 L 100.0 80.4 L 110.0 83.3 L 120.0 108.4 L 130.0 75.8 L 140.0 99.6 L 140.0 0 L 40 0"/>
+  <path class="path_fill" d="M 40.0 42.6 L 50.0 56.8 L 60.0 72.4 L 70.0 48.2 L 80.0 69.5 L 90.0 88.1 L 100.0 80.4 L 110.0 83.3 L 120.0 108.4 L 130.0 75.8 L 140.0 99.6 L 140.0 0 L 40 0"/>
 </g>
 </svg>
-</br>
+<br/>
+<h3>Scatter Plot</h3>
 <svg width="400" height="250">
+<title>Bar Chart of Anscombe's Quartett (scaled all values by a factor of 10)</title>
   <g transform="translate(0,250) scale(2,-2)">
     <circle class="circles" cx="40" cy="42.6" r="4"/>
     <circle class="circles" cx="50" cy="56.8" r="4"/>
