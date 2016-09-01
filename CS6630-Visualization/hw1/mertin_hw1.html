@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<!--
+    Adapted from Examples at
+    https://css-tricks.com/how-to-make-charts-with-svg/
+  -->
+<HTML lang="en">
+  <HEAD>
+    <META charset="UTF-8">
+    <TITLE>Christopher Mertin Homework 1</TITLE>
+    <STYLE>
+      table, td, th
+        { border: 1px solid gray }
+      #header
+        { font-weight: bold;
+          color: black;
+          text-align: center;
+          font-size: 4em; }
+      #uID
+        {
+          font-weight: bold;
+          color: black;
+          text-align: center;
+          font-size: 2em;
+        }
+        .bars
+        { fill:steelblue; }
+        .circles
+          { fill:orange; }
+    </STYLE>
+  </HEAD>
+  <BODY>
+    <div id="header">CS 6630 - Homework 1</div>
+    <div id="uID">Christopher Mertin: u1010077</div>
+    <table>
+      <tr>
+        <th>x</th>
+        <th>y</th>
+      </tr>
+      <tr>
+        <td>10.0</td>
+        <td>8.04</td>
+      </tr>
+      <tr>
+        <td>8.0</td>
+        <td>6.95</td>
+      </tr>
+      <tr>
+        <td>13.0</td>
+        <td>7.58</td>
+      </tr>
+      <tr>
+        <td>9.0</td>
+        <td>8.81</td>
+      </tr>
+      <tr>
+        <td>11.0</td>
+        <td>8.33</td>
+      </tr>
+      <tr>
+        <td>14.0</td>
+        <td>9.96</td>
+      </tr>
+      <tr>
+        <td>6.0</td>
+        <td>7.24</td>
+      </tr>
+      <tr>
+        <td>4.0</td>
+        <td>4.26</td>
+      </tr>
+      <tr>
+        <td>12.0</td>
+        <td>10.84</td>
+      </tr>
+      <tr>
+        <td>7.0</td>
+        <td>4.82</td>
+      </tr>
+      <tr>
+        <td>5.0</td>
+        <td>5.68</td>
+      </tr>
+    </table>
+  <br/><br/><br/>
+    <svg class="chart" width="500" height="220" role="img">
+      <title>Bar Chart of Anscombe's Quartett (scaled all values by a factor of 42)</title>
+      <g class="bar">
+        <rect class="bars" width="179" height="19" y="20"></rect>
+      </g>
+      <g class="bar">
+        <rect class="bars" width="239" height="19" y="40"></rect>
+      </g>
+      <g class="bar">
+        <rect class="bars" width="304" height="19" y="60"></rect>
+      </g>
+      <g class="bar">
+        <rect class="bars" width="202" height="19" y="80"></rect>
+      </g>
+      <g class="bar">
+        <rect class="bars" width="292" height="19" y="100"></rect>
+      </g>
+      <g class="bar">
+        <rect class="bars" width="370" height="19" y="120"></rect>
+      </g>
+      <g class="bar">
+        <rect class="bars" width="338" height="19" y="140"></rect>
+      </g>
+      <g class="bar">
+        <rect class="bars" width="350" height="19" y="160"></rect>
+      </g>
+      <g class="bar">
+        <rect class="bars" width="455" height="19" y="160"></rect>
+      </g>
+      <g class="bar">
+        <rect class="bars" width="318" height="19" y="180"></rect>
+      </g>
+      <g class="bar">
+        <rect class="bars" width="418" height="19" y="200"></rect>
+      </g>
+    </svg>
+
+  <svg width="500" height="250">
+    <title>Bar Chart of Anscombe's Quartett (scaled all values by a factor of 10)</title>
+    <g transform="translate(0,350) scale(3,-3)">
+    <path style="stroke:green; fill:none;" d="M 40.0 42.6 L 50.0 56.8 L 60.0 72.4 L 70.0 48.2 L 80.0 69.5 L 90.0 88.1 L 100.0 80.4 L 110.0 83.3 L 120.0 108.4 L 130.0 75.8 L 140.0 99.6"/>
+  </g>
+</svg>
+
+<svg width="500" height="250">
+  <title>Bar Chart of Anscombe's Quartett (scaled all values by a factor of 10)</title>
+  <g transform="translate(0,350) scale(3,-3)">
+  <path style="stroke:green; fill:green;" d="M 40.0 42.6 L 50.0 56.8 L 60.0 72.4 L 70.0 48.2 L 80.0 69.5 L 90.0 88.1 L 100.0 80.4 L 110.0 83.3 L 120.0 108.4 L 130.0 75.8 L 140.0 99.6 L 140.0 0 L 40 0"/>
+</g>
+</svg>
+</br>
+<svg width="400" height="250">
+  <g transform="translate(0,250) scale(2,-2)">
+    <circle class="circles" cx="40" cy="42.6" r="4"/>
+    <circle class="circles" cx="50" cy="56.8" r="4"/>
+    <circle class="circles" cx="60" cy="72.4" r="4"/>
+    <circle class="circles" cx="70" cy="48.2" r="4"/>
+    <circle class="circles" cx="80" cy="69.5" r="4"/>
+    <circle class="circles" cx="90" cy="88.1" r="4"/>
+    <circle class="circles" cx="100" cy="80.4" r="4"/>
+    <circle class="circles" cx="110" cy="83.3" r="4"/>
+    <circle class="circles" cx="120" cy="108.4" r="4"/>
+    <circle class="circles" cx="130" cy="75.8" r="4"/>
+    <circle class="circles" cx="140" cy="99.6" r="4"/>
+  </g>
+</svg>
+  </BODY>
+</HTML>
