@@ -243,12 +243,15 @@ From the definition of the {\em abolsute error} $(\xi)$, we get the absolute err
 Following this, we have
 
 \begin{align*}
-\left| f^{\prime} - \widetilde{f^{\prime}_{\star}} \right| &= \left| f^{\prime} - \widetilde{f^{\prime}} + \widetilde{f^{\prime}} -\widetilde{f^{\prime}_{star}} \right|\\
+\left| f^{\prime} - \widetilde{f^{\prime}_{\star}} \right| &= \left| f^{\prime} - \widetilde{f^{\prime}} + \widetilde{f^{\prime}} -\widetilde{f^{\prime}_{\star}} \right|\\
 &< \left| f^{\prime} - \widetilde{f^{\prime}} \right| + \left| \widetilde{f^{\prime}} - \widetilde{f^{\prime}_{\star}} \right|\\
-&< h\frac{M}{2} + \left| \widetilde{f^{\prime}} - \widetilde{f^{\prime_{\star}}} \right|
+&< h\frac{M}{2} + \left| \widetilde{f^{\prime}} - \widetilde{f^{\prime}_{\star}} \right|
 \end{align*}
 
-If we can say $\left| \widetilde{f^{\prime}} - \widetilde{f^{\prime_{\star}}} \right| < \frac{2\epsilon}{h}$ holds true, then the proof is complete.
+From looking at the defintions of the terms defined above, we can say that
+$\left| \widetilde{f^{\prime}} - \widetilde{f^{\prime}_{\star}} \right| $ is equal
+to the {\em rounding error} which is equal to $\frac{2\epsilon}{h}$. Therefore,
+we proved what we were asked to.
 
 \item What is the value of $h$ for which the above is minimized?
 
@@ -335,7 +338,7 @@ The first equation has $n$ subtractions while there is only a single subtraction
 in the second equation. Therefore, there will be less cancellation error in the
 second equation, so it should produce a more accurate answer.
 
-\item Give a small example, using a decimal system with precision $t = 2$ and
+\item Give a small example, using a decimal system with precision $\tau = 2$ and
 numbers of your choice, validate your claims.
 
 {\bf Solution:}
