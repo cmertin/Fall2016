@@ -86,13 +86,37 @@ Thus $f_{1}$ and $f_{2}$ have the same values, in exact arithmetic, for any give
 argument values $x_{0}$ and $h$.
 \begin{enumerate}
 \item Derive $f_{2}\left(x_{0},h\right)$
+
+{\bf Solution:}
+
+\[
+f_{2}\left(x_{0},h\right) = \sin\left(x_{0} + h\right) - \sin\left(x_{0}\right) = 2\cos\left(x_{0} + \frac{h}{2}\right)\sin\left(\frac{h}{2}\right)
+\]
 \item Suggest a formula that avoids cancellation errors for computing the approximation
 $\left(\left( f\left( x_{0}+h\right) - f\left(x_{0}\right)\right) /h\right)$
 to the derivative of $f(x)=\sin(x)$ at $x=x_{0}$. Write a {\sc Matlab} program
 that implements your formula and computes an approximation of $f^{\prime}(1.2)$
 for $h = \left\{ 10^{-20},10^{-19},\ldots,1\right\}$.
+
+{\bf Solution:}
+
+For $h$ significantly small, the values of $\sin\left(x_{0} + h\right)$ and $\sin\left(x_{0}\right)$
+are close as $\sin(x)$ is a smooth trigonometric function. Therefore, there is
+a possibiltiy of cancellation occurring for small values of $h$. This can be avoided
+by omitting the subtraction and using the equivalent equation stated above. Therefore,
+we have
+
+\[
+\frac{\sin\left(x_{0}+h\right) - \sin\left(x_{0}\right)}{h} = \frac{2\cos\left(x_{0} + \frac{h}{2}\right)\sin\left(\frac{h}{2}\right)}{h}
+\]
 \item Explain the difference in accuracy between your results and the results
 reported in Example 1.3.
+
+{\bf Solution:}
+
+In comparing the two figures, it shows that using the above equation to avoid the
+cancellation for small values of $h$ produced correct results as they both agree
+at every point. In Figure 1.3, the two curves diverge.
 \end{enumerate}
 
 %%%%%% Problem 4 %%%%%%
@@ -105,11 +129,36 @@ Thus, $f_{1}$ and $f_{2}$ have the same values, in exact arithmetic, for any giv
 argument values $x$ and $\delta$.
 \begin{enumerate}
 \item Show that, analytically, $f_{1}(x,\delta)/\delta$ or $f_{2}(x,\delta)/\delta$
-are effective approximations of the function $(-\sin(x))$ for $\delta$ sufficiently small.
+are effective approximations of the function ``$-\sin(x)$'' for $\delta$ sufficiently small.
+
+{\bf Solution:}
+
+This can be done by taking the limit of both functions as $x$ approaches $0$, which gives
+
+\begin{align*}
+\lim_{x\rightarrow 0} \frac{\cos(x + \delta) - \cos(x)}{\delta} &= \lim_{x\rightarrow 0} \frac{\cos(x)\cos(\delta) - \sin(x)\sin(\delta) -\cos(x)}{\delta}\\
+      &= \lim_{x\rightarrow 0} \frac{\cos(x)\left(\cos(\delta)-1\right) - \sin(x)\sin(\delta)}{\delta}\\
+      &= \lim_{x\rightarrow 0}\frac{\cos(x)\left(\cos(\delta)-1\right)}{\delta} - \lim_{x\rightarrow 0} \frac{\sin(x)\sin(\delta)}{\delta}\\
+      &= \cos(x)\lim_{x\rightarrow 0}\frac{\cos(\delta) - 1}{\delta} - \sin(x)\lim_{x\rightarrow 0}\frac{\sin(\delta)}{\delta}\\
+      &= 0\cdot \cos(x) - 1 \cdot \sin(x) = -\sin(x)
+\end{align*}
 \item Derive $f_{2}(x,\delta)$
+
+{\bf Solution:}
+
+\[
+f_{2}(x,\delta) = \cos(x + \delta) - \cos(x) = -2\sin\left(\frac{2x + \delta}{2}\right)\sin\left(\frac{\delta}{2}\right)
+\]
 \item Write a {\sc Matlab} script which will calculate $g_{1}(x,\delta) = f_{1}(x,\delta)/\delta + \sin(x)$
 and $g_{2}(x,\delta) = f_{2}(x,\delta)/\delta + \sin(x)$ for $x = 3$ and $\delta = 10^{-11}$.
 \item Explain the difference in the results of the two calculations.
+
+{\bf Solution:}
+
+The values of $g_{1}$ and $g_{2}$ should converge to zero as $\delta$ goes to zero.
+As can be seen in the results, $g_{2}$ is closer to zero so it therefore provides
+a better approximation of the derivative of $\cos(x)$.
+
 \end{enumerate}
 
 %%%%%% Problem 5 %%%%%%
@@ -127,10 +176,75 @@ is bounded by
 \frac{Mh}{2} + \frac{2\epsilon}{h}
 \]
 where $M$ is a bound on $\left| f^{\prime\prime}(x)\right|$.
+
+{\bf Solution:}
+
+In order to solve this, the following terms need to be defined:
+
+\begin{itemize}
+\item $f^{\prime}$: The {\em exact} derivative of $f$
+\item $\widetilde{f^{\prime}}$: The value of $f^{\prime}$ with the discretization error
+\item $\widetilde{f^{\prime}_{\star}}$: The value of $f^{\prime}$ with discretization {\em and} rounding error
+\item $\widetilde{f_{\star}}$: The value of $f$ with discretization {\em and} rounding error
+\end{itemize}
+
+Now that the notation is defined. We can approximate the first derivative of a
+function with a Taylor Series expansion about 0. In doing so, we get
+
+\begin{align*}
+&f\left(x_{0} + h\right)  = f\left(x_{0}\right) + hf^{\prime}\left(x_{0}\right) + \frac{h^{2}}{2}f^{\prime \prime}\left(x_{0}\right) + \ldots\\
+&\left| f^{\prime}\left(x_{0}\right) - \frac{f\left(x_{0}+h\right) - f\left(x_{0}\right)}{h}\right| \leq h\frac{f^{\prime\prime}\left(x_{0}\right)}{2} \leq h\frac{M}{2}
+\end{align*}
+
+which can be rewritten using the new notation defined above as
+
+\begin{align*}
+\left| f^{\prime} - \widetilde{f^{\prime}} \right| \leq h\frac{M}{2}
+\end{align*}
+
+From the definition of the {\em abolsute error} $(\xi)$, we get the absolute error on $f$ being bounded by $\epsilon$
+
+\[
+\xi = \left| f - \widetilde{f_{\star}} \right| < \epsilon
+\]
+
+Following this, we have
+
+\begin{align*}
+\left| f^{\prime} - \widetilde{f^{\prime}_{\star}} \right| &= \left| f^{\prime} - \widetilde{f^{\prime}} + \widetilde{f^{\prime}} -\widetilde{f^{\prime}_{star}} \right|\\
+&< \left| f^{\prime} - \widetilde{f^{\prime}} \right| + \left| \widetilde{f^{\prime}} - \widetilde{f^{\prime}_{\star}} \right|\\
+&< h\frac{M}{2} + \left| \widetilde{f^{\prime}} - \widetilde{f^{\prime_{\star}}} \right|
+\end{align*}
+
+If we can say $\left| \widetilde{f^{\prime}} - \widetilde{f^{\prime_{\star}}} \right| < \frac{2\epsilon}{h}$ holds true, then the proof is complete.
+
 \item What is the value of $h$ for which the above is minimized?
+
+{\bf Solution:}
+
+In finding the extremas, we can take the derivative of the funciton, set it equal to zero, and then solve the system
+
+\begin{align*}
+\frac{d}{dh}\left(h\frac{M}{2} + \frac{2\epsilon}{h}\right) &= \frac{M}{2} - \frac{2\epsilon}{h^{2}}\\
+\frac{M}{2} - \frac{2\epsilon}{h^{2}} &= 0\\
+h &= 2\sqrt{\frac{\epsilon}{M}}
+\end{align*}
+
 \item The rounding unit we employ is approximately equal to $10^{-16}$. Use this
 to explain the behavior of the graph in Example 1.3. Make sure to explain the shape
 of the graph as well as the value where the apparent minimum is attained.
+
+{\bf Solution:}
+
+Example 1.3 gives $f(x) = \sin(x)$, so $f^{\prime\prime}(x) = -\sin(x)$. Since $M$ is a bound
+for $\left| -\sin(x)\right|$, it is 1. Using the given tolerance value of $\epsilon$, we can solve
+for $h$, giving
+
+\begin{align*}
+\epsilon &= 10^{-16}\\
+h &= 2\sqrt{\frac{\epsilon}{M}} = 2\cdot 10^{-8}
+\end{align*}
+
 \item It is not difficult to show, using Taylor expansions, that $f^{\prime}(x)$ can
 be approximated more accurately (in terms of truncation error) by
 \[
@@ -140,6 +254,10 @@ For this approximation, the truncation error is $\mathcal{O}\left(h^{2}\right)$.
 Generate a graph similar to Figure 1.3 for the same function and the same value
 of $x$, namely, for $\sin(1.2)$, and compare the two graphs. Explain the meaning
 of your results.
+
+{\bf Solution:}
+
+In comparing Figure 1.3 and this one below
 \end{enumerate}
 
 %%%%%% Problem 6 %%%%%%
@@ -148,7 +266,7 @@ of your results.
 \bar{x} = \frac{1}{n}\sum_{i=1}^{n}x_{i},\quad \sigma^{2}=\frac{1}{n}\sum_{i=1}^{n}\left(x_{i}-\bar{x}\right)^{2}
 \]
 where $\left\{ x_{1}, x_{2}, \ldots, x_{n}\right\}$ are the given data. Assume that $n$
-is large, say, $n = 10000$. It is easy to see that $\sigma^{2}$ can also be written as
+is large, say, $n = 10\,000$. It is easy to see that $\sigma^{2}$ can also be written as
 \[
 \sigma^{2} = \frac{1}{n}\sum_{i=1}^{n} x_{i}^{2} - \bar{x}^{2}
 \]
@@ -156,10 +274,30 @@ is large, say, $n = 10000$. It is easy to see that $\sigma^{2}$ can also be writ
 \item Which of the two methods to calculate $\sigma^{2}$ is cheaper in terms of
 overall computational cost? Assume $\bar{x}$ has already been calculated and give
 the operation counts for these two options.
+
+{\bf Solution:}
+
+The first equation of $\sigma^{2}$ requires $n$ squares, $n$ subtractions, $n$ additions, and 1 division.
+This results in an overall computational cost of $\mathcal{O}(3n+1)$, while the second
+equation, assuming $\bar{x}^{2}$ is {\em not} precomputed,
+of $\sigma^{2}$ requires $n+1$ squares, 1 subtraction, $n$ additions, and 1 division,
+resulting in an overall complexity of $\mathcal{O}(2n+2)$.
+
 \item Which of the two methods is expected to give more accurate results for
 $\sigma^{2}$ in general?
+
+{\bf Solution:}
+
+The first equation has $n$ subtractions while there is only a single subtraction
+in the second equation. Therefore, there will be less cancellation error in the
+second equation, so it should produce a more accurate answer.
+
 \item Give a small example, using a decimal system with precision $t = 2$ and
 numbers of your choice, validate your claims.
+
+{\bf Solution:}
+
+Work goes here
 \end{enumerate}
 \end{enumerate}
 
