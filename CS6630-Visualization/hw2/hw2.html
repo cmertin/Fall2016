@@ -182,6 +182,9 @@
 </body>
 
 <script>
+  d3.select("#dataset").on("change", function() {execute();});
+  var execute = function()
+  {
   // Gets the name of the data from the selector
   var sel = document.getElementById("dataset").value;
   // Appends the appropriate directory to get the file
@@ -197,6 +200,9 @@
   newParagraph.appendChild(document.createTextNode(file));
   mainDiv.appendChild(newParagraph);
   console.log(data_array.length);
+  }
+
+    execute();
 
 </script>
 
