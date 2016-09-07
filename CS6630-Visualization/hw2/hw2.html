@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
+    <script src="https://d3js.org/d3.v4.js"></script>
     <meta charset="UTF-8">
     <title>Homework 2 Solution</title>
     <style>
@@ -48,8 +49,7 @@
     </style>
 </head>
 <body>
-<body>
-
+  
 <h3>CS-5630 / CS-6630 Homework 2</h3>
 <span>Christopher Mertin</span>
 <span>cmertin <sub>[at]</sub> cs <sub>[dot]</sub> utah <sub>[dot]<sub> edu</span>
@@ -177,5 +177,28 @@
         </g>
     </svg>
 </div>
+<br/> <br/>
+<div id="mainDiv">Text in HTML.</div>
 </body>
+
+<script>
+  // Gets the name of the data from the selector
+  var sel = document.getElementById("dataset").value;
+  // Appends the appropriate directory to get the file
+  var file = "./data/" + sel + ".csv";
+  // Initializes the data
+  var data_array = [];
+  // Reads in the csv file
+  d3.csv(file, function(data) {data_array = data;});
+  mainDiv = document.getElementById("mainDiv");
+  console.log(mainDiv);
+  var newParagraph = document.createElement("p");
+
+  newParagraph.appendChild(document.createTextNode(file));
+  mainDiv.appendChild(newParagraph);
+  console.log(data_array.length);
+
+</script>
+
+
 </html>
