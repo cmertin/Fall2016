@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="script.js"></script>
     <meta charset="UTF-8">
     <title>Homework 2 Solution</title>
     <style>
@@ -53,7 +54,7 @@
     </style>
 </head>
 <body>
-  
+
 <h3>CS-5630 / CS-6630 Homework 2</h3>
 <span>Christopher Mertin</span>
 <span>cmertin <sub>[at]</sub> cs <sub>[dot]</sub> utah <sub>[dot]<sub> edu</span>
@@ -86,35 +87,35 @@
 <div>
     <h2>Bar Charts</h2>
     <svg width="200" height="200">
-      <g transform="translate(0, 150) scale(1, -1)" class="barChart">
-        <rect x="0" y="10" width="100" height="10"/>
-        <rect x="0" y="20" width="80" height="10"/>
-        <rect x="0" y="30" width="130" height="10"/>
-        <rect x="0" y="40" width="90" height="10"/>
-        <rect x="0" y="50" width="110" height="10"/>
-        <rect x="0" y="60" width="140" height="10"/>
-        <rect x="0" y="70" width="60" height="10"/>
-        <rect x="0" y="80" width="40" height="10"/>
-        <rect x="0" y="90" width="120" height="10"/>
-        <rect x="0" y="100" width="70" height="10"/>
-        <rect x="0" y="110" width="50" height="10"/>
-    </g>
+        <g transform="translate(0, 200) scale(1, -1)" class="barChart">
+            <rect x="10" y="0" width="10" height="100"/>
+            <rect x="20" y="0" width="10" height="80"/>
+            <rect x="30" y="0" width="10" height="130"/>
+            <rect x="40" y="0" width="10" height="90"/>
+            <rect x="50" y="0" width="10" height="110"/>
+            <rect x="60" y="0" width="10" height="140"/>
+            <rect x="70" y="0" width="10" height="60"/>
+            <rect x="80" y="0" width="10" height="40"/>
+            <rect x="90" y="0" width="10" height="120"/>
+            <rect x="100" y="0" width="10" height="70"/>
+            <rect x="110" y="0" width="10" height="50"/>
+        </g>
     </svg>
 
     <svg width="200" height="200">
-      <g transform="translate(0, 150) scale(1, -1)" class="barChart">
-        <rect x="0" y="10" width="80" height="10"/>
-        <rect x="0" y="20" width="69" height="10"/>
-        <rect x="0" y="30" width="76" height="10"/>
-        <rect x="0" y="40" width="88" height="10"/>
-        <rect x="0" y="50" width="83" height="10"/>
-        <rect x="0" y="60" width="100" height="10"/>
-        <rect x="0" y="70" width="72" height="10"/>
-        <rect x="0" y="80" width="43" height="10"/>
-        <rect x="0" y="90" width="108" height="10"/>
-        <rect x="0" y="100" width="48" height="10"/>
-        <rect x="0" y="110" width="57" height="10"/>
-    </g>
+        <g transform="translate(0, 200) scale(1, -1)" class="barChart">
+            <rect x="10" y="0" width="10" height="80"/>
+            <rect x="20" y="0" width="10" height="69"/>
+            <rect x="30" y="0" width="10" height="76"/>
+            <rect x="40" y="0" width="10" height="88"/>
+            <rect x="50" y="0" width="10" height="83"/>
+            <rect x="60" y="0" width="10" height="100"/>
+            <rect x="70" y="0" width="10" height="72"/>
+            <rect x="80" y="0" width="10" height="43"/>
+            <rect x="90" y="0" width="10" height="108"/>
+            <rect x="100" y="0" width="10" height="48"/>
+            <rect x="110" y="0" width="10" height="57"/>
+        </g>
     </svg>
 </div>
 
@@ -187,7 +188,11 @@
 
 <script>
   var data_array = [];
-  d3.select("#dataset").on("change", function() {ReadData(); WriteTest();});
+
+  d3.select("#dataset").on("change", function() {ReadData();});
+
+  d3.select("button").on("click", function() {staircase();});
+
   var ReadData = function()
   {
     // Gets the name of the data from the selector
@@ -200,19 +205,7 @@
     d3.csv(file, function(data) {data_array = data;});
   }
 
-  var WriteTest = function()
-  {
-    mainDiv = document.getElementById("mainDiv");
-    console.log(mainDiv);
-    var newParagraph = document.createElement("p");
-
-    newParagraph.appendChild(document.createTextNode(data_array.length));
-    mainDiv.appendChild(newParagraph);
-    console.log(data_array.length);
-  }
-
   ReadData();
-  WriteTest();
 
 </script>
 

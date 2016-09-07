@@ -3,6 +3,7 @@
 
 function staircase() {
     // ****** TODO: PART II ******
+    console.log("Hello World");
 }
 
 function update(error, data) {
