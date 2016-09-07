@@ -6,28 +6,32 @@
     <title>Homework 2 Solution</title>
     <style>
         .barChart {
-            fill: steelblue;
+            fill: darkred;
             stroke: darkgray;
             stroke-width: 1px;
         }
 
         .barChart rect:hover {
-            fill: seagreen;
+            fill: gold;
         }
 
         .lines {
-            stroke: steelblue;
+            stroke: darkred;
             fill: none
         }
 
         .areas {
             stroke: none;
-            fill: steelblue
+            fill: darkred
         }
 
         circle {
-            fill: steelblue;
+            fill: darkred;
         }
+
+	circle:hover {
+	    fill: gold;
+	}
 
         .frame {
             fill: none;
@@ -182,27 +186,33 @@
 </body>
 
 <script>
-  d3.select("#dataset").on("change", function() {execute();});
-  var execute = function()
-  {
-  // Gets the name of the data from the selector
-  var sel = document.getElementById("dataset").value;
-  // Appends the appropriate directory to get the file
-  var file = "./data/" + sel + ".csv";
-  // Initializes the data
   var data_array = [];
-  // Reads in the csv file
-  d3.csv(file, function(data) {data_array = data;});
-  mainDiv = document.getElementById("mainDiv");
-  console.log(mainDiv);
-  var newParagraph = document.createElement("p");
-
-  newParagraph.appendChild(document.createTextNode(file));
-  mainDiv.appendChild(newParagraph);
-  console.log(data_array.length);
+  d3.select("#dataset").on("change", function() {ReadData(); WriteTest();});
+  var ReadData = function()
+  {
+    // Gets the name of the data from the selector
+    var sel = document.getElementById("dataset").value;
+    // Appends the appropriate directory to get the file
+    var file = "./data/" + sel + ".csv";
+    // Initializes the data
+    data_array = [];
+    // Reads in the csv file and stores it in data_array
+    d3.csv(file, function(data) {data_array = data;});
   }
 
-    execute();
+  var WriteTest = function()
+  {
+    mainDiv = document.getElementById("mainDiv");
+    console.log(mainDiv);
+    var newParagraph = document.createElement("p");
+
+    newParagraph.appendChild(document.createTextNode(data_array.length));
+    mainDiv.appendChild(newParagraph);
+    console.log(data_array.length);
+  }
+
+  ReadData();
+  WriteTest();
 
 </script>
 
