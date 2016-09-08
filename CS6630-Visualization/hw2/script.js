@@ -109,8 +109,6 @@ function update(error, data) {
     Line_A();
 
     // TODO: Select and update the 'b' line chart path (create your own generator)
-    //var bLineGenerator = d3.line().x().y();
-
     function Line_B()
     {
       var lineb = document.querySelectorAll('[id^="lb_"]');
@@ -121,7 +119,6 @@ function update(error, data) {
         lineb[i].setAttribute("x2", iScale(i+1));
         lineb[i].setAttribute("x1", iScale(i));
       }
-      console.log(lineb);
     }
 
     Line_B();
@@ -139,7 +136,7 @@ function update(error, data) {
     function Area_A()
     {
       var areaa = document.querySelectorAll('[id^="areaa_"]');
-      console.log(areaa);
+      //console.log(areaa);
       var newArea = aAreaGenerator(data);
       areaa[0].setAttribute("d", newArea);
     }
