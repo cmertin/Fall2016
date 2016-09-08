@@ -71,8 +71,8 @@
 <span>
     <label>Dataset:</label>
     <select id="dataset">
-        <option value="anscombe_I">Anscombe's Quartet I</option>
-        <option selected value="anscombe_II">Anscombe's Quartet II</option>
+        <option selected value="anscombe_I">Anscombe's Quartet I</option>
+        <option value="anscombe_II">Anscombe's Quartet II</option>
         <option value="anscombe_III">Anscombe's Quartet III</option>
         <option value="anscombe_IV">Anscombe's Quartet IV</option>
     </select>
@@ -125,7 +125,8 @@
     <svg width="200" height="200">
       <g transform="translate(0, 200) scale(1, -1)">
         <path id="la_1" class="lines"
-              d="M 10 100 L 20 80 L 30 130 L 40 90 L 50 110 L 60 140 L 70 60 L 80 40 L 90 120 L 100 70 L 110 50"/>
+        d="M10,107.14285714285714L20,85.71428571428571L29.999999999999996,139.28571428571428L40,96.42857142857143L50,117.85714285714286L59.99999999999999,150L70,64.28571428571428L80,42.857142857142854L90,128.57142857142856L100,75L110,53.57142857142857"/>
+              <!-- d="M 10 100 L 20 80 L 30 130 L 40 90 L 50 110 L 60 140 L 70 60 L 80 40 L 90 120 L 100 70 L 110 50"/> -->
     </g>
     </svg>
 
@@ -182,31 +183,14 @@
         </g>
     </svg>
 </div>
-<br/> <br/>
-<div id="mainDiv">Text in HTML.</div>
 </body>
 
 <script>
-  var data_array = [];
-
   d3.select("#dataset").on("change", function() {changeData();});
 
   d3.select("button").on("click", function() {staircase();});
 
   d3.select("#random").on("click", function() {changeData();});
-  function ReadData(dataArray)
-  {
-    console.log("Read Data");
-    // Initializes the data
-    dataArray = [];
-    // Gets the name of the data from the selector
-    var sel = document.getElementById("dataset").value;
-    // Appends the appropriate directory to get the file
-    var file = "./data/" + sel + ".csv";
-    // Reads in the csv file and stores it in data_array
-    d3.csv(file, function(data3) {dataArray = data3;});
-
-  }
 
   function execute()
   {

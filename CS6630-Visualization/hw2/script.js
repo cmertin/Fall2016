@@ -92,7 +92,7 @@ function update(error, data) {
     // TODO: Select and update the 'a' line chart path using this line generator
     var aLineGenerator = d3.line()
         .x(function (d, i) {
-            return iScale(i);
+            return iScale(i + 1);
         })
         .y(function (d) {
             return aScale(d.a);
@@ -100,15 +100,16 @@ function update(error, data) {
 
     function Line_A()
     {
-      var linea = document.querySelectorAll('[id^="la_1"]');
+      var linea = document.querySelectorAll('[id^="la_"]');
       var newLine = aLineGenerator(data);
       linea[0].setAttribute("d", newLine);
+      //console.log(newLine);
     }
 
     Line_A();
 
     // TODO: Select and update the 'b' line chart path (create your own generator)
-    var bLineGenerator = d3.line().x().y();
+    //var bLineGenerator = d3.line().x().y();
 
     function Line_B()
     {
@@ -121,16 +122,55 @@ function update(error, data) {
     // TODO: Select and update the 'a' area chart path using this line generator
     var aAreaGenerator = d3.area()
         .x(function (d, i) {
-            return iScale(i);
+            return iScale(i + 1);
         })
         .y0(0)
         .y1(function (d) {
             return aScale(d.a);
         });
 
+    function Area_A()
+    {
+      var areaa = document.querySelectorAll('[id^="areaa_"]');
+      console.log(areaa);
+      var newArea = aAreaGenerator(data);
+      areaa[0].setAttribute("d", newArea);
+    }
+
+    Area_A();
+
     // TODO: Select and update the 'b' area chart path (create your own generator)
+    var bAreaGenerator = d3.area()
+        .x(function(d,i) {
+            return iScale(i + 1);
+        })
+        .y0(0)
+        .y1(function(d) {
+          return bScale(d.b);
+        });
+
+    function Area_B()
+    {
+      var areab = document.querySelectorAll('[id^="areab_"]');
+      var newArea = bAreaGenerator(data);
+      areab[0].setAttribute("d", newArea);
+    }
+
+    Area_B();
 
     // TODO: Select and update the scatterplot points
+    function Circles()
+    {
+      var circles = document.querySelectorAll('[id^="cir_"]');
+
+      for(var i = 0; i < data.length; i++)
+        {
+          circles[i].setAttribute("cx", aScale(data[i].a));
+          circles[i].setAttribute("cy", bScale(data[i].b));
+        }
+    }
+
+    Circles();
 
     // ****** TODO: PART IV ******
 }
