@@ -88,17 +88,17 @@
     <h2>Bar Charts</h2>
     <svg width="200" height="200">
         <g transform="translate(0, 200) scale(1, -1)" class="barChart">
-            <rect x="10" y="0" width="10" height="100"/>
-            <rect x="20" y="0" width="10" height="80"/>
-            <rect x="30" y="0" width="10" height="130"/>
-            <rect x="40" y="0" width="10" height="90"/>
-            <rect x="50" y="0" width="10" height="110"/>
-            <rect x="60" y="0" width="10" height="140"/>
-            <rect x="70" y="0" width="10" height="60"/>
-            <rect x="80" y="0" width="10" height="40"/>
-            <rect x="90" y="0" width="10" height="120"/>
-            <rect x="100" y="0" width="10" height="70"/>
-            <rect x="110" y="0" width="10" height="50"/>
+            <rect id="bar1" x="10" y="0" width="10" height="100"/>
+            <rect id="bar1" x="20" y="0" width="10" height="80"/>
+            <rect id="bar1" x="30" y="0" width="10" height="130"/>
+            <rect id="bar1" x="40" y="0" width="10" height="90"/>
+            <rect id="bar1" x="50" y="0" width="10" height="110"/>
+            <rect id="bar1" x="60" y="0" width="10" height="140"/>
+            <rect id="bar1" x="70" y="0" width="10" height="60"/>
+            <rect id="bar1" x="80" y="0" width="10" height="40"/>
+            <rect id="bar1" x="90" y="0" width="10" height="120"/>
+            <rect id="bar1" x="100" y="0" width="10" height="70"/>
+            <rect id="bar1" x="110" y="0" width="10" height="50"/>
         </g>
     </svg>
 
@@ -189,24 +189,31 @@
 <script>
   var data_array = [];
 
-  d3.select("#dataset").on("change", function() {ReadData();});
+  d3.select("#dataset").on("change", function() {changeData();});
 
   d3.select("button").on("click", function() {staircase();});
 
-  var ReadData = function()
+  d3.select("#random").on("click", function() {randomSubset();});
+  function ReadData(dataArray)
   {
+    console.log("Read Data");
+    // Initializes the data
+    dataArray = [];
     // Gets the name of the data from the selector
     var sel = document.getElementById("dataset").value;
     // Appends the appropriate directory to get the file
     var file = "./data/" + sel + ".csv";
-    // Initializes the data
-    data_array = [];
     // Reads in the csv file and stores it in data_array
-    d3.csv(file, function(data) {data_array = data;});
+    d3.csv(file, function(data3) {dataArray = data3;});
+
   }
 
-  ReadData();
+  function execute()
+  {
+    changeData();
+  }
 
+  execute();
 </script>
 
 

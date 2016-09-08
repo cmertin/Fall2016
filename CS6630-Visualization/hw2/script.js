@@ -3,7 +3,16 @@
 
 function staircase() {
     // ****** TODO: PART II ******
+
+    function CompareForSort(first, second)
+    {
+      return first.getAttribute("height") - b.getAttribute("height");
+    }
+
     console.log("Hello World");
+    var d = document.querySelectorAll("#bar1");
+    d[5] = d[3];
+    console.log(d);
 }
 
 function update(error, data) {
