@@ -98,7 +98,25 @@ function update(error, data) {
             return aScale(d.a);
         });
 
+    function Line_A()
+    {
+      var linea = document.querySelectorAll('[id^="la_1"]');
+      var newLine = aLineGenerator(data);
+      linea[0].setAttribute("d", newLine);
+    }
+
+    Line_A();
+
     // TODO: Select and update the 'b' line chart path (create your own generator)
+    var bLineGenerator = d3.line().x().y();
+
+    function Line_B()
+    {
+      var lineb = document.querySelectorAll('[id^="lb_"]');
+      console.log(lineb);
+    }
+
+    Line_B();
 
     // TODO: Select and update the 'a' area chart path using this line generator
     var aAreaGenerator = d3.area()
