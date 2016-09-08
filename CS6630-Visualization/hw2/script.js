@@ -14,9 +14,10 @@ function staircase() {
     }
     function StaircaseData()
     {
-       var d = document.querySelectorAll("#bar1, #bar2, #bar3, #bar4, #bar5, #bar6, #bar7, #bar8, #bar9, #bar10, #bar11");
+       var d = document.querySelectorAll('[id^="ba_"]');
        //var array = Object.keys(d).map(function(key) {return d[key];});
        //array.sort(Compare);
+       //console.log(d);
        for(var i = 0; i < d.length; i++)
         {
           //var tempHeight = array[i].getAttribute("height");
@@ -68,12 +69,25 @@ function update(error, data) {
         .range([0, 110]);
 
     // ****** TODO: PART III (you will also edit in PART V) ******
+    function Bar_A()
+    {
+       var d = document.querySelectorAll('[id^="ba_"]');
+       for(var i = 0; i < data.length; i++)
+        d[i].setAttribute("height", data[i].a * 10);
+    }
 
-    console.log(data);
+    function Bar_B()
+    {
+       var d = document.querySelectorAll('[id^="bb_"]');
+       for(var i = 0; i < data.length; i++)
+        d[i].setAttribute("height", data[i].b * 10);
+    }
 
-    // TODO: Select and update the 'a' bar chart bars
+    // Changes the a data bar chart
+    Bar_A();
 
-    // TODO: Select and update the 'b' bar chart bars
+    // Changes the b data bar chart
+    Bar_B();
 
     // TODO: Select and update the 'a' line chart path using this line generator
     var aLineGenerator = d3.line()
