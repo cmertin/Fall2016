@@ -4,15 +4,27 @@
 function staircase() {
     // ****** TODO: PART II ******
 
-    function CompareForSort(first, second)
+    function Compare(first, second)
     {
-      return first.getAttribute("height") - b.getAttribute("height");
+      if(first.getAttribute("height") > second.getAttribute("height"))
+        return -1;
+      if(first.getAttribute("height") < second.getAttribute("height"))
+        return 1;
+      return 0;
+    }
+    function SortData()
+    {
+       var d = document.querySelectorAll("#bar1, #bar2, #bar3, #bar4, #bar5, #bar6, #bar7, #bar8, #bar9, #bar10, #bar11");
+       //var array = Object.keys(d).map(function(key) {return d[key];});
+       //array.sort(Compare);
+       for(var i = 0; i < array.length; i++)
+        {
+          //var tempHeight = array[i].getAttribute("height");
+          d[i].setAttribute("height", (i+1)*10);
+        }
     }
 
-    console.log("Hello World");
-    var d = document.querySelectorAll("#bar1");
-    d[5] = d[3];
-    console.log(d);
+    SortData();
 }
 
 function update(error, data) {
