@@ -12,19 +12,19 @@ function staircase() {
         return 1;
       return 0;
     }
-    function SortData()
+    function StaircaseData()
     {
        var d = document.querySelectorAll("#bar1, #bar2, #bar3, #bar4, #bar5, #bar6, #bar7, #bar8, #bar9, #bar10, #bar11");
        //var array = Object.keys(d).map(function(key) {return d[key];});
        //array.sort(Compare);
-       for(var i = 0; i < array.length; i++)
+       for(var i = 0; i < d.length; i++)
         {
           //var tempHeight = array[i].getAttribute("height");
           d[i].setAttribute("height", (i+1)*10);
         }
     }
 
-    SortData();
+    StaircaseData();
 }
 
 function update(error, data) {
@@ -68,6 +68,8 @@ function update(error, data) {
         .range([0, 110]);
 
     // ****** TODO: PART III (you will also edit in PART V) ******
+
+    console.log(data);
 
     // TODO: Select and update the 'a' bar chart bars
 
