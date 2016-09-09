@@ -71,30 +71,37 @@ function update(error, data) {
     // ****** TODO: PART III (you will also edit in PART V) ******
     function Bar_A()
     {
-      var svg = d3.select(".barChart");
-      var bars = svg.selectAll("rect").data(data);
-      bars.exit().remove();
+      var svg = d3.select(".barChart").selectAll("rect");
+      var bars = svg.data(data);
 
-      bars = bars.enter().append("rect").classed(".barChart",true).merge(bars);
+      bars.exit().transition().duration(1000)
+                 .attr("height",0).remove();
 
-      bars.attr("x", function(d,i) {return iScale(i);})
+      bars = bars.enter().append("rect").classed("barChart",true).merge(bars);
+
+      bars.attr("x", function(d,i) {return iScale(i+1);})
+          .attr("height", 0)
+          .transition()
+          .duration(1000)
           .attr("height", function(d) {return aScale(d.a);});
     }
 
     function Bar_B()
     {
-      var svg = d3.select(".barChart2");
-      var bars = svg.selectAll("rect").data(data);
-      bars.exit().remove();
+      var svg = d3.select(".barChart2").selectAll("rect");
+      var bars = svg.data(data);
 
-      bars = bars.enter().append("rect").classed(".barChart2",true).merge(bars);
+      bars.exit().transition().duration(1000)
+                 .attr("height",0).remove();
 
-      bars.attr("x", function(d,i) {return iScale(i);})
-          .attr("height", function(d) {return aScale(d.b);});
-      //var d = document.querySelectorAll('[id^="bb_"]');
-      //for(var i = 0; i < data.length; i++)
-      //  d[i].setAttribute("height", bScale(data[i].b));
-    }
+      bars = bars.enter().append("rect").classed("barChart2",true).merge(bars);
+
+      bars.attr("x", function(d,i) {return iScale(i+1);})
+          .attr("height",0)
+          .transition()
+          .duration(1000)
+          .attr("height", function(d) {return bScale(d.b);});
+  }
 
     // Changes the a data bar chart
     Bar_A();
@@ -178,20 +185,25 @@ function update(error, data) {
     Area_B();
 
     // TODO: Select and update the scatterplot points
-    function Circles(data_array)
+    function Circles()
     {
-      var svg = d3.selectAll("svg g circle");
-      var circles = svg.data(data_array);
-      circles.exit().remove();
+      var svg = d3.select(".circles_").selectAll("circle");
+      var circles = svg.data(data);
+
+      circles.exit().transition().duration(1000)
+             .attr("r",0).remove();
+
       circles = circles.enter().append("circle").classed("circles_", true).merge(circles);
 
       circles.attr("cx", function(d,i) {return aScale(d.a);})
              .attr("cy", function(d,i) {return bScale(d.b);})
+             .transition()
+             .duration(1000)
              .attr("r", function() {return 5;});
+
+
     }
     Circles(data);
-
-    // ****** TODO: PART IV ******
 }
 
 function changeData() {
