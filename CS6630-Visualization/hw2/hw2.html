@@ -12,6 +12,12 @@
             stroke-width: 1px;
         }
 
+        .barChart2 {
+            fill: darkred;
+            stroke: darkgray;
+            stroke-width: 1px;
+        }
+
         .lines {
             stroke: darkred;
             fill: none
@@ -95,7 +101,7 @@
     </svg>
 
     <svg width="200" height="200">
-        <g transform="translate(0, 200) scale(1, -1)" class="barChart">
+        <g transform="translate(0, 200) scale(1, -1)" class="barChart2">
             <rect id="bb_1" x="10" y="0" width="10" height="80"/>
             <rect id="bb_2" x="20" y="0" width="10" height="69"/>
             <rect id="bb_3" x="30" y="0" width="10" height="76"/>
@@ -185,6 +191,12 @@
   d3.select("#random").on("click", function() {execute();});
 
   d3.selectAll(".barChart rect")
+        .on("mouseover", function() {
+          d3.select(this).style('fill', 'gold');})
+        .on("mouseout", function() {
+          d3.select(this).style('fill','darkred');});
+
+  d3.selectAll(".barChart2 rect")
         .on("mouseover", function() {
           d3.select(this).style('fill', 'gold');})
         .on("mouseout", function() {

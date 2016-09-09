@@ -21,7 +21,7 @@ function staircase() {
        for(var i = 0; i < d.length; i++)
         {
           //var tempHeight = array[i].getAttribute("height");
-          d[i].setAttribute("height", i * 10);
+          d[i].setAttribute("height", (i+1) * 10);
         }
     }
 
@@ -83,11 +83,17 @@ function update(error, data) {
 
     function Bar_B()
     {
-      var svg = d3.selectAll("svg");
-      console.log(svg[0]);
-      var d = document.querySelectorAll('[id^="bb_"]');
-      for(var i = 0; i < data.length; i++)
-        d[i].setAttribute("height", bScale(data[i].b));
+      var svg = d3.select(".barChart2");
+      var bars = svg.selectAll("rect").data(data);
+      bars.exit().remove();
+
+      bars = bars.enter().append("rect").classed("barChart",true).merge(bars);
+
+      bars.attr("x", function(d,i) {return iScale(i);})
+          .attr("height", function(d) {return aScale(d.b);});
+      //var d = document.querySelectorAll('[id^="bb_"]');
+      //for(var i = 0; i < data.length; i++)
+      //  d[i].setAttribute("height", bScale(data[i].b));
     }
 
     // Changes the a data bar chart
