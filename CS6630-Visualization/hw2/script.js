@@ -73,14 +73,14 @@ function update(error, data) {
     {
        var d = document.querySelectorAll('[id^="ba_"]');
        for(var i = 0; i < data.length; i++)
-        d[i].setAttribute("height", data[i].a * 10);
+        d[i].setAttribute("height", aScale(data[i].a));
     }
 
     function Bar_B()
     {
        var d = document.querySelectorAll('[id^="bb_"]');
        for(var i = 0; i < data.length; i++)
-        d[i].setAttribute("height", data[i].b * 10);
+        d[i].setAttribute("height", bScale(data[i].b));
     }
 
     // Changes the a data bar chart
