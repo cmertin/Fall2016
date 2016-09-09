@@ -209,9 +209,11 @@
           d3.select(this).style('fill','darkred');})
         .on("click", function() {
           var pos = "(";
-          pos = pos.concat(d3.select(this).attr("cx"));
+          var cx = Math.round(d3.select(this).attr("cx") * 100)/100;
+          var cy = Math.round(d3.select(this).attr("cy") * 100)/100;
+          pos = pos.concat(cx);
           pos = pos.concat(", ");
-          pos = pos.concat(d3.select(this).attr("cy"));
+          pos = pos.concat(cy);
           pos = pos.concat(")");
           console.log(pos);});
 

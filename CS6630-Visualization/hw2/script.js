@@ -71,11 +71,11 @@ function update(error, data) {
     // ****** TODO: PART III (you will also edit in PART V) ******
     function Bar_A()
     {
-      var svg = d3.select("svg");
+      var svg = d3.select(".barChart");
       var bars = svg.selectAll("rect").data(data);
       bars.exit().remove();
 
-      bars = bars.enter().append("rect").classed("barChart",true).merge(bars);
+      bars = bars.enter().append("rect").classed(".barChart",true).merge(bars);
 
       bars.attr("x", function(d,i) {return iScale(i);})
           .attr("height", function(d) {return aScale(d.a);});
@@ -87,7 +87,7 @@ function update(error, data) {
       var bars = svg.selectAll("rect").data(data);
       bars.exit().remove();
 
-      bars = bars.enter().append("rect").classed("barChart",true).merge(bars);
+      bars = bars.enter().append("rect").classed(".barChart2",true).merge(bars);
 
       bars.attr("x", function(d,i) {return iScale(i);})
           .attr("height", function(d) {return aScale(d.b);});
