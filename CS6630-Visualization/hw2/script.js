@@ -101,7 +101,7 @@ function update(error, data) {
           .transition()
           .duration(1000)
           .attr("height", function(d) {return bScale(d.b);});
-  }
+    }
 
     // Changes the a data bar chart
     Bar_A();
