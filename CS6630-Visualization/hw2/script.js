@@ -21,7 +21,7 @@ function staircase() {
        for(var i = 0; i < d.length; i++)
         {
           //var tempHeight = array[i].getAttribute("height");
-          d[i].setAttribute("height", (i+1)*10);
+          d[i].setAttribute("height", i * 10);
         }
     }
 
@@ -71,15 +71,22 @@ function update(error, data) {
     // ****** TODO: PART III (you will also edit in PART V) ******
     function Bar_A()
     {
-       var d = document.querySelectorAll('[id^="ba_"]');
-       for(var i = 0; i < data.length; i++)
-        d[i].setAttribute("height", aScale(data[i].a));
+      var svg = d3.select("svg");
+      var bars = svg.selectAll("rect").data(data);
+      bars.exit().remove();
+
+      bars = bars.enter().append("rect").classed("barChart",true).merge(bars);
+
+      bars.attr("x", function(d,i) {return iScale(i);})
+          .attr("height", function(d) {return aScale(d.a);});
     }
 
     function Bar_B()
     {
-       var d = document.querySelectorAll('[id^="bb_"]');
-       for(var i = 0; i < data.length; i++)
+      var svg = d3.selectAll("svg");
+      console.log(svg[0]);
+      var d = document.querySelectorAll('[id^="bb_"]');
+      for(var i = 0; i < data.length; i++)
         d[i].setAttribute("height", bScale(data[i].b));
     }
 
@@ -163,21 +170,18 @@ function update(error, data) {
     Area_B();
 
     // TODO: Select and update the scatterplot points
-    function Circles()
+    function Circles(data_array)
     {
-      //console.log(data.length);
-      var svg = d3.selectAll("svg g circle");//d3.selectAll("circle");//select("svg").select("g").selectAll("circles_");
-      var circles = svg.data(data);
-      //console.log(svg);
-      //console.log(circles);
+      var svg = d3.selectAll("svg g circle");
+      var circles = svg.data(data_array);
       circles.exit().remove();
-      circles = circles.enter().append("circle").classed("circles_", true)
-                .merge(circles);
-      circles.attr("cx", function(d,i) {return aScale(data[i].a);})
-             .attr("cy", function(d,i) {return bScale(data[i].b);})
+      circles = circles.enter().append("circle").classed("circles_", true).merge(circles);
+
+      circles.attr("cx", function(d,i) {return aScale(d.a);})
+             .attr("cy", function(d,i) {return bScale(d.b);})
              .attr("r", function() {return 5;});
     }
-    Circles();
+    Circles(data);
 
     // ****** TODO: PART IV ******
 }
