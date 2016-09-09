@@ -184,13 +184,6 @@
 
   d3.select("#random").on("click", function() {execute();});
 
-  //var bars = document.getElementsByTagName("rect");
-
-  var bars = document.getElementsByClassName("barChart");
-  var cir = document.getElementsByClassName("circles_")
-
-  console.log(cir);
-
   d3.selectAll(".barChart rect")
         .on("mouseover", function() {
           d3.select(this).style('fill', 'gold');})

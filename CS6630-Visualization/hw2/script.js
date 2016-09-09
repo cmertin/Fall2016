@@ -165,15 +165,18 @@ function update(error, data) {
     // TODO: Select and update the scatterplot points
     function Circles()
     {
-      var circles = document.querySelectorAll('[id^="cir_"]');
-
-      for(var i = 0; i < data.length; i++)
-        {
-          circles[i].setAttribute("cx", aScale(data[i].a));
-          circles[i].setAttribute("cy", bScale(data[i].b));
-        }
+      //console.log(data.length);
+      var svg = d3.selectAll("svg g circle");//d3.selectAll("circle");//select("svg").select("g").selectAll("circles_");
+      var circles = svg.data(data);
+      //console.log(svg);
+      //console.log(circles);
+      circles.exit().remove();
+      circles = circles.enter().append("circle").classed("circles_", true)
+                .merge(circles);
+      circles.attr("cx", function(d,i) {return aScale(data[i].a);})
+             .attr("cy", function(d,i) {return bScale(data[i].b);})
+             .attr("r", function() {return 5;});
     }
-
     Circles();
 
     // ****** TODO: PART IV ******
