@@ -71,13 +71,13 @@ function update(error, data) {
     // ****** TODO: PART III (you will also edit in PART V) ******
     function Bar_A()
     {
-      var svg = d3.select(".barChart").selectAll("rect");
+      var svg = d3.select("svg g.barChart").selectAll("rect");
       var bars = svg.data(data);
 
-      bars.exit().transition().duration(1000)
+      bars.exit().transition().duration(500)
                  .attr("height",0).remove();
 
-      bars = bars.enter().append("rect").classed("barChart",true).merge(bars);
+      bars = bars.enter().append("rect").classed(".barChart",true).merge(bars);
 
       bars.attr("x", function(d,i) {return iScale(i+1);})
           .attr("height", 0)
@@ -88,13 +88,13 @@ function update(error, data) {
 
     function Bar_B()
     {
-      var svg = d3.select(".barChart2").selectAll("rect");
+      var svg = d3.select("svg g.barChart2").selectAll("rect");
       var bars = svg.data(data);
 
-      bars.exit().transition().duration(1000)
+      bars.exit().transition().duration(500)
                  .attr("height",0).remove();
 
-      bars = bars.enter().append("rect").classed("barChart2",true).merge(bars);
+      bars = bars.enter().append("rect").classed(".barChart2",true).merge(bars);
 
       bars.attr("x", function(d,i) {return iScale(i+1);})
           .attr("height",0)
@@ -187,23 +187,49 @@ function update(error, data) {
     // TODO: Select and update the scatterplot points
     function Circles()
     {
-      var svg = d3.select(".circles_").selectAll("circle");
+      var svg = d3.select("svg g.circles_").selectAll("circle");
       var circles = svg.data(data);
 
-      circles.exit().transition().duration(1000)
+      circles.exit().transition().duration(500)
              .attr("r",0).remove();
 
-      circles = circles.enter().append("circle").classed("circles_", true).merge(circles);
+      circles = circles.enter().append("circle").classed(".circles_", true).merge(circles);
 
       circles.attr("cx", function(d,i) {return aScale(d.a);})
              .attr("cy", function(d,i) {return bScale(d.b);})
+             .attr("r",0)
              .transition()
              .duration(1000)
              .attr("r", function() {return 5;});
-
-
     }
     Circles(data);
+
+    d3.select("svg g.circles_").selectAll("circle")
+          .on("mouseover", function() {
+            d3.select(this).style('fill','gold');})
+          .on("mouseout", function() {
+            d3.select(this).style('fill','darkred');})
+          .on("click", function() {
+            var pos = "(";
+            var cx = Math.round(d3.select(this).attr("cx") * 100)/100;
+            var cy = Math.round(d3.select(this).attr("cy") * 100)/100;
+            pos = pos.concat(cx);
+            pos = pos.concat(", ");
+            pos = pos.concat(cy);
+            pos = pos.concat(")");
+            console.log(pos);});
+
+      d3.selectAll(".barChart rect")
+          .on("mouseover", function() {
+            d3.select(this).style('fill', 'gold');})
+          .on("mouseout", function() {
+            d3.select(this).style('fill','darkred');});
+
+      d3.selectAll(".barChart2 rect")
+          .on("mouseover", function() {
+            d3.select(this).style('fill', 'gold');})
+          .on("mouseout", function() {
+            d3.select(this).style('fill','darkred');});
 }
 
 function changeData() {

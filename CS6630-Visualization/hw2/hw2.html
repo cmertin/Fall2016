@@ -102,17 +102,17 @@
 
     <svg width="200" height="200">
         <g transform="translate(0, 200) scale(1, -1)" class="barChart2">
-            <rect id="bb_1" x="10" y="0" width="10" height="80"/>
-            <rect id="bb_2" x="20" y="0" width="10" height="69"/>
-            <rect id="bb_3" x="30" y="0" width="10" height="76"/>
-            <rect id="bb_4" x="40" y="0" width="10" height="88"/>
-            <rect id="bb_5" x="50" y="0" width="10" height="83"/>
-            <rect id="bb_6" x="60" y="0" width="10" height="100"/>
-            <rect id="bb_7" x="70" y="0" width="10" height="72"/>
-            <rect id="bb_8" x="80" y="0" width="10" height="43"/>
-            <rect id="bb_9" x="90" y="0" width="10" height="108"/>
-            <rect id="bb_10" x="100" y="0" width="10" height="48"/>
-            <rect id="bb_11" x="110" y="0" width="10" height="57"/>
+            <rect x="10" y="0" width="10" height="80"/>
+            <rect x="20" y="0" width="10" height="69"/>
+            <rect x="30" y="0" width="10" height="76"/>
+            <rect x="40" y="0" width="10" height="88"/>
+            <rect x="50" y="0" width="10" height="83"/>
+            <rect x="60" y="0" width="10" height="100"/>
+            <rect x="70" y="0" width="10" height="72"/>
+            <rect x="80" y="0" width="10" height="43"/>
+            <rect x="90" y="0" width="10" height="108"/>
+            <rect x="100" y="0" width="10" height="48"/>
+            <rect x="110" y="0" width="10" height="57"/>
         </g>
     </svg>
 </div>
@@ -157,17 +157,19 @@
 
     <svg width="200" height="200">
        <g  transform="translate(0, 200) scale(1, -1)" class="circles_">
-            <circle id="cir_1" cx="100" cy="80" r="5" />
-            <circle id="cir_2" cx="80" cy="69" r="5" />
-            <circle id="cir_3" cx="130" cy="76" r="5" />
-            <circle id="cir_4" cx="90" cy="88" r="5" />
-            <circle id="cir_5" cx="110" cy="83" r="5" />
-            <circle id="cir_6" cx="140" cy="100" r="5" />
-            <circle id="cir_7" cx="60" cy="72" r="5" />
-            <circle id="cir_8" cx="40" cy="43" r="5" />
-            <circle id="cir_9" cx="120" cy="108" r="5" />
-            <circle id="cir_10" cx="70" cy="48" r="5" />
-            <circle id="cir_11" cx="50" cy="57" r="5" />
+         <circle />
+         <!--
+            <circle cx="100" cy="80" r="5" />
+            <circle cx="80" cy="69" r="5" />
+            <circle cx="130" cy="76" r="5" />
+            <circle cx="90" cy="88" r="5" />
+            <circle cx="110" cy="83" r="5" />
+            <circle cx="140" cy="100" r="5" />
+            <circle cx="60" cy="72" r="5" />
+            <circle cx="40" cy="43" r="5" />
+            <circle cx="120" cy="108" r="5" />
+            <circle cx="70" cy="48" r="5" />
+            <circle cx="50" cy="57" r="5" />-->
         </g>
     </svg>
 </div>
@@ -179,33 +181,6 @@
   d3.select("button").on("click", function() {staircase();});
 
   d3.select("#random").on("click", function() {execute();});
-
-  d3.selectAll(".barChart rect")
-        .on("mouseover", function() {
-          d3.select(this).style('fill', 'gold');})
-        .on("mouseout", function() {
-          d3.select(this).style('fill','darkred');});
-
-  d3.selectAll(".barChart2 rect")
-        .on("mouseover", function() {
-          d3.select(this).style('fill', 'gold');})
-        .on("mouseout", function() {
-          d3.select(this).style('fill','darkred');});
-
-  d3.selectAll("circle")
-        .on("mouseover", function() {
-          d3.select(this).style('fill','gold');})
-        .on("mouseout", function() {
-          d3.select(this).style('fill','darkred');})
-        .on("click", function() {
-          var pos = "(";
-          var cx = Math.round(d3.select(this).attr("cx") * 100)/100;
-          var cy = Math.round(d3.select(this).attr("cy") * 100)/100;
-          pos = pos.concat(cx);
-          pos = pos.concat(", ");
-          pos = pos.concat(cy);
-          pos = pos.concat(")");
-          console.log(pos);});
 
   function execute()
   {
