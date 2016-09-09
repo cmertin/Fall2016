@@ -122,16 +122,18 @@ function update(error, data) {
     Line_A();
 
     // TODO: Select and update the 'b' line chart path (create your own generator)
+    var bLineGenerator = d3.line()
+        .x(function(d,i) {
+            return iScale(i + 1);})
+        .y(function (d) {
+            return bScale(d.b);
+        });
+
     function Line_B()
     {
       var lineb = document.querySelectorAll('[id^="lb_"]');
-      for(var i = 0; i < data.length-1; i++)
-      {
-        lineb[i].setAttribute("y1", bScale(data[i].b));
-        lineb[i].setAttribute("y2", bScale(data[i+1].b));
-        lineb[i].setAttribute("x2", iScale(i+1));
-        lineb[i].setAttribute("x1", iScale(i));
-      }
+      var newLine = bLineGenerator(data);
+      lineb[0].setAttribute("d", newLine);
     }
 
     Line_B();
