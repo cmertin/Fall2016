@@ -2,9 +2,14 @@
 
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amsthm,amssymb}
+\usepackage{float}
+\usepackage{graphicx}
 
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
+\newcommand{\abs}[1]{\left| #1 \right|}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 
 \newenvironment{theorem}[2][Theorem]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
@@ -19,147 +24,116 @@
 \newenvironment{corollary}[2][Corollary]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
 
-
 \DeclareMathOperator{\sech}{sech}
 \DeclareMathOperator{\csch}{csch}
 
 \begin{document}
 
-\title{CS6210: Homework 1}
+\title{CS6210: Homework 2}
 \author{Christopher Mertin}
-\date{September 6, 2016}
+\date{September 15, 2016}
 \maketitle
 
 \begin{enumerate}
 %%%%%% Problem 1 %%%%%%
-\item Carry out calculations similar to those of Example 1.3 for approximating
-the derivative of the function $f(x)=e^{-2x}$ evaluated at $x_{0}=0.5$. Observe
-similarities and differences by comparing your graph against that in Figure 1.3.
-
-%%%%%% Problem 2 %%%%%%
-\item Following Example 1.5, assess the conditioning of the problem of evaluating
-\[
-  g(x)=\tanh{(cx)} = \frac{e^{cx}-e^{-cx}}{e^{cx}+e^{-cx}}
-\]
-
-near $x=0$ as the positive parameter $c$ grows.
+\item Consider the fixed point iteration $x_{k+1} = g\left( x_{k}\right),\ k=\{0,1,\ldots\}$
+and let all the assumptions of the Fixed Point Theorem hold. Use a Taylor's series expansion
+to show that the order of convergence depends on how many of the derivatives of $g$ vanish
+at $x = x^{*}$. Use your result to state how fast (at least) a fixed point iteration
+is expected to converge if $g^{\prime} = \cdots = g^{(r)}\left( x^{*}\right) = 0$,
+where the integer $r \geq 1$ is given.
 
 {\bf Solution:}
 
-The condition number measures how sensitive the output of a function is to small
-changes in the input. It can be calculated by:
+The definition of the Taylor Series Expansion for a function $g(x)$ around $x = x^{*}$ is defined as:
 
 \begin{align*}
-\text{Condition Number}(g) &= x\frac{g^{\prime}(x)}{g(x)}
+g(x) &= \sum_{n=0}^{\infty} \frac{g^{(n)}\left( x^{*}\right)}{n!} \left( x - x^{*}\right)^{n}\\
+g\left( x_{k}\right) &= \sum_{n=0}^{\infty} \frac{g^{(n)}\left( x^{*}\right)}{n!} \left( x_{k} - x^{*}\right)^{n}\\
+x_{k+1} - x^{*} &= \xi_{k+1} = \sum_{n=1}^{\infty} \frac{g^{(n)}\left( x^{*}\right)}{n!}\xi_{k}^{n}
 \end{align*}
 
-which for the instance of this problem gives us
-
-\begin{align*}
-  g(x) &= \frac{e^{cx} - e^{-cx}}{e^{cx}+e^{-cx}} = \frac{\frac{e^{cx}-e^{-cx}}{2}}{\frac{e^{cx}+e^{-cx}}{2}}\\
-        &= \frac{\sinh(x)}{\cosh(x)}\\
-  g^{\prime}(x) &= c \sech^{2}(cx)\\
-                &= \frac{c}{\cosh^{2}(cx)}
-\end{align*}
-
-with using these formulas, we can plug it into the definition of the condition
-number we get
-
-\begin{align*}
-\text{Condition Number}(g) &= x\frac{g^{\prime}(x)}{g(x)} = \frac{cx}{\cosh^{2}(x)\cdot \tanh(cx)}\\
-                            &= cx\frac{\cosh(cx)}{\sinh(cx)} = cx\cdot \coth(cx)
-\intertext{Where we can take the limit of the condition number as $x$ approaches $0$, giving}
-\lim_{x\rightarrow 0} cx\cdot \coth(cx) &= 1
-\end{align*}
-
-This shows that the funcion's sensitivity is not dependent upon $c$ and is well conditioned.
-
-
-%%%%%% Problem 3 %%%%%%
-\item The function $f_{1}\left(x_{0},h\right) = \sin\left(x_{0}+h\right) - \sin\left(x_{0}\right)$
-can be transformed into another form, $f_{2}\left(x_{0},h\right)$, using the
-trigonometric formula
-\[
-\sin(\phi) - \sin(\psi) = 2\cos\left(\frac{\phi + \psi}{2}\right)\sin\left(\frac{\phi - \psi}{2}\right)
-\]
-Thus $f_{1}$ and $f_{2}$ have the same values, in exact arithmetic, for any given
-argument values $x_{0}$ and $h$.
+%%%%%% Problem 2 %%%%%%
+\item Consider the function $g(x) = x^{2} + \frac{3}{16}$
 \begin{enumerate}
-\item Derive $f_{2}\left(x_{0},h\right)$
-\item Suggest a formula that avoids cancellation errors for computing the approximation
-$\left(\left( f\left( x_{0}+h\right) - f\left(x_{0}\right)\right) /h\right)$
-to the derivative of $f(x)=\sin(x)$ at $x=x_{0}$. Write a {\sc Matlab} program
-that implements your formula and computes an approximation of $f^{\prime}(1.2)$
-for $h = \left\{ 10^{-20},10^{-19},\ldots,1\right\}$.
-\item Explain the difference in accuracy between your results and the results
-reported in Example 1.3.
+  \item This function has two fixed points. What are they?
+  \item Consider the fixed point iteration $x_{k+1} = g\left( x_{k}\right)$ for this $g$.
+  For which of the points you have found in $(a)$ can you be sure that the iterations
+  will converge to that fixed point? Briefly justify your answer. You may assume that
+  the initial guess is sufficiently close to the fixed point.
+  \item For the point or points you found in $(b)$, roughly how many iterations will be
+  required to reduce the convergence error by a factor of 10?
 \end{enumerate}
 
+%%%%%% Problem 3 %%%%%%
+\item It is known that the order of convergence of the secant method is $p = \frac{1 + \sqrt{5}}{2} \approx 1.618\ldots$
+and that of Newton's method is $p = 2$. Suppose that evaluating $f^{\prime}$ costs approximately
+$\alpha$ times the cost of approximating $f$. Determine approximately for what values of $\alpha$
+Newton's method is more efficient (in terms of number of function evaluations) than the secant method.
+You may neglect the asymptotic error constants in your calculations. Assume that both methods
+are starting with initial guesses of a similar quality.
+
 %%%%%% Problem 4 %%%%%%
-\item The function $f_{1}(x,\delta) = \cos(x+\delta)-\cos(x)$ can be transformed
-into another form, $f_{2}(x,\delta)$, using the trigonometric formula
+\item The function
+
 \[
-\cos(\phi) - \cos(\psi) = -2\sin\left(\frac{\phi + \psi}{2}\right)\sin\left(\frac{\phi - \psi}{2}\right)
+f(x) = (x-1)^{2}e^{x}
 \]
-Thus, $f_{1}$ and $f_{2}$ have the same values, in exact arithmetic, for any given
-argument values $x$ and $\delta$.
+
+has a double root at $x = 1$.
+
 \begin{enumerate}
-\item Show that, analytically, $f_{1}(x,\delta)/\delta$ or $f_{2}(x,\delta)/\delta$
-are effective approximations of the function $(-\sin(x))$ for $\delta$ sufficiently small.
-\item Derive $f_{2}(x,\delta)$
-\item Write a {\sc Matlab} script which will calculate $g_{1}(x,\delta) = f_{1}(x,\delta)/\delta + \sin(x)$
-and $g_{2}(x,\delta) = f_{2}(x,\delta)/\delta + \sin(x)$ for $x = 3$ and $\delta = 10^{-11}$.
-\item Explain the difference in the results of the two calculations.
+\item Derive Newton's iteration for this function. Show that the iteration is well-defined
+so long as $x_{k} \neq -1$ and that the convergence rate is expected to be similar to that
+of the bisection method (and certainly not quadratic).
+\item Implement Newton's method and observe its performance starting from $x_{0} = 2$.
+\item How easy would it be to apply the bisection method? Explain.
 \end{enumerate}
 
 %%%%%% Problem 5 %%%%%%
-\item Consider the approximation of the first derivative
-\[
-f^{\prime}(x) \approx \frac{f(x+h)-f(x)}{h}
-\]
-The {\em truncation error} for this formula is $\mathcal{O}(h)$. Suppose that the
-absolute error in evaluating the function $f$ is bounded by $\epsilon$ and
-let us ignore the errors generated in basic arithmetic operations.
+\item Given $a > 0$, we wish to compute $x = \ln (a)$ using addition, subtraction, multiplication,
+division, and the exponential function $e^{x}$.
 \begin{enumerate}
-\item Show that the total computational error (truncation error and rounding combined)
-is bounded by
-\[
-\frac{Mh}{2} + \frac{2\epsilon}{h}
-\]
-where $M$ is a bound on $\left| f^{\prime\prime}(x)\right|$.
-\item What is the value of $h$ for which the above is minimized?
-\item The rounding unit we employ is approximately equal to $10^{-16}$. Use this
-to explain the behavior of the graph in Example 1.3. Make sure to explain the shape
-of the graph as well as the value where the apparent minimum is attained.
-\item It is not difficult to show, using Taylor expansions, that $f^{\prime}(x)$ can
-be approximated more accurately (in terms of truncation error) by
-\[
-f^{\prime}(x) \approx \frac{f(x+h) - f(x-h)}{2h}
-\]
-For this approximation, the truncation error is $\mathcal{O}\left(h^{2}\right)$.
-Generate a graph similar to Figure 1.3 for the same function and the same value
-of $x$, namely, for $\sin(1.2)$, and compare the two graphs. Explain the meaning
-of your results.
+\item Suggest an iterative formula based on Newton's method, and write it in a way suitable
+for numerical computation
+\item Show that your formula converges quadratically
+\item Write down an iterative formula based on the secant method
+\item State which of the secant and Newton's methods is expected to perform better in
+this case in terms of overall number of exponential function evaluations. Assume a fair
+comparison, {\em i.e.} same floating point system, ``same quality'' initial guesses, and idential
+convergence criterion.
 \end{enumerate}
 
 %%%%%% Problem 6 %%%%%%
-\item In the statistical treatment of data one often needs to compute the quantities
+\item For $x>0$ consider the equation
+
 \[
-\bar{x} = \frac{1}{n}\sum_{i=1}^{n}x_{i},\quad \sigma^{2}=\frac{1}{n}\sum_{i=1}^{n}\left(x_{i}-\bar{x}\right)^{2}
+x + \ln(x) = 0
 \]
-where $\left\{ x_{1}, x_{2}, \ldots, x_{n}\right\}$ are the given data. Assume that $n$
-is large, say, $n = 10000$. It is easy to see that $\sigma^{2}$ can also be written as
-\[
-\sigma^{2} = \frac{1}{n}\sum_{i=1}^{n} x_{i}^{2} - \bar{x}^{2}
-\]
+
+It is a reformulation of the equation of Example 3.4
+
 \begin{enumerate}
-\item Which of the two methods to calculate $\sigma^{2}$ is cheaper in terms of
-overall computational cost? Assume $\bar{x}$ has already been calculated and give
-the operation counts for these two options.
-\item Which of the two methods is expected to give more accurate results for
-$\sigma^{2}$ in general?
-\item Give a small example, using a decimal system with precision $t = 2$ and
-numbers of your choice, validate your claims.
+  \item Show analytically that there is exactly one root, $0 < x^{*} < \infty$
+  \item Plot a graph of the function on the interval $[0.1, 1]$
+  \item As you can see from the graph, the root is between $0.5$ and $0.6$. Write
+  {\sc Matlab} routines for finding the root, using the following:
+  \begin{enumerate}
+    \item The bisection method, with the initial interval $[0.5,0.6]$. Explain
+    why this choice of the intial interval is valid.
+    \item A linearly convergent fixed point interation, with $x_{0} = 0.5$. Show that
+    the conditions of the Fixed Point Theorem (for the function $g$ you have selected)
+    are satisfied.
+    \item Newton's method, with $x_{0} = 0.5$.
+    \item The secant method, with $x_{0} = 0.5$ and $x_{1} = 0.6$.
+  \end{enumerate}
+  For each of the methods:
+  \begin{itemize}
+    \item Use $\abs{ x_{k} - x_{k-1}} < 10^{-10}$ as convergence criterion
+    \item Print out eh iterates and show the progress in the number of correct decimal
+    digits throughout the iteration.
+    \item Explain the convergence behavior and how it matches theoretical expectations
+  \end{itemize}
 \end{enumerate}
 \end{enumerate}
 
