@@ -10,6 +10,8 @@
 \newcommand{\abs}[1]{\left| #1 \right|}
 \newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\pprime}{\prime \prime}
+\newcommand{\BigO}[1]{\mathcal{O}\left( #1 \right)}
 
 \newenvironment{theorem}[2][Theorem]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
@@ -50,19 +52,80 @@ The definition of the Taylor Series Expansion for a function $g(x)$ around $x = 
 \begin{align*}
 g(x) &= \sum_{n=0}^{\infty} \frac{g^{(n)}\left( x^{*}\right)}{n!} \left( x - x^{*}\right)^{n}\\
 g\left( x_{k}\right) &= \sum_{n=0}^{\infty} \frac{g^{(n)}\left( x^{*}\right)}{n!} \left( x_{k} - x^{*}\right)^{n}\\
-x_{k+1} - x^{*} &= \xi_{k+1} = \sum_{n=1}^{\infty} \frac{g^{(n)}\left( x^{*}\right)}{n!}\xi_{k}^{n}
+x_{k+1} - x^{*} &= \xi_{k+1} = \sum_{n=0}^{\infty} \frac{g^{(n)}\left( x^{*}\right)}{n!}\xi_{k}^{n}
+\intertext{If $g^{\prime}\left( x^{*}\right) = 0$, then}
+\xi_{k+1} &= \sum_{n=2}^{\infty} \frac{g^{(n)}\left( x^{*}\right)}{n!} \xi_{k}^n = \xi_{k}^{2}\sum_{n=2}^{\infty}\frac{g^{(n)}\left( x^{*}\right)}{n!}\xi_{k}^{n-2}
 \end{align*}
+
+Which shows that $g(x)$ is {\em minimally} quadratically convergent. Consequently, if
+$g^{(i)}\left( x^{*}\right) = 0$ for $i \in \{1,2,\ldots,r\}$, then the function has a
+divergence of {\em at least} $\BigO{r}$.
 
 %%%%%% Problem 2 %%%%%%
 \item Consider the function $g(x) = x^{2} + \frac{3}{16}$
+
 \begin{enumerate}
   \item This function has two fixed points. What are they?
+
+  {\bf Solution:}
+
+  In order to find the {\em fixed points} of the above function, we need to find
+  the zeros
+
+  \begin{align*}
+    x^{2} + \frac{3}{16} &= x\\
+    x^{2} - x + \frac{3}{16} &= 0\\
+    \Rightarrow x_{1} &= \frac{1}{4}\\
+    \Rightarrow x_{2} &= \frac{3}{4}
+  \end{align*}
   \item Consider the fixed point iteration $x_{k+1} = g\left( x_{k}\right)$ for this $g$.
   For which of the points you have found in $(a)$ can you be sure that the iterations
   will converge to that fixed point? Briefly justify your answer. You may assume that
   the initial guess is sufficiently close to the fixed point.
+
+{\bf Solution:}
+
+  Since the inital guess is said to be {\em sufficiently close to the fixed point},
+  we can assume that the given range is the following.
+
+  \begin{align*}
+    \frac{1}{4} &\leq x \leq \frac{3}{4}
+  \end{align*}
+  We need to check to make sure the function $f(x)$ is constrained in this domain, such that it won't go ``over'' or ``under'' when getting the next $x_{k+1}$ point. To do so
+  \begin{align*}
+    \frac{1}{16} &\leq x^{2} \leq \frac{9}{16}\\
+    \frac{1}{16} + \frac{3}{16} &\leq x^{2} + \frac{3}{16} \leq \frac{9}{16} + \frac{3}{16}\\
+    \frac{1}{4} &\leq f(x) \leq \frac{3}{4}
+    \end{align*}
+
+    So $f(x)$ is contained in the interval $\frac{1}{4} \leq f(x) \leq \frac{3}{4}$ for
+    choosing an initial $x$ in the same interval. Therefore, we can now check to see if it will
+    converge to each of the fixed points by checking the {\em slope} of the function
+
+    \begin{align*}
+      g^{\prime}(x) &= 2x\\
+      g^{\prime}\left(\frac{1}{4}\right) &= \frac{1}{2}\\
+      g^{\prime}\left(\frac{3}{4}\right) &= \frac{3}{2}
+    \end{align*}
+
+    Since $g^{\prime}\left(\frac{1}{4}\right) < 1$, it is a decreasing slope and the function will converge
+    for $x_{1} = \frac{1}{4}$. Like wise, $g^{\prime}\left(\frac{3}{4}\right) > 1$ means that it will converge
+    to $x_{2} = \frac{3}{4}$, assuming that the initial value is {\em sufficiently close}.
   \item For the point or points you found in $(b)$, roughly how many iterations will be
   required to reduce the convergence error by a factor of 10?
+
+  {\bf Solution:}
+
+  Page 49 of the text gives the equation to reduce the convergence error by a factor of 10.
+  The number of iterations is defined as $k = \ceil{1/rate}$, for which $rate = -\log_{10}\abs{g^{\prime}\left( x^{*}\right)}$.
+  Using this equation, we can get the convergence rate to be
+
+  \begin{align*}
+    g^{\prime}\left( \frac{1}{4}\right) &= \frac{1}{2}\\
+    \Rightarrow rate &= -\log_{10}\abs{2^{-1}} = \frac{3}{10}\\
+    \intertext{So it takes $k = \ceil{1/rate}$ iterations to reduce the error by more than an order of magnitude, resulting in}
+    k &= \ceil{\left( \frac{3}{10}\right)^{-1}} = 4
+  \end{align*}
 \end{enumerate}
 
 %%%%%% Problem 3 %%%%%%
@@ -72,6 +135,8 @@ $\alpha$ times the cost of approximating $f$. Determine approximately for what v
 Newton's method is more efficient (in terms of number of function evaluations) than the secant method.
 You may neglect the asymptotic error constants in your calculations. Assume that both methods
 are starting with initial guesses of a similar quality.
+
+{\bf Solution:}
 
 %%%%%% Problem 4 %%%%%%
 \item The function
@@ -86,8 +151,33 @@ has a double root at $x = 1$.
 \item Derive Newton's iteration for this function. Show that the iteration is well-defined
 so long as $x_{k} \neq -1$ and that the convergence rate is expected to be similar to that
 of the bisection method (and certainly not quadratic).
+
+{\bf Solution:}
+
+In order to build the methods, we need the following
+
+\begin{align*}
+f(x) &= (x-1)^{2}e^{x}\\
+f^{\prime}(x) &= (x-1)^{2}e^{x} + 2(x-1)e^{x}\\
+f^{\pprime}(x) &= (x-1)^{2}e^{x} + 2(x-1)e^{x} + 2(x-1)^{2}e^{x} + 2e^{x}
+\end{align*}
+
+with Newton's method being defined as:
+
+\begin{align*}
+x_{k+1} &= x_{k} - \frac{f\left(x_{k}\right)}{f^{\prime}\left(x_{k}\right)}\\
+        &= x_{k} - \frac{\left(x_{k}-1\right)^{2}e^{x_{k}}}{2\left(x_{k}-1\right)e^{x_{k}} + \left( x_{k} - 1\right)^{2}e^{x_{k}}}\\
+        &= x_{k} - \frac{x_{k}-1}{x_{k} + 1}
+\end{align*}
+
 \item Implement Newton's method and observe its performance starting from $x_{0} = 2$.
+
+{\bf Solution:}
+
 \item How easy would it be to apply the bisection method? Explain.
+
+{\bf Solution:}
+
 \end{enumerate}
 
 %%%%%% Problem 5 %%%%%%
@@ -95,13 +185,25 @@ of the bisection method (and certainly not quadratic).
 division, and the exponential function $e^{x}$.
 \begin{enumerate}
 \item Suggest an iterative formula based on Newton's method, and write it in a way suitable
-for numerical computation
-\item Show that your formula converges quadratically
-\item Write down an iterative formula based on the secant method
+for numerical computation.
+
+{\bf Solution:}
+
+\item Show that your formula converges quadratically.
+
+{\bf Solution:}
+
+\item Write down an iterative formula based on the secant method.
+
+{\bf Solution:}
+
 \item State which of the secant and Newton's methods is expected to perform better in
 this case in terms of overall number of exponential function evaluations. Assume a fair
 comparison, {\em i.e.} same floating point system, ``same quality'' initial guesses, and idential
 convergence criterion.
+
+{\bf Solution:}
+
 \end{enumerate}
 
 %%%%%% Problem 6 %%%%%%
@@ -115,17 +217,36 @@ It is a reformulation of the equation of Example 3.4
 
 \begin{enumerate}
   \item Show analytically that there is exactly one root, $0 < x^{*} < \infty$
+
+  {\bf Solution:}
+
   \item Plot a graph of the function on the interval $[0.1, 1]$
+
+  {\bf Solution:}
+
   \item As you can see from the graph, the root is between $0.5$ and $0.6$. Write
   {\sc Matlab} routines for finding the root, using the following:
   \begin{enumerate}
     \item The bisection method, with the initial interval $[0.5,0.6]$. Explain
     why this choice of the intial interval is valid.
+
+    {\bf Solution:}
+
     \item A linearly convergent fixed point interation, with $x_{0} = 0.5$. Show that
     the conditions of the Fixed Point Theorem (for the function $g$ you have selected)
     are satisfied.
+
+    {\bf Solution:}
+
     \item Newton's method, with $x_{0} = 0.5$.
+
+    {\bf Solution:}
+
     \item The secant method, with $x_{0} = 0.5$ and $x_{1} = 0.6$.
+
+    {\bf Solution:}
+
+
   \end{enumerate}
   For each of the methods:
   \begin{itemize}

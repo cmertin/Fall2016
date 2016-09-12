@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/W32TeX) (preloaded format=pdflatex 2016.7.28)  11 SEP 2016 18:54
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/W32TeX) (preloaded format=pdflatex 2016.7.28)  12 SEP 2016 17:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -171,18 +171,18 @@ Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
 ) (./hw2.aux)
 \openout1 = `hw2.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 30.
-LaTeX Font Info:    ... okay on input line 30.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 32.
+LaTeX Font Info:    ... okay on input line 32.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -277,49 +277,58 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-LaTeX Font Info:    Try loading font information for U+msa on input line 35.
+LaTeX Font Info:    Try loading font information for U+msa on input line 37.
 
 (c:/texlive/2016/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 35.
+LaTeX Font Info:    Try loading font information for U+msb on input line 37.
 
 (c:/texlive/2016/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [1
+)
+Overfull \hbox (8.40288pt too wide) in paragraph at lines 60--63
+[]\OT1/cmr/m/n/12 Which shows that $\OML/cmm/m/it/12 g\OT1/cmr/m/n/12 (\OML/cmm
+/m/it/12 x\OT1/cmr/m/n/12 )$ is \OT1/cmr/m/it/12 min-i-mally \OT1/cmr/m/n/12 qu
+adrat-i-cally con-ver-gent. Con-se-quently, if $\OML/cmm/m/it/12 g[] [] \OT1/cm
+r/m/n/12 =
+ []
 
-{c:/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 132.
+[1
 
+{c:/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
+[4]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 253.
 
-(c:/texlive/2016/texmf-dist/tex/latex/base/omscmr.fd
+ (c:/texlive/2016/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 132.
- [2] [3] (./hw2.aux) ) 
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 253.
+ [5] (./hw2.aux) ) 
 Here is how much of TeX's memory you used:
- 3036 strings out of 493013
- 40197 string characters out of 6136993
- 111480 words of memory out of 5000000
- 6532 multiletter control sequences out of 15000+600000
+ 3038 strings out of 493013
+ 40207 string characters out of 6136993
+ 112498 words of memory out of 5000000
+ 6534 multiletter control sequences out of 15000+600000
  12138 words of font info for 47 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 40i,10n,32p,232b,307s stack positions out of 5000i,500n,10000p,200000b,80000s
-<c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmbx12.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10
-.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/
-texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2
-016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2016/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2016/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr17.pfb><c:/texlive/2016/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmr8.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmsy10.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
-8.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on hw2.pdf (3 pages, 112677 bytes).
+ 40i,10n,32p,232b,312s stack positions out of 5000i,500n,10000p,200000b,80000s
+<c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+bx12.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb
+><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texl
+ive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2016/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2016/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2016/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmr17.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmr8.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pf
+b><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texl
+ive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on hw2.pdf (5 pages, 131864 bytes).
 PDF statistics:
- 58 PDF objects out of 1000 (max. 8388607)
- 41 compressed objects within 1 object stream
+ 68 PDF objects out of 1000 (max. 8388607)
+ 48 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
