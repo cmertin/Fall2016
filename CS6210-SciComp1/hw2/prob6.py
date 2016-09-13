@@ -32,19 +32,19 @@ print("Wrote f(x) to hw2_prob6a.pdf")
 tol = 1e-10
 # Bisection Method
 x, bisect_vals = Bisection(fn, 0.5, 0.6, tol)
-print("Finished Bisection Method")
+print("Finished Bisection Method in " + str(len(bisect_vals)) + " iterations")
 
 # Fixed Point
 x, fixed_vals = FixedPoint(FixedPoint_fn, 0.5, tol)
-print("Finished Fixed Point Method")
+print("Finished Fixed Point Method in " + str(len(fixed_vals)) + " iterations")
 
 # Newton's Method
 x, newton_vals = Newton(fn, dfn, 0.5, tol)
-print("Finished Newton's Method")
+print("Finished Newton's Method in " + str(len(newton_vals)) + " iterations")
 
 # Secant Method
 x, secant_vals = Secant(fn, 0.5, 0.6, tol)
-print("Finished Secant Method")
+print("Finished Secant Method in " + str(len(secant_vals)) + " iterations")
 
 plt.clf()
 plt.plot(bisect_vals, label="Bisection Method")

@@ -41,24 +41,24 @@
 \item Consider the fixed point iteration $x_{k+1} = g\left( x_{k}\right),\ k=\{0,1,\ldots\}$
 and let all the assumptions of the Fixed Point Theorem hold. Use a Taylor's series expansion
 to show that the order of convergence depends on how many of the derivatives of $g$ vanish
-at $x = x^{*}$. Use your result to state how fast (at least) a fixed point iteration
-is expected to converge if $g^{\prime} = \cdots = g^{(r)}\left( x^{*}\right) = 0$,
+at $x = \widetilde{x}$. Use your result to state how fast (at least) a fixed point iteration
+is expected to converge if $g^{\prime} = \cdots = g^{(r)}\left( \widetilde{x}\right) = 0$,
 where the integer $r \geq 1$ is given.
 
 {\bf Solution:}
 
-The definition of the Taylor Series Expansion for a function $g(x)$ around $x = x^{*}$ is defined as:
+The definition of the Taylor Series Expansion for a function $g(x)$ around $x = \widetilde{x}$ is defined as:
 
 \begin{align*}
-g(x) &= \sum_{n=0}^{\infty} \frac{g^{(n)}\left( x^{*}\right)}{n!} \left( x - x^{*}\right)^{n}\\
-g\left( x_{k}\right) &= \sum_{n=0}^{\infty} \frac{g^{(n)}\left( x^{*}\right)}{n!} \left( x_{k} - x^{*}\right)^{n}\\
-x_{k+1} - x^{*} &= \xi_{k+1} = \sum_{n=0}^{\infty} \frac{g^{(n)}\left( x^{*}\right)}{n!}\xi_{k}^{n}
-\intertext{If $g^{\prime}\left( x^{*}\right) = 0$, then}
-\xi_{k+1} &= \sum_{n=2}^{\infty} \frac{g^{(n)}\left( x^{*}\right)}{n!} \xi_{k}^n = \xi_{k}^{2}\sum_{n=2}^{\infty}\frac{g^{(n)}\left( x^{*}\right)}{n!}\xi_{k}^{n-2}
+g(x) &= \sum_{n=0}^{\infty} \frac{g^{(n)}\left( \widetilde{x}\right)}{n!} \left( x - \widetilde{x}\right)^{n}\\
+g\left( x_{k}\right) &= \sum_{n=0}^{\infty} \frac{g^{(n)}\left( \widetilde{x}\right)}{n!} \left( x_{k} - \widetilde{x}\right)^{n}\\
+x_{k+1} - \widetilde{x} &= \xi_{k+1} = \sum_{n=0}^{\infty} \frac{g^{(n)}\left( \widetilde{x}\right)}{n!}\xi_{k}^{n}
+\intertext{If $g^{\prime}\left( \widetilde{x}\right) = 0$, then}
+\xi_{k+1} &= \sum_{n=2}^{\infty} \frac{g^{(n)}\left( \widetilde{x}\right)}{n!} \xi_{k}^n = \xi_{k}^{2}\sum_{n=2}^{\infty}\frac{g^{(n)}\left( \widetilde{x}\right)}{n!}\xi_{k}^{n-2}
 \end{align*}
 
 Which shows that $g(x)$ is {\em minimally} quadratically convergent. Consequently, if
-$g^{(i)}\left( x^{*}\right) = 0$ for $i \in \{1,2,\ldots,r\}$, then the function has a
+$g^{(i)}\left( \widetilde{x}\right) = 0$ for $i \in \{1,2,\ldots,r\}$, then the function has a
 divergence of {\em at least} $\BigO{r}$.
 
 %%%%%% Problem 2 %%%%%%
@@ -117,7 +117,7 @@ divergence of {\em at least} $\BigO{r}$.
   {\bf Solution:}
 
   Page 49 of the text gives the equation to reduce the convergence error by a factor of 10.
-  The number of iterations is defined as $k = \ceil{1/rate}$, for which $rate = -\log_{10}\abs{g^{\prime}\left( x^{*}\right)}$.
+  The number of iterations is defined as $k = \ceil{1/rate}$, for which $rate = -\log_{10}\abs{g^{\prime}\left( \widetilde{x}\right)}$.
   Using this equation, we can get the convergence rate to be
 
   \begin{align*}
@@ -137,6 +137,26 @@ You may neglect the asymptotic error constants in your calculations. Assume that
 are starting with initial guesses of a similar quality.
 
 {\bf Solution:}
+
+The Secant Method only requires one function evaluation, which will be denoted by $\varsigma$,
+as $f\left(x_{n-1}\right)$ can be stored from the previous computation. On the other hand,
+Newton's Method requires one function evaluation, and one derivative evaluation, having a total
+of $\varsigma(\alpha + 1)$ as the total cost.
+
+Therefore, we can determine the minimum values of $\alpha$ for which the computations would be
+better to use the Secant Method over the Newton's Method.
+
+\begin{align*}
+  \varsigma &\leq \varsigma(\alpha + 1)\\
+  \varsigma - \varsigma(\alpha + 1) &\leq 0\\
+  \varsigma(1 - 1 - \alpha) &\leq 0\\
+  \alpha &\leq 0
+\end{align*}
+
+Therefore, since you cannot have {\em negative computational cost}, the Secant Method
+will always be faster than Newton's Method in the case of linear convergence, but
+Newton's Method would win in the case of Quadratic Convergence.
+
 
 %%%%%% Problem 4 %%%%%%
 \item The function
@@ -174,8 +194,8 @@ Which shows that it is well defined {\em except} for $x_{k} = -1$. We can subtra
 of the root for $x = 1$ of $f(x)$ from both sides, which gives
 
 \begin{align*}
-x_{k+1} - x^{*} &= x_{k} - \frac{x_{k} - 1}{x_{k} + 1} - x^{*}\\
-\xi_{k+1} &= \xi_{k} - \frac{x_{k}-1}{x_{k}+1} \approx \xi_{k} - \frac{x_{k} - x^{*}}{x_{k}+1}\\
+x_{k+1} - \widetilde{x} &= x_{k} - \frac{x_{k} - 1}{x_{k} + 1} - \widetilde{x}\\
+\xi_{k+1} &= \xi_{k} - \frac{x_{k}-1}{x_{k}+1} \approx \xi_{k} - \frac{x_{k} - \widetilde{x}}{x_{k}+1}\\
           &= \xi_{k} - \frac{\xi_{k}}{x_{k}+1} = \xi_{k} \left( 1 - \frac{1}{x_{k}+1}\right)\\
           &= \xi_{k}\left( \frac{x_{k}}{x_{k}+1}\right)
 \end{align*}
@@ -237,15 +257,15 @@ x_{k+1} &= x_{k} - \frac{f(x_{k})}{f^{\prime}(x_{k})}\\
 We can define $g(x) = \frac{a}{e^{x}} - 1$, and then take the Taylor Series of it, giving
 
 \begin{align*}
-  g(x) &= \sum_{n=0}^{\infty}\frac{g^{(n)}\left( x^{*}\right)}{n!}\left(x - x^{*}\right)^{n}\\
-  \intertext{For $n=0$ we get $g\left(x^{*}\right) = 0$ and for $n=1$ we get $g^{\prime}\left(x^{*}\right) = -1$, this changes our series to}
-  g\left(x_{k}\right) &= 0 - \xi_{k} + \sum_{n=2}^{\infty} \frac{g^{(n)}\left(x^{*}\right)}{n!}\xi_{k}^{n}
+  g(x) &= \sum_{n=0}^{\infty}\frac{g^{(n)}\left( \widetilde{x}\right)}{n!}\left(x - \widetilde{x}\right)^{n}\\
+  \intertext{For $n=0$ we get $g\left(\widetilde{x}\right) = 0$ and for $n=1$ we get $g^{\prime}\left(\widetilde{x}\right) = -1$, this changes our series to}
+  g\left(x_{k}\right) &= 0 - \xi_{k} + \sum_{n=2}^{\infty} \frac{g^{(n)}\left(\widetilde{x}\right)}{n!}\xi_{k}^{n}
   \intertext{where we can replace this into the iterative equation from above, giving}
-  x_{k+1} &= x_{k} - \xi_{k} + \sum_{n=2}^{\infty} \frac{g^{(n)}\left(x^{*}\right)}{n!}\xi_{k}^{n}\\
-          &= x_{k} - \xi_{k} + \xi_{k}^{2}\sum_{n=2}^{\infty} \frac{g^{(n)}\left(x^{*}\right)}{n!}\xi_{k}^{n-2}\\
-  \intertext{Finally, after subtracting $x^{*}$ from both sides, gives}
-  \xi_{k+1} = x_{k+1} - x^{*} &= \xi_{k} - \xi_{k} + \xi_{k}^{2}\sum_{n=2}^{\infty} \frac{g^{(n)}\left(x^{*}\right)}{n!}\xi_{k}^{n-2}\\
-                              &= \xi_{k}^{2}\sum_{n=2}^{\infty} \frac{g^{(n)}\left(x^{*}\right)}{n!}\xi_{k}^{n-2}
+  x_{k+1} &= x_{k} - \xi_{k} + \sum_{n=2}^{\infty} \frac{g^{(n)}\left(\widetilde{x}\right)}{n!}\xi_{k}^{n}\\
+          &= x_{k} - \xi_{k} + \xi_{k}^{2}\sum_{n=2}^{\infty} \frac{g^{(n)}\left(\widetilde{x}\right)}{n!}\xi_{k}^{n-2}\\
+  \intertext{Finally, after subtracting $\widetilde{x}$ from both sides, gives}
+  \xi_{k+1} = x_{k+1} - \widetilde{x} &= \xi_{k} - \xi_{k} + \xi_{k}^{2}\sum_{n=2}^{\infty} \frac{g^{(n)}\left(\widetilde{x}\right)}{n!}\xi_{k}^{n-2}\\
+                              &= \xi_{k}^{2}\sum_{n=2}^{\infty} \frac{g^{(n)}\left(\widetilde{x}\right)}{n!}\xi_{k}^{n-2}
 \end{align*}
 
 So it is quadratically convergent.
@@ -260,15 +280,23 @@ x_{k+1} &= x_{k} - \frac{f\left(x_{k}\right) \left(x_{k} - x_{k-1}\right)}{f\lef
         &= x_{k} - \frac{\left(e^{x_{k}} - a\right)\left(x_{k} - x_{k-1}\right)}{e^{x_{k}} - e^{x_{k-1}}}
 \end{align*}
 
-\item State which of the secant and Newton's methods is expected to perform better in
+\item State which of the Secant and Newton's Methods is expected to perform better in
 this case in terms of overall number of exponential function evaluations. Assume a fair
 comparison, {\em i.e.} same floating point system, ``same quality'' initial guesses, and idential
 convergence criterion.
 
 {\bf Solution:}
 
-Newton's method only has two evaluations of the exponential function $\left(f(x)\ \text{and}\ \frac{\text{d}}{\text{d}x}f(x) \right)$
+Newton's method only has two evaluations of the exponential function $\left(f(x)\right.$ and $\left.\frac{\text{d}}{\text{d}x}f(x) \right)$
 while the Secant Method has three. Thus, Newton's Method should perform better.
+
+This can be reduced down to a single exponential evaluation for the Secant Method
+by, instead of taking the na\"{i}ve approach you store the last value and only
+calculate $e^{x_{k}}$ once instead. In that instance, the Secant Method would win
+out as it only has to do one function evaluation, but Newton's Method is stuck at 2.
+
+However, in overall time, Newton's Method will most likely win out since it is
+quadratically convergent in this case.
 
 
 \end{enumerate}
@@ -283,7 +311,7 @@ x + \ln(x) = 0
 It is a reformulation of the equation of Example 3.4
 
 \begin{enumerate}
-  \item Show analytically that there is exactly one root, $0 < x^{*} < \infty$
+  \item Show analytically that there is exactly one root, $0 < \widetilde{x} < \infty$
 
   {\bf Solution:}
 
@@ -315,8 +343,11 @@ It is a reformulation of the equation of Example 3.4
 
     {\bf Solution:}
 
-    This interval is valid because the sign changes in the domain $[0.5, 0.6]$ so
-    the Bisection method can be used. For the plot, please see the last question.
+    This interval is valid because the sign changes in the domain $[0.5, 0.6]$ and
+    the function is everywhere continuous, so the Bisection method can be used.
+    It was able to converge in 30 iterations, which is within the theoretical limits.
+
+    For the plot, please see the last question.
 
     \item A linearly convergent fixed point interation, with $x_{0} = 0.5$. Show that
     the conditions of the Fixed Point Theorem (for the function $g$ you have selected)
@@ -324,7 +355,7 @@ It is a reformulation of the equation of Example 3.4
 
     {\bf Solution:}
 
-    In determining $g(x)$, we wanted a function such that $g\left(x^{*}\right) = x^{*}$,
+    In determining $g(x)$, we wanted a function such that $g\left(\widetilde{x}\right) = \widetilde{x}$,
     which was determined in the following way
 
     \begin{align*}
@@ -333,21 +364,27 @@ It is a reformulation of the equation of Example 3.4
       x &= e^{-x}
     \end{align*}
 
-    So $g\left( x^{*}\right) = e^{x^{*}}$ since $e^{x^{*}} = x^{*}$ for the given equation.
+    So $g\left( \widetilde{x}\right) = e^{\widetilde{x}}$ since $e^{\widetilde{x}} = \widetilde{x}$ for the given equation.
     This satisfies the conditions of the Fixed Point Method, and can be used to
-    converge to the root.
-    
+    converge to the root. In the implementation, it took 38 iterations to converge to the root.
+
     For the plot, please see the last question.
 
     \item Newton's method, with $x_{0} = 0.5$.
 
     {\bf Solution:}
 
+    Newton's Method was the fastest implementation, as it converged in only 3 iterations.
+
     For the plot, please see the last question.
 
-    \item The secant method, with $x_{0} = 0.5$ and $x_{1} = 0.6$.
+    \item The Secant Method, with $x_{0} = 0.5$ and $x_{1} = 0.6$.
 
     {\bf Solution:}
+
+    The Secant Method was the second fastest of the 4 methods, and converged in 4 iterateions.
+    However, since the number of computations is less, it most likely was faster than Newton's Method
+    for overall time.
 
     \begin{figure}[H]
       \centering
@@ -355,7 +392,15 @@ It is a reformulation of the equation of Example 3.4
       \caption{{\tt prob6.py}}
     \end{figure}
 
+    The Secant Method approached the root from the positive side of the function, which
+    is what is to be expected from the definition of the secant line and how it
+    is used in determining the root. Newton's Method on the other hand approached it from
+    the opposite side of the root, and converged from there. On the other hand, both the
+    Fixed Point and Bisection methods oscillated back and forth on both sides of the
+    root, which is usually what happens when implementing either of these two methods,
+    so it was to be expected.
 
+    
   \end{enumerate}
   For each of the methods:
   \begin{itemize}
