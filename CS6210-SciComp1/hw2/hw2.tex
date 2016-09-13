@@ -170,13 +170,36 @@ x_{k+1} &= x_{k} - \frac{f\left(x_{k}\right)}{f^{\prime}\left(x_{k}\right)}\\
         &= x_{k} - \frac{x_{k}-1}{x_{k} + 1}
 \end{align*}
 
+Which shows that it is well defined {\em except} for $x_{k} = -1$. We can subtract the approximation
+of the root for $x = 1$ of $f(x)$ from both sides, which gives
+
+\begin{align*}
+x_{k+1} - x^{*} &= x_{k} - \frac{x_{k} - 1}{x_{k} + 1} - x^{*}\\
+\xi_{k+1} &= \xi_{k} - \frac{x_{k}-1}{x_{k}+1} \approx \xi_{k} - \frac{x_{k} - x^{*}}{x_{k}+1}\\
+          &= \xi_{k} - \frac{\xi_{k}}{x_{k}+1} = \xi_{k} \left( 1 - \frac{1}{x_{k}+1}\right)\\
+          &= \xi_{k}\left( \frac{x_{k}}{x_{k}+1}\right)
+\end{align*}
+
+With $\frac{x_{k}}{x_{k}+1} < 1$, it is not quadratically convergent.
+
 \item Implement Newton's method and observe its performance starting from $x_{0} = 2$.
 
 {\bf Solution:}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width = .65\textwidth]{hw2_prob4.pdf}
+\caption{{\tt prob4.py}}
+\end{figure}
+
 \item How easy would it be to apply the bisection method? Explain.
 
 {\bf Solution:}
+
+To use the Bisection Method, we need two points $x_{0}$ and $x_{1}$ in the domain.
+It is also required that $f\left(x_{0}\right)$ has a different sign than $f\left(x_{1}\right)$,
+which since $f(x)$ is positive over the entire domain, cannot hold true. Therefore, the Bisection Method
+cannot be used.
 
 \end{enumerate}
 
@@ -189,13 +212,53 @@ for numerical computation.
 
 {\bf Solution:}
 
+In order to find an iterative formula, we need an $f(x)$ such that $f(x) = 0$ at some point,
+and has a derivative in the domain of interest. We can do that by taking the above equation and solving for 0, thus giving the $f(x)$
+
+\begin{align*}
+x &= \ln(a)\\
+e^{x} &= e^{\ln (a)}\\
+\therefore f(x) &= e^{x} - a\\
+f^{\prime}(x) &= e^{x}
+\end{align*}
+
+As we have a derivative, we can define the Newton's Method for this equation as being
+
+\begin{align*}
+x_{k+1} &= x_{k} - \frac{f(x_{k})}{f^{\prime}(x_{k})}\\
+        &= x_{k} - \frac{e^{x_{k}} - a}{e^{x_{k}}}\\
+        &= x_{k} - \frac{a}{e^{x_{k}}} - 1
+\end{align*}
+
 \item Show that your formula converges quadratically.
 
 {\bf Solution:}
 
+We can define $g(x) = \frac{a}{e^{x}} - 1$, and then take the Taylor Series of it, giving
+
+\begin{align*}
+  g(x) &= \sum_{n=0}^{\infty}\frac{g^{(n)}\left( x^{*}\right)}{n!}\left(x - x^{*}\right)^{n}\\
+  \intertext{For $n=0$ we get $g\left(x^{*}\right) = 0$ and for $n=1$ we get $g^{\prime}\left(x^{*}\right) = -1$, this changes our series to}
+  g\left(x_{k}\right) &= 0 - \xi_{k} + \sum_{n=2}^{\infty} \frac{g^{(n)}\left(x^{*}\right)}{n!}\xi_{k}^{n}
+  \intertext{where we can replace this into the iterative equation from above, giving}
+  x_{k+1} &= x_{k} - \xi_{k} + \sum_{n=2}^{\infty} \frac{g^{(n)}\left(x^{*}\right)}{n!}\xi_{k}^{n}\\
+          &= x_{k} - \xi_{k} + \xi_{k}^{2}\sum_{n=2}^{\infty} \frac{g^{(n)}\left(x^{*}\right)}{n!}\xi_{k}^{n-2}\\
+  \intertext{Finally, after subtracting $x^{*}$ from both sides, gives}
+  \xi_{k+1} = x_{k+1} - x^{*} &= \xi_{k} - \xi_{k} + \xi_{k}^{2}\sum_{n=2}^{\infty} \frac{g^{(n)}\left(x^{*}\right)}{n!}\xi_{k}^{n-2}\\
+                              &= \xi_{k}^{2}\sum_{n=2}^{\infty} \frac{g^{(n)}\left(x^{*}\right)}{n!}\xi_{k}^{n-2}
+\end{align*}
+
+So it is quadratically convergent.
+
 \item Write down an iterative formula based on the secant method.
 
 {\bf Solution:}
+
+\begin{align*}
+x_{k+1} &= x_{k} - \frac{f\left(x_{k}\right) \left(x_{k} - x_{k-1}\right)}{f\left(x_{k}\right) - f\left(x_{k-1}\right)}\\
+        &= x_{k} - \frac{\left(e^{x_{k}} - a\right)\left(x_{k} - x_{k-1}\right)}{e^{x_{k}} - a - \left(e^{x_{k-1}} - a\right)}\\
+        &= x_{k} - \frac{\left(e^{x_{k}} - a\right)\left(x_{k} - x_{k-1}\right)}{e^{x_{k}} - e^{x_{k-1}}}
+\end{align*}
 
 \item State which of the secant and Newton's methods is expected to perform better in
 this case in terms of overall number of exponential function evaluations. Assume a fair
@@ -203,6 +266,10 @@ comparison, {\em i.e.} same floating point system, ``same quality'' initial gues
 convergence criterion.
 
 {\bf Solution:}
+
+Newton's method only has two evaluations of the exponential function $\left(f(x)\ \text{and}\ \frac{\text{d}}{\text{d}x}f(x) \right)$
+while the Secant Method has three. Thus, Newton's Method should perform better.
+
 
 \end{enumerate}
 
@@ -220,9 +287,25 @@ It is a reformulation of the equation of Example 3.4
 
   {\bf Solution:}
 
+  $\ln(x)$ is a continuous function for $x > 0$, and we can choose two points such that
+  $x_{0} = \frac{1}{2}$ and $x_{1} = 1$.
+
+  \begin{align*}
+    f\left( x_{0}\right) &\approx \frac{1}{2} - 0.69 < 0\\
+    f\left( x_{1}\right) &= 1 + 0 > 0
+  \end{align*}
+
+  By the {\em Intermediate Value Theorem}, there must exist some $f(c)$ such that
+  $f(c) = 0$ due to the sign change of the function.
+
   \item Plot a graph of the function on the interval $[0.1, 1]$
 
   {\bf Solution:}
+
+  \begin{figure}
+    \centering
+    \includegraphics[width=.65\textwidth]{hw2_prob6a.pdf}
+  \end{figure}
 
   \item As you can see from the graph, the root is between $0.5$ and $0.6$. Write
   {\sc Matlab} routines for finding the root, using the following:
@@ -232,19 +315,45 @@ It is a reformulation of the equation of Example 3.4
 
     {\bf Solution:}
 
+    This interval is valid because the sign changes in the domain $[0.5, 0.6]$ so
+    the Bisection method can be used. For the plot, please see the last question.
+
     \item A linearly convergent fixed point interation, with $x_{0} = 0.5$. Show that
     the conditions of the Fixed Point Theorem (for the function $g$ you have selected)
     are satisfied.
 
     {\bf Solution:}
 
+    In determining $g(x)$, we wanted a function such that $g\left(x^{*}\right) = x^{*}$,
+    which was determined in the following way
+
+    \begin{align*}
+      x + \ln(x) &= 0\\
+      -x &= \ln(x)\\
+      x &= e^{-x}
+    \end{align*}
+
+    So $g\left( x^{*}\right) = e^{x^{*}}$ since $e^{x^{*}} = x^{*}$ for the given equation.
+    This satisfies the conditions of the Fixed Point Method, and can be used to
+    converge to the root.
+    
+    For the plot, please see the last question.
+
     \item Newton's method, with $x_{0} = 0.5$.
 
     {\bf Solution:}
 
+    For the plot, please see the last question.
+
     \item The secant method, with $x_{0} = 0.5$ and $x_{1} = 0.6$.
 
     {\bf Solution:}
+
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=.65\textwidth]{hw2_prob6b.pdf}
+      \caption{{\tt prob6.py}}
+    \end{figure}
 
 
   \end{enumerate}
