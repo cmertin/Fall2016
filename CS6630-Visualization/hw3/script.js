@@ -9,6 +9,7 @@ var allWorldCupData;
  */
 function updateBarChart(selectedDimension) {
 
+    var margin = 10;
     var svgBounds = d3.select("#barChart").node().getBoundingClientRect(),
         xAxisWidth = 100,
         yAxisHeight = 70;
@@ -17,10 +18,44 @@ function updateBarChart(selectedDimension) {
 
     // Create the x and y scales; make
     // sure to leave room for the axes
+    allWorldCupData.sort(function(a,b) {return a.year - b.year;});
+    var plotVal = document.getElementById('dataset').value;
+    var xSpacing = xAxisWidth / allWorldCupData.length;
+    var ySpacing = yAxisHeight / allWorldCupData.length;
+
+    var years = allWorldCupData.map(function(d) {return d['year']});
+    var barVals = allWorldCupData.map(function(d) {return d[plotVal]});
+
+    var minX = d3.min(years);
+    var maxX = d3.max(years);
+    var minY = 0;
+    var maxY = d3.max(barVals);
+
+    var xScale = d3.scaleLinear()
+                   .domain(years)
+                   .range([0+margin,xAxisWidth-margin])
+                   .nice();
 
     // Create colorScale
 
     // Create the axes (hint: use #xAxis and #yAxis)
+
+    var xAxis = d3.axisBottom().scale(xScale);
+    var svg_x = d3.select("svg").selectAll("#xAxis").data(years);
+    svg_x.exit().remove();
+    svg_x = svg_x.enter().append("g")
+                     .attr("class", "#xAxis")
+                     .attr("transform", "translate(0," + 300 + ")")
+                     .call(xAxis)
+                     .selectAll("text")
+                          .style("text-anchor", "end")
+                          .attr("dx", "-.8em")
+                          .attr("dy", ".15em")
+                          .attr("transform","rotate(-90)");
+
+    console.log(svg_x);
+
+
 
     // Create the bars (hint: use #bars)
 
@@ -178,4 +213,6 @@ d3.csv("data/fifa-world-cup.csv", function (error, csv) {
     allWorldCupData = csv;
     // Draw the Bar chart for the first time
     updateBarChart('attendance');
+
+    //console.log(allWorldCupData[1]);
 });
