@@ -193,7 +193,7 @@ function drawMap(world) {
      .attr("d", path);
 
     g.append("path")
-     .datum(topojson.mesh(world, world.obects.countries, function(a,b) {return a !== b;}))
+     .datum(topojson.mesh(world, world.objects.countries, function(a,b) {return a !== b;}))
      .attr("class", "grat")
      .attr("d", path);
 }
@@ -238,8 +238,14 @@ function updateMap(worldcupData) {
 
     //We strongly suggest using classes to style the selected countries.
 
+    var host = allWorldCupData[worldcupData].host_country_code;
+    var teams = allWorldCupData[worldcupData].TEAM_LIST;
+    teams = teams.split(',');
 
+    for(var i = 0; i < teams.length; i++)
+      document.getElementById(teams[i]).setAttribute("class", "team");
 
+    document.getElementById(host).setAttribute("class", "host");
 }
 
 /* DATA LOADING */
