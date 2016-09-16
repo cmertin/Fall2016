@@ -42,8 +42,7 @@ function updateBarChart(selectedDimension) {
 
     // Create the axes (hint: use #xAxis and #yAxis)
     var xAxis = d3.axisBottom(x);
-    svg = d3.select("svg").selectAll("#xAxis")
-                          .append("g")
+    svg = d3.selectAll("#xAxis")
                           .attr("transform", "translate(0," + height + ")")
                           .call(xAxis)
                           .selectAll("text")
@@ -53,24 +52,12 @@ function updateBarChart(selectedDimension) {
                               .attr("text-anchor", "end");
 
     var yAxis = d3.axisLeft(y);
-    svg = d3.select("svg").select("#yAxis")
-                          .append("g")
+    svg = d3.selectAll("#yAxis")
                           .attr("transform", "translate(" + margin.left + ",0)")
                           .call(yAxis);
 
     // Create the bars (hint: use #bars)
-    /*
-    svg = d3.select("#barChart").selectAll("bars").data(allWorldCupData)
-                          .enter()
-                          .append("rect")
-                              .style("fill", function(d) {return colorScale(d[selectedDimension])})
-                              .attr("x", function(d) {return x(d.year);})
-                              .attr("width", x.bandwidth())
-                              .attr("y", function(d) {return y(d[selectedDimension]);})
-                              .attr("height", function(d) {return height - y(d[selectedDimension]);});
-*/
-
-    svg = d3.select("svg g").selectAll("rect");
+    svg = d3.select("#barChart").selectAll("rect");
     var bars = svg.data(allWorldCupData);
     bars.exit().remove();
     bars = bars.enter().append("rect").merge(bars);
@@ -110,10 +97,8 @@ function chooseData() {
     //Changed the selected data when a user selects a different
     // menu item from the drop down.
     var selected = document.getElementById("dataset").value;
-    console.log(selected);
-
+    //console.log(selected);
     updateBarChart(selected);
-
 }
 
 /**
