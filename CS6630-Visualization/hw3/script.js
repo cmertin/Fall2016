@@ -9,7 +9,7 @@ var allWorldCupData;
  */
 function updateBarChart(selectedDimension) {
 
-    var margin = {top: 50, right: 10, left: 10, bottom: 50};
+    var margin = {top: 50, right: 10, left: 60, bottom: 50};
     var svgBounds = d3.select("#barChart").node().getBoundingClientRect(),
         xAxisWidth = 100,
         yAxisHeight = 70;
@@ -31,15 +31,13 @@ function updateBarChart(selectedDimension) {
 
     var minY = d3.min(barVals);
     var maxY = d3.max(barVals);
-    var scaleX = Math.floor((d3.max(years) - d3.min(years))/years.length);
-
-    console.log(d3.max(years));
-
 
     var x = d3.scaleBand().rangeRound([margin.left, width])
                           .paddingInner(0.05)
                           .domain(allWorldCupData.map(function(d) {return d.year;}));
 
+    var y = d3.scaleLinear().range([height,margin.bottom])
+                            .domain([0,maxY]);
     // Create colorScale
 
     // Create the axes (hint: use #xAxis and #yAxis)
@@ -55,6 +53,11 @@ function updateBarChart(selectedDimension) {
                               .attr("text-anchor", "end");
 
 
+    var yAxis = d3.axisLeft(y);
+    svg = d3.select("svg").selectAll("#yAxis")
+                          .append("g")
+                          .attr("transform", "translate(" + margin.left + ",0)")
+                          .call(yAxis);
     // Create the bars (hint: use #bars)
 
 
