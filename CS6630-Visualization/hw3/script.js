@@ -130,11 +130,6 @@ function updateInfo(oneWorldCup) {
     // Changes the edition name
     document.getElementById("edition").innerHTML = allWorldCupData[oneWorldCup].EDITION;
 
-    // Removes old li elements
-    //var lis = root.
-
-    //var selection = d3.select("#host").append("ul").append("li").text("test").append("ul");
-
     document.getElementById("host").innerHTML = allWorldCupData[oneWorldCup].host;
 
     document.getElementById("winner").innerHTML = allWorldCupData[oneWorldCup].winner;
@@ -166,6 +161,13 @@ function drawMap(world) {
     // updateMap() will need it to add the winner/runner_up markers.)
 
     projection = d3.geoConicConformal().scale(200).translate([500, 450]);
+    var path = d3.geoPath().projection(projection);
+    var graticule = d3.geoGraticule();
+
+    var svg = d3.selectAll("g#map");
+
+    var g = svg.append("g");
+
 
     // ******* TODO: PART IV *******
 
@@ -178,7 +180,23 @@ function drawMap(world) {
     // Make sure and give your paths the appropriate class (see the .css selectors at
     // the top of the provided html file)
 
+    var countries = topojson.feature(world, world.objects.countries);
+    g.selectAll("path")
+     .data(countries.features)
+     .enter()
+     .append("path")
+     .attr("class", function(d) {return d.id;})
+     .attr("d", path);
 
+    g.append("path")
+     .datum(graticule)
+     .attr("class", "grat")
+     .attr("d", path);
+
+    g.append("path")
+     .datum(topojson.mesh(world, world.obects.countries, function(a,b) {return a !== b;}))
+     .attr("class", "grat")
+     .attr("d", path);
 }
 
 /**
