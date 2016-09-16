@@ -38,7 +38,7 @@ function updateBarChart(selectedDimension) {
                 // notice the three interpolation points
                 .domain([minY, maxY])
                // each color matches to an interpolation point
-                .range(["steelblue", "darkblue"]);
+                .range(["DodgerBlue", "darkblue"]);
 
     // Create the axes (hint: use #xAxis and #yAxis)
     var xAxis = d3.axisBottom(x);
@@ -79,7 +79,7 @@ function updateBarChart(selectedDimension) {
 
     d3.selectAll("#barChart rect")
         .on("mouseover", function() {
-          d3.select(this).style('fill', 'darkred');})
+          d3.select(this).style('fill', 'DarkRed');})
         .on("click", function() {
           var temp = d3.select(this).attr("x");
           var index = -1;
@@ -130,7 +130,29 @@ function updateInfo(oneWorldCup) {
     // Changes the edition name
     document.getElementById("edition").innerHTML = allWorldCupData[oneWorldCup].EDITION;
 
+    // Removes old li elements
+    //var lis = root.
 
+    //var selection = d3.select("#host").append("ul").append("li").text("test").append("ul");
+
+    document.getElementById("host").innerHTML = allWorldCupData[oneWorldCup].host;
+
+    document.getElementById("winner").innerHTML = allWorldCupData[oneWorldCup].winner;
+
+    document.getElementById("silver").innerHTML = allWorldCupData[oneWorldCup].runner_up;
+
+    var teams = allWorldCupData[oneWorldCup].TEAM_NAMES;
+    teams = teams.split(',');
+    teams.sort();
+
+    var list = "<ul>\n";
+    for(var i = 0; i < teams.length; i++)
+        {
+          list = list + "  <li>" + teams[i] + "</li>\n";
+        }
+    list = list + "</ul>\n";
+
+    document.getElementById("teams").innerHTML = list;
 }
 
 /**
