@@ -127,6 +127,9 @@ function updateInfo(oneWorldCup) {
     // Hint: For the list of teams, you can create an list element for each team.
     // Hint: Select the appropriate ids to update the text content.
 
+    // Changes the edition name
+    document.getElementById("edition").innerHTML = allWorldCupData[oneWorldCup].EDITION;
+
 
 }
 
