@@ -213,6 +213,8 @@ function clearMap() {
 
     var teams = d3.selectAll(".team").attr("class", "countries");
     var host = d3.selectAll(".host").attr("class", "countries");
+    d3.select("#win_circ").remove();
+    d3.select("#run_circ").remove();
 }
 
 
