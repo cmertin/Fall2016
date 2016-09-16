@@ -37,7 +37,7 @@ function updateBarChart(selectedDimension) {
     var colorScale = d3.scaleLinear()
                 // notice the three interpolation points
                 .domain([minY, maxY])
-                // each color matches to an interpolation point
+               // each color matches to an interpolation point
                 .range(["steelblue", "darkblue"]);
 
     // Create the axes (hint: use #xAxis and #yAxis)
@@ -81,7 +81,16 @@ function updateBarChart(selectedDimension) {
         .on("mouseover", function() {
           d3.select(this).style('fill', 'darkred');})
         .on("click", function() {
-          console.log(d3.select(this));  })
+          var temp = d3.select(this).attr("x");
+          var index = -1;
+          for(var i = 0; i < allWorldCupData.length; i++)
+          {
+            var tempScale = x(allWorldCupData[i].year);
+            if(tempScale == temp)
+              index = i;
+          }
+          updateInfo(index);
+          updateMap(index);})
         .on("mouseout", function() {
           d3.select(this).style('fill',function(d) {return colorScale(d[selectedDimension]);});});
 
