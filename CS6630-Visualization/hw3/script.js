@@ -163,9 +163,7 @@ function drawMap(world) {
     projection = d3.geoConicConformal().scale(200).translate([500, 450]);
     var path = d3.geoPath().projection(projection);
     var graticule = d3.geoGraticule();
-
     var svg = d3.selectAll("g#map");
-
     var g = svg.append("g");
 
 
@@ -185,7 +183,8 @@ function drawMap(world) {
      .data(countries.features)
      .enter()
      .append("path")
-     .attr("class", function(d) {return d.id;})
+     .attr("class", "countries")
+     .attr("id", function(d) {return d.id;})
      .attr("d", path);
 
     g.append("path")
