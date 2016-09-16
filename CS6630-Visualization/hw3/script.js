@@ -9,10 +9,15 @@ var allWorldCupData;
  */
 function updateBarChart(selectedDimension) {
 
-    var margin = 10;
+    var margin = {top: 50, right: 10, left: 10, bottom: 50};
     var svgBounds = d3.select("#barChart").node().getBoundingClientRect(),
         xAxisWidth = 100,
         yAxisHeight = 70;
+
+    var width = svgBounds.width - margin.right - margin.left;
+    var height = svgBounds.height - margin.top;
+
+    console.log(svgBounds);
 
     // ******* TODO: PART I *******
 
@@ -20,41 +25,34 @@ function updateBarChart(selectedDimension) {
     // sure to leave room for the axes
     allWorldCupData.sort(function(a,b) {return a.year - b.year;});
     var plotVal = document.getElementById('dataset').value;
-    var xSpacing = xAxisWidth / allWorldCupData.length;
-    var ySpacing = yAxisHeight / allWorldCupData.length;
 
-    var years = allWorldCupData.map(function(d) {return d['year']});
+  //  var years = allWorldCupData.map(function(d) {return d['year']});
     var barVals = allWorldCupData.map(function(d) {return d[plotVal]});
 
-    var minX = d3.min(years);
-    var maxX = d3.max(years);
-    var minY = 0;
+    var minY = d3.min(barVals);
     var maxY = d3.max(barVals);
+    var scaleX = Math.floor((d3.max(years) - d3.min(years))/years.length);
 
-    var xScale = d3.scaleLinear()
-                   .domain(years)
-                   .range([0+margin,xAxisWidth-margin])
-                   .nice();
+    console.log(d3.max(years));
+
+
+    var x = d3.scaleBand().rangeRound([margin.left, width])
+                          .paddingInner(0.05)
+                          .domain(allWorldCupData.map(function(d) {return d.year;}));
 
     // Create colorScale
 
     // Create the axes (hint: use #xAxis and #yAxis)
-
-    var xAxis = d3.axisBottom().scale(xScale);
-    var svg_x = d3.select("svg").selectAll("#xAxis").data(years);
-    svg_x.exit().remove();
-    svg_x = svg_x.enter().append("g")
-                     .attr("class", "#xAxis")
-                     .attr("transform", "translate(0," + 300 + ")")
-                     .call(xAxis)
-                     .selectAll("text")
-                          .style("text-anchor", "end")
-                          .attr("dx", "-.8em")
-                          .attr("dy", ".15em")
-                          .attr("transform","rotate(-90)");
-
-    console.log(svg_x);
-
+    var xAxis = d3.axisBottom(x);
+    svg = d3.select("svg").selectAll("#xAxis")
+                          .append("g")
+                          .attr("transform", "translate(0," + height + ")")
+                          .call(xAxis)
+                              .selectAll("text")
+                              .attr("dy", "-.3em")
+                              .attr("dx", "-.6em")
+                              .attr("transform", "rotate(-90)")
+                              .attr("text-anchor", "end");
 
 
     // Create the bars (hint: use #bars)
