@@ -14,20 +14,18 @@ function updateBarChart(selectedDimension) {
         xAxisWidth = 100,
         yAxisHeight = 70;
 
+    console.log(svgBounds);
+
     var width = svgBounds.width - margin.right - margin.left;
     var height = svgBounds.height - margin.top;
 
-    console.log(svgBounds);
 
     // ******* TODO: PART I *******
 
     // Create the x and y scales; make
     // sure to leave room for the axes
     allWorldCupData.sort(function(a,b) {return a.year - b.year;});
-    var plotVal = document.getElementById('dataset').value;
-
-  //  var years = allWorldCupData.map(function(d) {return d['year']});
-    var barVals = allWorldCupData.map(function(d) {return d[plotVal]});
+    var barVals = allWorldCupData.map(function(d) {return d[selectedDimension]});
 
     var minY = d3.min(barVals);
     var maxY = d3.max(barVals);
@@ -38,7 +36,14 @@ function updateBarChart(selectedDimension) {
 
     var y = d3.scaleLinear().range([height,margin.bottom])
                             .domain([0,maxY]);
+
     // Create colorScale
+
+    var colorScale = d3.scaleLinear()
+                // notice the three interpolation points
+                .domain([minY, maxY])
+                // each color matches to an interpolation point
+                .range(["steelblue", "darkblue"]);
 
     // Create the axes (hint: use #xAxis and #yAxis)
     var xAxis = d3.axisBottom(x);
@@ -46,20 +51,28 @@ function updateBarChart(selectedDimension) {
                           .append("g")
                           .attr("transform", "translate(0," + height + ")")
                           .call(xAxis)
-                              .selectAll("text")
+                          .selectAll("text")
                               .attr("dy", "-.3em")
                               .attr("dx", "-.6em")
                               .attr("transform", "rotate(-90)")
                               .attr("text-anchor", "end");
-
 
     var yAxis = d3.axisLeft(y);
     svg = d3.select("svg").selectAll("#yAxis")
                           .append("g")
                           .attr("transform", "translate(" + margin.left + ",0)")
                           .call(yAxis);
-    // Create the bars (hint: use #bars)
 
+    // Create the bars (hint: use #bars)
+    svg = d3.select("svg").selectAll("#bars")
+                          .data(allWorldCupData)
+                          .enter()
+                          .append("rect")
+                              .style("fill", function(d) {return colorScale(d[selectedDimension])})
+                              .attr("x", function(d) {return x(d.year);})
+                              .attr("width", x.bandwidth())
+                              .attr("y", function(d) {return y(d[selectedDimension]);})
+                              .attr("height", function(d) {return height - y(d[selectedDimension]);});
 
 
     // ******* TODO: PART II *******
