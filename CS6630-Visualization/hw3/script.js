@@ -211,8 +211,8 @@ function clearMap() {
     //the colors and markers for hosts/teams/winners, you can use
     //d3 selection and .classed to set these classes on and off here.
 
-    var teams = d3.selectAll(".team").attr("class", "countries");
-    var host = d3.selectAll(".host").attr("class", "countries");
+    var teams = d3.select("#map").selectAll(".team").attr("class", "countries");
+    var host = d3.select("#map").selectAll(".host").attr("class", "countries");
     d3.select("#win_circ").remove();
     d3.select("#run_circ").remove();
 }
