@@ -59,8 +59,7 @@ function updateBarChart(selectedDimension) {
                           .call(yAxis);
 
     // Create the bars (hint: use #bars)
-    svg = d3.select("#barChart").selectAll("bar")
-                          .data(allWorldCupData)
+    svg = d3.select("#barChart").selectAll("bars").data(allWorldCupData)
                           .enter()
                           .append("rect")
                               .style("fill", function(d) {return colorScale(d[selectedDimension])})
@@ -79,6 +78,11 @@ function updateBarChart(selectedDimension) {
     // Call the necessary update functions for when a user clicks on a bar.
     // Note: think about what you want to update when a different bar is selected.
 
+    d3.selectAll("#barChart rect")
+        .on("mouseover", function() {
+          d3.select(this).style('fill', 'darkred');})
+        .on("mouseout", function() {
+          d3.select(this).style('fill',function(d) {return colorScale(d[selectedDimension]);});});
 
 }
 
