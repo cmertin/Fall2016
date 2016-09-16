@@ -53,12 +53,13 @@ function updateBarChart(selectedDimension) {
                               .attr("text-anchor", "end");
 
     var yAxis = d3.axisLeft(y);
-    svg = d3.select("svg").selectAll("#yAxis")
+    svg = d3.select("svg").select("#yAxis")
                           .append("g")
                           .attr("transform", "translate(" + margin.left + ",0)")
                           .call(yAxis);
 
     // Create the bars (hint: use #bars)
+    /*
     svg = d3.select("#barChart").selectAll("bars").data(allWorldCupData)
                           .enter()
                           .append("rect")
@@ -67,7 +68,18 @@ function updateBarChart(selectedDimension) {
                               .attr("width", x.bandwidth())
                               .attr("y", function(d) {return y(d[selectedDimension]);})
                               .attr("height", function(d) {return height - y(d[selectedDimension]);});
+*/
 
+    svg = d3.select("svg g").selectAll("rect");
+    var bars = svg.data(allWorldCupData);
+    bars.exit().remove();
+    bars = bars.enter().append("rect").merge(bars);
+
+    bars.style("fill", function(d) {return colorScale(d[selectedDimension])})
+        .attr("x", function(d) {return x(d.year);})
+        .attr("width", x.bandwidth())
+        .attr("y", function(d) {return y(d[selectedDimension]);})
+        .attr("height", function(d) {return height - y(d[selectedDimension]);});
 
     // ******* TODO: PART II *******
 
