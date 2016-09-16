@@ -247,6 +247,28 @@ function updateMap(worldcupData) {
 
     document.getElementById(host).setAttribute("class", "host");
 
+    var win = [allWorldCupData[worldcupData].WIN_LON, allWorldCupData[worldcupData].WIN_LAT];
+    var run = [allWorldCupData[worldcupData].RUP_LON, allWorldCupData[worldcupData].RUP_LAT];
+
+    var svg = d3.select("#points").selectAll("circ")
+                                .data([1])
+                                .enter()
+                                .append("circle")
+                                    .attr("cx", function(d) {return projection(win)[0];})
+                                    .attr("cy", function(d) {return projection(win)[1];})
+                                    .attr("r", 8)
+                                    .attr("id", "win_circ")
+                                    .attr("class", "gold");
+    svg = d3.select("#points").selectAll("circ")
+                               .data([1])
+                               .enter()
+                               .append("circle")
+                                    .attr("cx", function(d) {return projection(run)[0];})
+                                    .attr("cy", function(d) {return projection(run)[1];})
+                                    .attr("r", 8)
+                                    .attr("id", "run_circ")
+                                    .attr("class", "silver");
+
 }
 
 /* DATA LOADING */
