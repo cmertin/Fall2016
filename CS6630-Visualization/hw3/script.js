@@ -80,6 +80,8 @@ function updateBarChart(selectedDimension) {
     d3.selectAll("#barChart rect")
         .on("mouseover", function() {
           d3.select(this).style('fill', 'darkred');})
+        .on("click", function() {
+          console.log(d3.select(this));  })
         .on("mouseout", function() {
           d3.select(this).style('fill',function(d) {return colorScale(d[selectedDimension]);});});
 
