@@ -14,8 +14,6 @@ function updateBarChart(selectedDimension) {
         xAxisWidth = 100,
         yAxisHeight = 70;
 
-    console.log(svgBounds);
-
     var width = svgBounds.width - margin.right - margin.left;
     var height = svgBounds.height - margin.top;
 
@@ -25,20 +23,17 @@ function updateBarChart(selectedDimension) {
     // Create the x and y scales; make
     // sure to leave room for the axes
     allWorldCupData.sort(function(a,b) {return a.year - b.year;});
-    var barVals = allWorldCupData.map(function(d) {return d[selectedDimension]});
+    var minY = d3.min(allWorldCupData, function(d) {return d[selectedDimension];});
+    var maxY = d3.max(allWorldCupData, function(d) {return d[selectedDimension];});
 
-    var minY = d3.min(barVals);
-    var maxY = d3.max(barVals);
-
-    var x = d3.scaleBand().rangeRound([margin.left, width])
+    var x = d3.scaleBand().rangeRound([margin.left, width + margin.left + margin.right])
                           .paddingInner(0.05)
                           .domain(allWorldCupData.map(function(d) {return d.year;}));
 
-    var y = d3.scaleLinear().range([height,margin.bottom])
-                            .domain([0,maxY]);
+    var y = d3.scaleLinear().range([height, margin.bottom])
+                            .domain([0, maxY]);
 
     // Create colorScale
-
     var colorScale = d3.scaleLinear()
                 // notice the three interpolation points
                 .domain([minY, maxY])
@@ -64,7 +59,7 @@ function updateBarChart(selectedDimension) {
                           .call(yAxis);
 
     // Create the bars (hint: use #bars)
-    svg = d3.select("svg").selectAll("#bars")
+    svg = d3.select("#barChart").selectAll("bar")
                           .data(allWorldCupData)
                           .enter()
                           .append("rect")
@@ -98,6 +93,10 @@ function chooseData() {
     // ******* TODO: PART I *******
     //Changed the selected data when a user selects a different
     // menu item from the drop down.
+    var selected = document.getElementById("dataset").value;
+    console.log(selected);
+
+    updateBarChart(selected);
 
 }
 
