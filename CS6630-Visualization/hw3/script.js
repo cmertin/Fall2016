@@ -204,11 +204,6 @@ function drawMap(world) {
      .datum(graticule)
      .attr("class", "grat")
      .attr("d", path);
-
-    g.append("path")
-     .datum(topojson.mesh(world, world.objects.countries, function(a,b) {return a !== b;}))
-     .attr("class", "grat")
-     .attr("d", path);
 }
 
 /**
