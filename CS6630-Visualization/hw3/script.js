@@ -78,9 +78,21 @@ function updateBarChart(selectedDimension) {
     // Note: think about what you want to update when a different bar is selected.
 
     d3.selectAll("#barChart rect")
-        .on("mouseover", function() {
-          d3.select(this).style('fill', 'DarkRed');})
+    //    .on("mouseover", function() {
+    //      d3.select(this).style("fill", 'darkred');})
         .on("click", function() {
+          svg = d3.select("#barChart").selectAll("rect");
+          var bars = svg.data(allWorldCupData);
+          bars.exit().remove();
+          bars = bars.enter().append("rect").merge(bars);
+
+          bars.style("fill", function(d) {return colorScale(d[selectedDimension])})
+              .attr("x", function(d) {return x(d.year);})
+              .attr("width", x.bandwidth())
+              .attr("y", function(d) {return y(d[selectedDimension]);})
+              .attr("height", function(d) {return height - y(d[selectedDimension]);});
+
+          d3.select(this).style('fill', '#d20a11');
           var temp = d3.select(this).attr("x");
           var index = -1;
           for(var i = 0; i < allWorldCupData.length; i++)
@@ -90,9 +102,9 @@ function updateBarChart(selectedDimension) {
               index = i;
           }
           updateInfo(index);
-          updateMap(index);})
-        .on("mouseout", function() {
-          d3.select(this).style('fill',function(d) {return colorScale(d[selectedDimension]);});});
+          updateMap(index);});
+    //    .on("mouseout", function() {
+    //      d3.select(this).style('fill',function(d) {return colorScale(d[selectedDimension]);});});
 
 }
 
