@@ -54,13 +54,14 @@ function updateBarChart(selectedDimension) {
     var yAxis = d3.axisLeft(y);
     svg = d3.selectAll("#yAxis")
                           .attr("transform", "translate(" + margin.left + ",0)")
+                          .transition().duration(1000)
                           .call(yAxis);
 
     // Create the bars (hint: use #bars)
     svg = d3.select("#barChart").selectAll("rect");
     var bars = svg.data(allWorldCupData);
     bars.exit().remove();
-    bars = bars.enter().append("rect").merge(bars);
+    bars = bars.enter().append("rect").merge(bars).transition().duration(1000);
 
     bars.style("fill", function(d) {return colorScale(d[selectedDimension])})
         .attr("x", function(d) {return x(d.year);})
