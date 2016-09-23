@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/W32TeX) (preloaded format=pdflatex 2016.7.28)  22 SEP 2016 21:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/W32TeX) (preloaded format=pdflatex 2016.7.28)  22 SEP 2016 21:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -168,21 +168,25 @@ Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
 ))
 \Gin@req@height=\dimen120
 \Gin@req@width=\dimen121
+)
+(c:/texlive/2016/texmf-dist/tex/latex/bbold/bbold.sty
+Package: bbold 1994/04/06 Bbold symbol package
+LaTeX Font Info:    Redeclaring math alphabet \mathbb on input line 42.
 ) (./hw3.aux)
 \openout1 = `hw3.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -277,40 +281,44 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-LaTeX Font Info:    Try loading font information for U+msa on input line 38.
+LaTeX Font Info:    Try loading font information for U+msa on input line 39.
 
 (c:/texlive/2016/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 38.
+LaTeX Font Info:    Try loading font information for U+msb on input line 39.
 
 (c:/texlive/2016/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
-{c:/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] (./hw3.
-aux) ) 
+{c:/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    Try loading font information for U+bbold on input line 124.
+
+
+(c:/texlive/2016/texmf-dist/tex/latex/bbold/ubbold.fd) [2] [3] (./hw3.aux) ) 
 Here is how much of TeX's memory you used:
- 3028 strings out of 493013
- 39982 string characters out of 6136993
- 111504 words of memory out of 5000000
- 6524 multiletter control sequences out of 15000+600000
- 12928 words of font info for 50 fonts, out of 8000000 for 9000
+ 3049 strings out of 493013
+ 40462 string characters out of 6136993
+ 111596 words of memory out of 5000000
+ 6535 multiletter control sequences out of 15000+600000
+ 13479 words of font info for 53 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 40i,9n,32p,232b,250s stack positions out of 5000i,500n,10000p,200000b,80000s
-<c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:
-/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><c:/texlive
-/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2016/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2016/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2016/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmr12.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmr17.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmr8.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-<c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texliv
-e/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb><c:/texlive/2016/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb><c:/texlive/2016/texmf-dist/
-fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on hw3.pdf (3 pages, 122195 bytes).
+ 40i,9n,32p,235b,250s stack positions out of 5000i,500n,10000p,200000b,80000s
+<c:
+/texlive/2016/texmf-dist/fonts/type1/public/bbold-type1/bbold10.pfb><c:/texlive
+/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2016/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><c:/texlive/2016/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2016/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmmi8.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmr12.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.p
+fb><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texl
+ive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2016/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2016/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmti12.pfb><c:/texlive/2016/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmtt12.pfb>
+Output written on hw3.pdf (3 pages, 121807 bytes).
 PDF statistics:
  66 PDF objects out of 1000 (max. 8388607)
  47 compressed objects within 1 object stream

@@ -4,6 +4,7 @@
 \usepackage{amsmath,amsthm,amssymb}
 \usepackage{float}
 \usepackage{graphicx}
+\usepackage{bbold}
 
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
@@ -12,7 +13,7 @@
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \newcommand{\pprime}{\prime \prime}
 \newcommand{\BigO}[1]{\mathcal{O}\left( #1 \right)}
-\newcommand{\Id}{\mathbb{I}}
+\newcommand{\Id}{\mathbb{1}}
 
 \newenvironment{theorem}[2][Theorem]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
@@ -45,7 +46,7 @@
 s(\lambda) = \frac{1}{\mathbf{x}^{T}\mathbf{w}}
 \]
 
-where $\mathbf{x}$ is a (right) eigenvector of the matrix, satisfying $A\mathbf{x} = \lambda x$,
+where $\mathbf{x}$ is a (right) eigenvector of the matrix, satisfying $A\mathbf{x} = \lambda \mathbf{x}$,
 and $\mathbf{w}$ is a left eigenvector, satisfying $\mathbf{w}^{T}A = \lambda \mathbf{w}^{T}$.
 Both $\mathbf{x}$ and $\mathbf{w}$ are assumed to have a unit $\ell_{2}$-norm. Loosly speaking,
 the condition number determines the difficulty of computing the eigenvalue in question accurately;
