@@ -111,12 +111,12 @@ tableElements = teamData;
 function updateTable() {
 
 // ******* TODO: PART III *******
-function ArrayData(element)
+function ElementData(element)
 {
   var gameType = element.type;
   var name = {type:gameType, vis:"text", value:element.key};
   var goals = {delta:element.value["Delta Goals"], scored_on:element.value["Goals Conceded"], goals:element.value["Goals Made"]};
-  goalsTuple = {type:gameType, vis:"goals", value:goals};
+  var goalsTuple = {type:gameType, vis:"goals", value:goals};
   var result = {type:gameType, vis:"text", value:element.value.Result.label};
   var wins = {type:gameType, vis:"bars", value:element.value.Wins};
   var loss = element.value.TotalGames - wins;
@@ -126,7 +126,7 @@ function ArrayData(element)
 }
 
 var tblRow = d3.select("#matchTable").selectAll("tr_row").data(tableElements).enter().append("tr").classed(".tr",true);
-var tblCol = tblRow.selectAll("td").data(function(d) {return ArrayData(d);}).enter().append("td");
+var tblCol = tblRow.selectAll("td").data(function(d) {return ElementData(d);}).enter().append("td");
 
 };
 
