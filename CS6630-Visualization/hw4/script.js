@@ -101,9 +101,7 @@ var goalsX = d3.select("#goalHeader")
                .append("svg").attr("width", cellWidth * 2)
                .attr("height", cellHeight).append("g")
                .attr("transform", "translate(0," + (cellBuffer+2) + ")")
-               .call(xAxis)
-                    .selectAll("text")
-                    .style("font-size", 5);
+               .call(xAxis);
 
 tableElements = teamData;
 // ******* TODO: PART V *******
@@ -125,8 +123,7 @@ function ElementData(element)
   var goalsTuple = {type:gameType, vis:"goals", value:goals};
   var result = {type:gameType, vis:"text", value:element.value.Result.label};
   var wins = {type:gameType, vis:"bars", value:element.value.Wins};
-  var loss = element.value.TotalGames - element.value.Wins;
-  var losses = {type:gameType, vis:"bars", value:loss};
+  var losses = {type:gameType, vis:"bars", value:element.value.Losses};
   var totalGames = {type:gameType, vis:"bars", value:element.value.TotalGames};
   return [name, goalsTuple, result, wins, losses, totalGames];
 }
@@ -165,6 +162,32 @@ barsCol.append("text")
                     .attr("x", function(d) {return gameScale(d.value) - cellBuffer/1.75;})
                     .classed("label", true)
                     .text(function(d) {return d.value;});
+
+console.log(goalsCol);
+function barColor(d)
+{
+  if(d < 0)
+    return "red";
+  else
+  {
+    return "blue";
+  }
+}
+
+goalsCol = goalsCol.append("svg").attr("height", cellHeight).attr("width", 130);
+
+goalsCol.append("rect").classed("goalBar", true).style("fill", function(d) {return barColor(d.value.delta);})
+        .attr("x", function(d) {return goalScale(d3.min([d.value.goals, d.value.scored_on]));})
+        .attr("height", 10).attr("y", cellHeight/4)
+        .attr("width", function(d) {return goalScale(Math.abs(d.value.goals - d.value.scored_on));});
+
+goalsCol.append("circle").classed("goalCircle", true).style("fill", "blue")
+        .attr("cx", function(d) {return goalScale(d.value.goals)}).attr("cy", cellHeight/2);
+
+goalsCol.append("circle").classed("goalCircle", true).style("fill", "red")
+        .attr("cx", function(d) {return goalScale(d.value.scored_on);}).attr("cy", cellHeight/2);
+
+
 
 
 /*
