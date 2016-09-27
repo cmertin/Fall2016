@@ -97,7 +97,13 @@ var maxGoals = d3.max(teamData, function(d) {return d.value[goalsMadeHeader];});
 goalScale = goalScale.domain([0, maxGoals]);
 
 var xAxis = d3.axisTop(goalScale);
-var goalsX = d3.select("#goalHeader").attr("class", "label").call(xAxis);
+var goalsX = d3.select("#goalHeader")
+               .append("svg").attr("width", cellWidth * 2)
+               .attr("height", cellHeight).append("g")
+               .attr("transform", "translate(0," + (cellBuffer+2) + ")")
+               .call(xAxis)
+                    .selectAll("text")
+                    .style("font-size", 5);
 
 tableElements = teamData;
 // ******* TODO: PART V *******
