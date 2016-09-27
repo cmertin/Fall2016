@@ -113,20 +113,58 @@ function updateTable() {
 // ******* TODO: PART III *******
 function ElementData(element)
 {
-  var gameType = element.type;
+  var gameType = element.value.type;
   var name = {type:gameType, vis:"text", value:element.key};
   var goals = {delta:element.value["Delta Goals"], scored_on:element.value["Goals Conceded"], goals:element.value["Goals Made"]};
   var goalsTuple = {type:gameType, vis:"goals", value:goals};
   var result = {type:gameType, vis:"text", value:element.value.Result.label};
   var wins = {type:gameType, vis:"bars", value:element.value.Wins};
-  var loss = element.value.TotalGames - wins;
+  var loss = element.value.TotalGames - element.value.Wins;
   var losses = {type:gameType, vis:"bars", value:loss};
   var totalGames = {type:gameType, vis:"bars", value:element.value.TotalGames};
   return [name, goalsTuple, result, wins, losses, totalGames];
 }
 
-var tblRow = d3.select("#matchTable").selectAll("tr_row").data(tableElements).enter().append("tr").classed(".tr",true);
+
+/*
+var cellWidth = 70,
+    cellHeight = 20,
+    cellBuffer = 15,
+    barHeight = 20;
+*/
+var tblRow = d3.select("tbody").selectAll("tr").data(tableElements).enter().append("tr").classed("tr",true);
 var tblCol = tblRow.selectAll("td").data(function(d) {return ElementData(d);}).enter().append("td");
+
+textCol = tblCol.filter(function(d) {return d.vis == "text"});
+barsCol = tblCol.filter(function(d) {return d.vis == "bars"});
+goalsCol = tblCol.filter(function(d) {return d.vis == "goals"});
+console.log(textCol);
+console.log(teamData);
+var minGames = 0;
+var maxGames = d3.max(teamData, function(d) {return d.value.TotalGames;});
+var colorScale = d3.scaleLinear()
+                   .domain([minGames, maxGames])
+                   .range(["DodgerBlue", "darkblue"]);
+gameScale = gameScale.domain([minGames, maxGames]);
+
+
+textCol = textCol.text(function(d) {return d.value});
+barsCol = barsCol.append("svg").attr("height", cellHeight).attr("width", cellWidth)
+                 .append("rect").style("fill", function(d) {return colorScale(d.value);})
+                 .attr("height", barHeight).attr("width",function(d) {return gameScale(d.value);});
+
+
+/*
+var svg = d3.select("#points").selectAll("circ")
+                            .data([1])
+                            .enter()
+                            .append("circle")
+                                .attr("cx", function(d) {return projection(win)[0];})
+                                .attr("cy", function(d) {return projection(win)[1];})
+                                .attr("r", 8)
+                                .attr("id", "win_circ")
+                                .attr("class", "gold");
+*/
 
 };
 
