@@ -149,9 +149,16 @@ gameScale = gameScale.domain([minGames, maxGames]);
 
 
 textCol = textCol.text(function(d) {return d.value});
-barsCol = barsCol.append("svg").attr("height", cellHeight).attr("width", cellWidth)
-                 .append("rect").style("fill", function(d) {return colorScale(d.value);})
-                 .attr("height", barHeight).attr("width",function(d) {return gameScale(d.value);});
+barsCol = barsCol.append("svg").attr("height", cellHeight).attr("width", cellWidth);
+
+barsCol.append("rect").style("fill", function(d) {return colorScale(d.value);})
+                 .attr("height", barHeight).attr("width",function(d) {return gameScale(d.value);})
+                 .style("opacity", function(d){return d.value/maxGames});
+barsCol.append("text")
+                    .attr("y", (barHeight/2) + cellBuffer/3)
+                    .attr("x", function(d) {return gameScale(d.value) - cellBuffer/1.75;})
+                    .classed("label", true)
+                    .text(function(d) {return d.value;});
 
 
 /*
