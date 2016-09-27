@@ -150,8 +150,14 @@ var colorScale = d3.scaleLinear()
                    .range(["DodgerBlue", "darkblue"]);
 gameScale = gameScale.domain([minGames, maxGames]);
 
+console.log(textCol);
 
-textCol = textCol.text(function(d) {return d.value});
+firstCol = textCol.filter(function(d,i) {return i == 0;});
+secondCol = textCol.filter(function(d,i) {return i == 1;});
+firstCol = firstCol.classed("aggregate", true).style("float", "right")
+                   .style("border-left", "solid 0px #000").text(function(d) {return d.value});
+secondCol = secondCol.text(function(d) {return d.value});
+//textCol = textCol.text(function(d) {return d.value});
 barsCol = barsCol.append("svg").attr("height", cellHeight).attr("width", cellWidth);
 
 barsCol.append("rect").style("fill", function(d) {return colorScale(d.value);})
