@@ -196,10 +196,19 @@ goalsCol.append("rect").classed("goalBar", true).style("fill", function(d) {retu
         .attr("y", function(d) {if(d.type != "game") {return cellHeight/4;} else{return cellHeight/2.5;}})
         .attr("width", function(d) {return goalScale(Math.abs(d.value.goals - d.value.scored_on)) - cellBuffer;});
 
+/*
 goalsCol.append("circle").classed("goalCircle", true).style("fill", function(d) {if(d.value.delta !== 0) {return "blue";} else {return "grey";}})
         .attr("cx", function(d) {return goalScale(d.value.goals);}).attr("cy", cellHeight/2);
+*/
 
-goalsCol.append("circle").classed("goalCircle", true).style("fill", function(d) {if(d.value.delta !== 0) {return "red";} else {return "grey";}})
+goalsCol.append("circle").classed("goalCircle", true)
+        .style("fill", function(d) {if(d.type != "game"){if(d.value.delta !== 0) {return "blue";} else {return "grey";}} else{return "white";}    })
+        .style("stroke", function(d) {if(d.type == "game"){if(d.value.delta != 0){return "blue";} else{return "grey";}}})
+        .attr("cx", function(d) {return goalScale(d.value.goals);}).attr("cy", cellHeight/2);
+
+goalsCol.append("circle").classed("goalCircle", true)
+        .style("fill", function(d) {if(d.type != "game"){if(d.value.delta !== 0) {return "red";} else {return "grey";}} else{return "white";}    })
+        .style("stroke", function(d) {if(d.type == "game"){if(d.value.delta != 0){return "red";} else{return "grey";}}})
         .attr("cx", function(d) {return goalScale(d.value.scored_on);}).attr("cy", cellHeight/2);
 
 d3.select("tbody").selectAll("tr").on("click", function(d,i){updateList(i);});
