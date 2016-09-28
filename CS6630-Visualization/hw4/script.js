@@ -203,7 +203,7 @@ goalsCol.append("circle").classed("goalCircle", true)
 d3.select("tbody").selectAll("tr").on("click", function(d,i){updateList(i);});
 d3.select("#matchTable").select("tr").selectAll("th, td").on("click", function(d,i){
                         collapseList();
-                        console.log(tableElements[0]);
+                        //console.log(tableElements[0]);
                         if(dblClick[i] == 0)
                         {
                           for(var ind = 0; ind < dblClick.length; ind++)
