@@ -220,7 +220,7 @@ d3.select("#matchTable").select("tr").selectAll("th, td").on("click", function(d
                             tableElements.sort(function(a,b) {return d3.ascending(rank[a.value.Result.label], rank[b.value.Result.label]);});
                           else if(i == 3)
                             tableElements.sort(function(a,b) {return d3.ascending(a.value.Wins, b.value.Wins);});
-                          else if(i == 1)
+                          else if(i == 4)
                             tableElements.sort(function(a,b) {return d3.ascending(a.value.Losses, b.value.Losses);});
                           else
                             tableElements.sort(function(a,b) {return d3.ascending(a.value.TotalGames, b.value.TotalGames);});
@@ -240,7 +240,7 @@ d3.select("#matchTable").select("tr").selectAll("th, td").on("click", function(d
                             tableElements.sort(function(a,b) {return d3.descending(rank[a.value.Result.label], rank[b.value.Result.label]);});
                           else if(i == 3)
                             tableElements.sort(function(a,b) {return d3.descending(a.value.Wins, b.value.Wins);});
-                          else if(i == 1)
+                          else if(i == 4)
                             tableElements.sort(function(a,b) {return d3.descending(a.value.Losses, b.value.Losses);});
                           else
                             tableElements.sort(function(a,b) {return d3.descending(a.value.TotalGames, b.value.TotalGames);});
