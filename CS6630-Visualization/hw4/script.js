@@ -94,13 +94,13 @@ function createTable() {
 
 // ******* TODO: PART II *******
 var maxGoals = d3.max(teamData, function(d) {return d.value[goalsMadeHeader];});
-goalScale = goalScale.domain([0, maxGoals]);
+goalScale = goalScale.domain([0, maxGoals]).range([cellBuffer, cellWidth * 2]);
 
 var xAxis = d3.axisTop(goalScale);
 var goalsX = d3.select("#goalHeader")
-               .append("svg").attr("width", cellWidth * 2)
+               .append("svg").attr("width", cellWidth * 2 + cellBuffer)
                .attr("height", cellHeight).append("g")
-               .attr("transform", "translate(0," + (cellBuffer+2) + ")")
+               .attr("transform", "translate(0" + "," + (cellBuffer + 2) + ")")
                .call(xAxis);
 
 tableElements = teamData;
@@ -147,7 +147,7 @@ var minGames = 0;
 var maxGames = d3.max(teamData, function(d) {return d.value.TotalGames;});
 var colorScale = d3.scaleLinear()
                    .domain([minGames, maxGames])
-                   .range(["DodgerBlue", "darkblue"]);
+                   .range(["LightSeaGreen", "SeaGreen"]);
 gameScale = gameScale.domain([minGames, maxGames]);
 
 console.log(textCol);
@@ -174,24 +174,28 @@ function barColor(d)
 {
   if(d < 0)
     return "red";
-  else
+  else if(d > 0)
   {
     return "blue";
+  }
+  else
+  {
+    return "white";
   }
 }
 
 goalsCol = goalsCol.append("svg").attr("height", cellHeight).attr("width", 130);
 
 goalsCol.append("rect").classed("goalBar", true).style("fill", function(d) {return barColor(d.value.delta);})
-        .attr("x", function(d) {return goalScale(d3.min([d.value.goals, d.value.scored_on]));})
+        .attr("x", function(d) {return goalScale(d3.min([d.value.goals, d.value.scored_on]))-cellBuffer;})
         .attr("height", 10).attr("y", cellHeight/4)
-        .attr("width", function(d) {return goalScale(Math.abs(d.value.goals - d.value.scored_on));});
+        .attr("width", function(d) {return goalScale(Math.abs(d.value.goals - d.value.scored_on)) - cellBuffer;});
 
-goalsCol.append("circle").classed("goalCircle", true).style("fill", "blue")
-        .attr("cx", function(d) {return goalScale(d.value.goals)}).attr("cy", cellHeight/2);
+goalsCol.append("circle").classed("goalCircle", true).style("fill", function(d) {if(d.value.delta !== 0) {return "blue";} else {return "grey";}})
+        .attr("cx", function(d) {return goalScale(d.value.goals) - cellBuffer;}).attr("cy", cellHeight/2);
 
-goalsCol.append("circle").classed("goalCircle", true).style("fill", "red")
-        .attr("cx", function(d) {return goalScale(d.value.scored_on);}).attr("cy", cellHeight/2);
+goalsCol.append("circle").classed("goalCircle", true).style("fill", function(d) {if(d.value.delta !== 0) {return "red";} else {return "grey";}})
+        .attr("cx", function(d) {return goalScale(d.value.scored_on) - cellBuffer;}).attr("cy", cellHeight/2);
 
 
 
