@@ -4,6 +4,8 @@ var teamData;
 /** Global var for list of all elements that will populate the table.*/
 var tableElements;
 
+/* Global Variable to hold double click parameters for labels */
+var dblClick = [0, 0, 0, 0, 0, 0];
 
 /** Variables to be used when sizing the svgs in the table cells.*/
 var cellWidth = 70,
@@ -130,13 +132,6 @@ function ElementData(element)
   return [name, goalsTuple, result, wins, losses, totalGames];
 }
 
-
-/*
-var cellWidth = 70,
-    cellHeight = 20,
-    cellBuffer = 15,
-    barHeight = 20;
-*/
 d3.select("tbody").selectAll("tr").remove();
 var tblRow = d3.select("tbody").selectAll("tr").data(tableElements).enter().append("tr").classed("tr",true);
 var tblCol = tblRow.selectAll("td").data(function(d) {return ElementData(d);}).enter().append("td");
@@ -144,8 +139,7 @@ var tblCol = tblRow.selectAll("td").data(function(d) {return ElementData(d);}).e
 textCol = tblCol.filter(function(d) {return d.vis == "text"});
 barsCol = tblCol.filter(function(d) {return d.vis == "bars"});
 goalsCol = tblCol.filter(function(d) {return d.vis == "goals"});
-//console.log(textCol);
-//console.log(teamData);
+
 var minGames = 0;
 var maxGames = d3.max(teamData, function(d) {return d.value.TotalGames;});
 var colorScale = d3.scaleLinear()
@@ -157,7 +151,7 @@ gameScale = gameScale.domain([minGames, maxGames]);
 
 firstCol = textCol.filter(function(d,i) {return i == 0;});
 secondCol = textCol.filter(function(d,i) {return i == 1;});
-firstCol = firstCol.style("float", "right").attr("class", function(d) {return d.type;}/*{if(d.type == "game"){return "game";}else{return "aggregate";}}*/)
+firstCol = firstCol.style("float", "right").attr("class", function(d) {return d.type;})
                    .style("border-left", "solid 0px #000").text(function(d) {return d.value});
 secondCol = secondCol.text(function(d) {return d.value});
 //textCol = textCol.text(function(d) {return d.value});
@@ -196,11 +190,6 @@ goalsCol.append("rect").classed("goalBar", true).style("fill", function(d) {retu
         .attr("y", function(d) {if(d.type != "game") {return cellHeight/4;} else{return cellHeight/2.5;}})
         .attr("width", function(d) {return goalScale(Math.abs(d.value.goals - d.value.scored_on)) - cellBuffer;});
 
-/*
-goalsCol.append("circle").classed("goalCircle", true).style("fill", function(d) {if(d.value.delta !== 0) {return "blue";} else {return "grey";}})
-        .attr("cx", function(d) {return goalScale(d.value.goals);}).attr("cy", cellHeight/2);
-*/
-
 goalsCol.append("circle").classed("goalCircle", true)
         .style("fill", function(d) {if(d.type != "game"){if(d.value.delta !== 0) {return "blue";} else {return "grey";}} else{return "white";}    })
         .style("stroke", function(d) {if(d.type == "game"){if(d.value.delta != 0){return "blue";} else{return "grey";}}})
@@ -212,6 +201,51 @@ goalsCol.append("circle").classed("goalCircle", true)
         .attr("cx", function(d) {return goalScale(d.value.scored_on);}).attr("cy", cellHeight/2);
 
 d3.select("tbody").selectAll("tr").on("click", function(d,i){updateList(i);});
+d3.select("#matchTable").select("tr").selectAll("th, td").on("click", function(d,i){
+                        collapseList();
+                        console.log(tableElements[0]);
+                        if(dblClick[i] == 0)
+                        {
+                          for(var ind = 0; ind < dblClick.length; ind++)
+                          {
+                            dblClick[ind] = 0;
+                          }
+                          dblClick[i] = 1;
+                          // sort ascending
+                          if(i == 0)
+                            tableElements.sort(function(a,b) {return d3.ascending(a.key, b.key);});
+                          else if(i == 1)
+                            tableElements.sort(function(a,b) {return d3.ascending(a.value["Delta Goals"], b.value["Delta Goals"]);});
+                          else if(i == 2)
+                            tableElements.sort(function(a,b) {return d3.ascending(rank[a.value.Result.label], rank[b.value.Result.label]);});
+                          else if(i == 3)
+                            tableElements.sort(function(a,b) {return d3.ascending(a.value.Wins, b.value.Wins);});
+                          else if(i == 1)
+                            tableElements.sort(function(a,b) {return d3.ascending(a.value.Losses, b.value.Losses);});
+                          else
+                            tableElements.sort(function(a,b) {return d3.ascending(a.value.TotalGames, b.value.TotalGames);});
+                        }
+                        else
+                        {
+                          for(var ind = 0; ind < dblClick.length; ind++)
+                          {
+                            dblClick[ind] = 0;
+                          }
+                          // sort descending
+                          if(i == 0)
+                            tableElements.sort(function(a,b) {return d3.descending(a.key, b.key);});
+                          else if(i == 1)
+                            tableElements.sort(function(a,b) {return d3.descending(a.value["Delta Goals"], b.value["Delta Goals"]);});
+                          else if(i == 2)
+                            tableElements.sort(function(a,b) {return d3.descending(rank[a.value.Result.label], rank[b.value.Result.label]);});
+                          else if(i == 3)
+                            tableElements.sort(function(a,b) {return d3.descending(a.value.Wins, b.value.Wins);});
+                          else if(i == 1)
+                            tableElements.sort(function(a,b) {return d3.descending(a.value.Losses, b.value.Losses);});
+                          else
+                            tableElements.sort(function(a,b) {return d3.descending(a.value.TotalGames, b.value.TotalGames);});
+                        }
+                        updateTable();});
 };
 
 
