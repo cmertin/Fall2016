@@ -118,6 +118,7 @@ function updateTable() {
 function ElementData(element)
 {
   var gameType = element.value.type;
+  //console.log(element.key);
   var name = {type:gameType, vis:"text", value:element.key};
   var goals = {delta:element.value["Delta Goals"], scored_on:element.value["Goals Conceded"], goals:element.value["Goals Made"]};
   var goalsTuple = {type:gameType, vis:"goals", value:goals};
@@ -135,14 +136,15 @@ var cellWidth = 70,
     cellBuffer = 15,
     barHeight = 20;
 */
+d3.select("tbody").selectAll("tr").remove();
 var tblRow = d3.select("tbody").selectAll("tr").data(tableElements).enter().append("tr").classed("tr",true);
 var tblCol = tblRow.selectAll("td").data(function(d) {return ElementData(d);}).enter().append("td");
 
 textCol = tblCol.filter(function(d) {return d.vis == "text"});
 barsCol = tblCol.filter(function(d) {return d.vis == "bars"});
 goalsCol = tblCol.filter(function(d) {return d.vis == "goals"});
-console.log(textCol);
-console.log(teamData);
+//console.log(textCol);
+//console.log(teamData);
 var minGames = 0;
 var maxGames = d3.max(teamData, function(d) {return d.value.TotalGames;});
 var colorScale = d3.scaleLinear()
@@ -150,11 +152,11 @@ var colorScale = d3.scaleLinear()
                    .range(["LightSeaGreen", "SeaGreen"]);
 gameScale = gameScale.domain([minGames, maxGames]);
 
-console.log(textCol);
+//console.log(textCol);
 
 firstCol = textCol.filter(function(d,i) {return i == 0;});
 secondCol = textCol.filter(function(d,i) {return i == 1;});
-firstCol = firstCol.classed("aggregate", true).style("float", "right")
+firstCol = firstCol.style("float", "right").attr("class", function(d) {if(d.type == "game"){return "game";}else{return "aggregate";}})
                    .style("border-left", "solid 0px #000").text(function(d) {return d.value});
 secondCol = secondCol.text(function(d) {return d.value});
 //textCol = textCol.text(function(d) {return d.value});
@@ -169,7 +171,6 @@ barsCol.append("text")
                     .classed("label", true)
                     .text(function(d) {return d.value;});
 
-console.log(goalsCol);
 function barColor(d)
 {
   if(d < 0)
@@ -198,20 +199,7 @@ goalsCol.append("circle").classed("goalCircle", true).style("fill", function(d) 
         .attr("cx", function(d) {return goalScale(d.value.scored_on) - cellBuffer;}).attr("cy", cellHeight/2);
 
 
-
-
-/*
-var svg = d3.select("#points").selectAll("circ")
-                            .data([1])
-                            .enter()
-                            .append("circle")
-                                .attr("cx", function(d) {return projection(win)[0];})
-                                .attr("cy", function(d) {return projection(win)[1];})
-                                .attr("r", 8)
-                                .attr("id", "win_circ")
-                                .attr("class", "gold");
-*/
-
+d3.select("tbody").selectAll("tr").on("click", function(d,i){updateList(i);});
 };
 
 
@@ -233,8 +221,29 @@ function collapseList() {
 function updateList(i) {
 
     // ******* TODO: PART IV *******
-
-
+    if(tableElements[i].value.type != "game")
+    {
+      games_list = tableElements[i].value.games;
+      if(tableElements[i+1].value.type == "game")
+      {
+        tableElements.splice(i+1, games_list.length);
+      }
+      else
+      {
+        for(var ind = 0; ind < games_list.length; ind++)
+        {
+          if(games_list[ind].key[0] != "x")
+          {
+            games_list[ind].key = "x" + games_list[ind].key;
+          }
+        }
+        for(var ind = games_list.length-1; ind >= 0; ind--)
+        {
+          tableElements.splice(i+1, 0, games_list[ind]);
+        }
+      }
+      updateTable();
+    }
 }
 
 /**
