@@ -160,7 +160,7 @@ firstCol = firstCol.style("float", "right").attr("class", function(d) {if(d.type
                    .style("border-left", "solid 0px #000").text(function(d) {return d.value});
 secondCol = secondCol.text(function(d) {return d.value});
 //textCol = textCol.text(function(d) {return d.value});
-barsCol = barsCol.append("svg").attr("height", cellHeight).attr("width", cellWidth);
+barsCol = barsCol.filter(function(d,i) {return d.type != "game";}).append("svg").attr("height", cellHeight).attr("width", cellWidth);
 
 barsCol.append("rect").style("fill", function(d) {return colorScale(d.value);})
                  .attr("height", barHeight).attr("width",function(d) {return gameScale(d.value);})
