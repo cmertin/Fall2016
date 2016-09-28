@@ -6,7 +6,7 @@ var tableElements;
 
 
 /** Variables to be used when sizing the svgs in the table cells.*/
-var cellWidth = 70,
+var cellWidth = 100,
     cellHeight = 20,
     cellBuffer = 15,
     barHeight = 20;
@@ -94,13 +94,13 @@ function createTable() {
 
 // ******* TODO: PART II *******
 var maxGoals = d3.max(teamData, function(d) {return d.value[goalsMadeHeader];});
-goalScale = goalScale.domain([0, maxGoals]).range([cellBuffer, cellWidth * 2]);
+goalScale = goalScale.domain([0, maxGoals]);
 
 var xAxis = d3.axisTop(goalScale);
 var goalsX = d3.select("#goalHeader")
-               .append("svg").attr("width", cellWidth * 2 + cellBuffer)
+               .append("svg").attr("width", cellWidth * 2)
                .attr("height", cellHeight).append("g")
-               .attr("transform", "translate(0" + "," + (cellBuffer + 2) + ")")
+               .attr("transform", "translate(5" + "," + (cellBuffer + 2) + ")")
                .call(xAxis);
 
 tableElements = teamData;
@@ -120,7 +120,8 @@ function ElementData(element)
   var gameType = element.value.type;
   //console.log(element.key);
   var name = {type:gameType, vis:"text", value:element.key};
-  var goals = {delta:element.value["Delta Goals"], scored_on:element.value["Goals Conceded"], goals:element.value["Goals Made"]};
+  var delta_val = element.value["Goals Made"] - element.value["Goals Conceded"];
+  var goals = {delta:delta_val, scored_on:element.value["Goals Conceded"], goals:element.value["Goals Made"]};
   var goalsTuple = {type:gameType, vis:"goals", value:goals};
   var result = {type:gameType, vis:"text", value:element.value.Result.label};
   var wins = {type:gameType, vis:"bars", value:element.value.Wins};
@@ -156,7 +157,7 @@ gameScale = gameScale.domain([minGames, maxGames]);
 
 firstCol = textCol.filter(function(d,i) {return i == 0;});
 secondCol = textCol.filter(function(d,i) {return i == 1;});
-firstCol = firstCol.style("float", "right").attr("class", function(d) {if(d.type == "game"){return "game";}else{return "aggregate";}})
+firstCol = firstCol.style("float", "right").attr("class", function(d) {return d.type;}/*{if(d.type == "game"){return "game";}else{return "aggregate";}}*/)
                    .style("border-left", "solid 0px #000").text(function(d) {return d.value});
 secondCol = secondCol.text(function(d) {return d.value});
 //textCol = textCol.text(function(d) {return d.value});
@@ -174,7 +175,9 @@ barsCol.append("text")
 function barColor(d)
 {
   if(d < 0)
+  {
     return "red";
+  }
   else if(d > 0)
   {
     return "blue";
@@ -185,19 +188,19 @@ function barColor(d)
   }
 }
 
-goalsCol = goalsCol.append("svg").attr("height", cellHeight).attr("width", 130);
+goalsCol = goalsCol.append("svg").attr("height", cellHeight).attr("width", 2 * cellWidth);
 
 goalsCol.append("rect").classed("goalBar", true).style("fill", function(d) {return barColor(d.value.delta);})
-        .attr("x", function(d) {return goalScale(d3.min([d.value.goals, d.value.scored_on]))-cellBuffer;})
-        .attr("height", 10).attr("y", cellHeight/4)
+        .attr("x", function(d) {return goalScale(d3.min([d.value.goals, d.value.scored_on]));})
+        .attr("height", function(d) {if(d.type != "game") {return 10;} else{return 5;}})
+        .attr("y", function(d) {if(d.type != "game") {return cellHeight/4;} else{return cellHeight/2.5;}})
         .attr("width", function(d) {return goalScale(Math.abs(d.value.goals - d.value.scored_on)) - cellBuffer;});
 
 goalsCol.append("circle").classed("goalCircle", true).style("fill", function(d) {if(d.value.delta !== 0) {return "blue";} else {return "grey";}})
-        .attr("cx", function(d) {return goalScale(d.value.goals) - cellBuffer;}).attr("cy", cellHeight/2);
+        .attr("cx", function(d) {return goalScale(d.value.goals);}).attr("cy", cellHeight/2);
 
 goalsCol.append("circle").classed("goalCircle", true).style("fill", function(d) {if(d.value.delta !== 0) {return "red";} else {return "grey";}})
-        .attr("cx", function(d) {return goalScale(d.value.scored_on) - cellBuffer;}).attr("cy", cellHeight/2);
-
+        .attr("cx", function(d) {return goalScale(d.value.scored_on);}).attr("cy", cellHeight/2);
 
 d3.select("tbody").selectAll("tr").on("click", function(d,i){updateList(i);});
 };
@@ -224,6 +227,7 @@ function updateList(i) {
     if(tableElements[i].value.type != "game")
     {
       games_list = tableElements[i].value.games;
+      console.log(games_list);
       if(tableElements[i+1].value.type == "game")
       {
         tableElements.splice(i+1, games_list.length);
