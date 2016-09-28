@@ -6,7 +6,7 @@ var tableElements;
 
 
 /** Variables to be used when sizing the svgs in the table cells.*/
-var cellWidth = 100,
+var cellWidth = 70,
     cellHeight = 20,
     cellBuffer = 15,
     barHeight = 20;
@@ -222,8 +222,8 @@ d3.select("tbody").selectAll("tr").on("click", function(d,i){updateList(i);});
 function collapseList() {
 
     // ******* TODO: PART IV *******
-
-
+    tableElements = tableElements.filter(function(d) {return d.value.type != "game";});
+    updateTable();
 }
 
 /**
@@ -236,7 +236,7 @@ function updateList(i) {
     if(tableElements[i].value.type != "game")
     {
       games_list = tableElements[i].value.games;
-      console.log(games_list);
+      //console.log(games_list);
       if(tableElements[i+1].value.type == "game")
       {
         tableElements.splice(i+1, games_list.length);
