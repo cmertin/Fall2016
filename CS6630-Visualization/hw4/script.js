@@ -148,7 +148,51 @@ var goalsX = d3.select("#goalHeader")
 
 tableElements = teamData;
 // ******* TODO: PART V *******
-
+d3.select("#matchTable").select("tr").selectAll("th, td").on("click", function(d,i){
+                        collapseList();
+                        //console.log(tableElements[0]);
+                        if(dblClick[i] == 0)
+                        {
+                          for(var ind = 0; ind < dblClick.length; ind++)
+                          {
+                            dblClick[ind] = 0;
+                          }
+                          dblClick[i] = 1;
+                          // sort ascending
+                          if(i == 0)
+                            tableElements.sort(function(a,b) {return d3.ascending(a.key, b.key);});
+                          else if(i == 1)
+                            tableElements.sort(function(a,b) {return d3.ascending(a.value["Delta Goals"], b.value["Delta Goals"]);});
+                          else if(i == 2)
+                            tableElements.sort(function(a,b) {return d3.ascending(rank[a.value.Result.label], rank[b.value.Result.label]);});
+                          else if(i == 3)
+                            tableElements.sort(function(a,b) {return d3.ascending(a.value.Wins, b.value.Wins);});
+                          else if(i == 4)
+                            tableElements.sort(function(a,b) {return d3.ascending(a.value.Losses, b.value.Losses);});
+                          else
+                            tableElements.sort(function(a,b) {return d3.ascending(a.value.TotalGames, b.value.TotalGames);});
+                        }
+                        else
+                        {
+                          for(var ind = 0; ind < dblClick.length; ind++)
+                          {
+                            dblClick[ind] = 0;
+                          }
+                          // sort descending
+                          if(i == 0)
+                            tableElements.sort(function(a,b) {return d3.descending(a.key, b.key);});
+                          else if(i == 1)
+                            tableElements.sort(function(a,b) {return d3.descending(a.value["Delta Goals"], b.value["Delta Goals"]);});
+                          else if(i == 2)
+                            tableElements.sort(function(a,b) {return d3.descending(rank[a.value.Result.label], rank[b.value.Result.label]);});
+                          else if(i == 3)
+                            tableElements.sort(function(a,b) {return d3.descending(a.value.Wins, b.value.Wins);});
+                          else if(i == 4)
+                            tableElements.sort(function(a,b) {return d3.descending(a.value.Losses, b.value.Losses);});
+                          else
+                            tableElements.sort(function(a,b) {return d3.descending(a.value.TotalGames, b.value.TotalGames);});
+                        }
+                        updateTable();});
 }
 
 /**
@@ -244,53 +288,7 @@ goalsCol.append("circle").classed("goalCircle", true)
 
 d3.select("tbody").selectAll("tr").on("click", function(d,i){updateList(i);});
 d3.select("tbody").selectAll("tr").on("mouseover", function(d,i){console.log(d); console.log(i);})
-d3.select("#matchTable").select("tr").selectAll("th, td").on("click", function(d,i){
-                        collapseList();
-                        //console.log(tableElements[0]);
-                        if(dblClick[i] == 0)
-                        {
-                          for(var ind = 0; ind < dblClick.length; ind++)
-                          {
-                            dblClick[ind] = 0;
-                          }
-                          dblClick[i] = 1;
-                          // sort ascending
-                          if(i == 0)
-                            tableElements.sort(function(a,b) {return d3.ascending(a.key, b.key);});
-                          else if(i == 1)
-                            tableElements.sort(function(a,b) {return d3.ascending(a.value["Delta Goals"], b.value["Delta Goals"]);});
-                          else if(i == 2)
-                            tableElements.sort(function(a,b) {return d3.ascending(rank[a.value.Result.label], rank[b.value.Result.label]);});
-                          else if(i == 3)
-                            tableElements.sort(function(a,b) {return d3.ascending(a.value.Wins, b.value.Wins);});
-                          else if(i == 4)
-                            tableElements.sort(function(a,b) {return d3.ascending(a.value.Losses, b.value.Losses);});
-                          else
-                            tableElements.sort(function(a,b) {return d3.ascending(a.value.TotalGames, b.value.TotalGames);});
-                        }
-                        else
-                        {
-                          for(var ind = 0; ind < dblClick.length; ind++)
-                          {
-                            dblClick[ind] = 0;
-                          }
-                          // sort descending
-                          if(i == 0)
-                            tableElements.sort(function(a,b) {return d3.descending(a.key, b.key);});
-                          else if(i == 1)
-                            tableElements.sort(function(a,b) {return d3.descending(a.value["Delta Goals"], b.value["Delta Goals"]);});
-                          else if(i == 2)
-                            tableElements.sort(function(a,b) {return d3.descending(rank[a.value.Result.label], rank[b.value.Result.label]);});
-                          else if(i == 3)
-                            tableElements.sort(function(a,b) {return d3.descending(a.value.Wins, b.value.Wins);});
-                          else if(i == 4)
-                            tableElements.sort(function(a,b) {return d3.descending(a.value.Losses, b.value.Losses);});
-                          else
-                            tableElements.sort(function(a,b) {return d3.descending(a.value.TotalGames, b.value.TotalGames);});
-                        }
-                        updateTable();});
-};
-
+}
 
 /**
  * Collapses all expanded countries, leaving only rows for aggregate values per country.
