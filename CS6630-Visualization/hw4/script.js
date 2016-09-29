@@ -287,7 +287,8 @@ goalsCol.append("circle").classed("goalCircle", true)
         .attr("cx", function(d) {return goalScale(d.value.scored_on);}).attr("cy", cellHeight/2);
 
 d3.select("tbody").selectAll("tr").on("click", function(d,i){updateList(i);});
-d3.select("tbody").selectAll("tr").on("mouseover", function(d,i){updateTree(d);})
+d3.select("tbody").selectAll("tr").on("mouseover", function(d,i){updateTree(d);});
+d3.select("tbody").selectAll("tr").on("mouseleave", function(d,i){clearTree()});
 }
 
 /**
@@ -373,8 +374,8 @@ function createTree(treeData) {
 
     node.append("circle").classed("treeCircle", true);
 
-    node.append("text").attr("dy", text_dy).style("text-anchor", function(d) {if(d.children == true){return "end";} else{return "start";}})
-        .text(function(d) {return d.data.Team}).attr("x", function(d) {if(d.children == true){return -13;}else{return 13;}});
+    node.append("text").classed("treeLabel", true).attr("dy", text_dy).style("text-anchor", function(d) {if(d.children == true){return "end";} else{return "start";}})
+        .text(function(d) {return d.data.Team}).attr("x", function(d) {if(d.children == true){return -15;}else{return 15;}});
 };
 
 /**
@@ -388,13 +389,28 @@ function updateTree(row) {
     // ******* TODO: PART VII *******
     if(row.value.type == "aggregate")
     {
-      console.log("aggregate");
-      links = d3.selectAll(".link").data(tableElements).enter();
-      console.log(links);
+      paths = d3.selectAll(".link").filter(function(d,i) {return d.data.Team == row.key;})
+                                   .filter(function(d,i) {return d.data.Wins == 1});
+      paths = paths.classed("selected", true);
+
+      circ = d3.selectAll(".treeCircle").filter(function(d,i) {return d.data.Team == row.key;});
+                                        //.filter(function(d,i) {return d.data.Wins == 1});
+      //circ = circ.classed("selected", true);
+
+      label = d3.selectAll(".treeLabel").filter(function(d,i) {return d.data.Team == row.key;});
+                                        //.filter(function(d,i) {return d.data.Wins == 1});
+      //label = label.classed("selectedLabel", true);
     }
     else
     {
-      console.log("game");
+      team = row.key.slice(1);
+      opponent = row.value.Opponent;
+      paths = d3.selectAll(".link").filter(function(d,i) {return d.data.Team == team})
+                                   .filter(function(d,i) {return d.data.Opponent == opponent});
+      paths = paths.classed("selected", true);
+      paths = d3.selectAll(".link").filter(function(d,i) {return d.data.Team == opponent})
+                                   .filter(function(d,i) {return d.data.Opponent == team});
+      paths = paths.classed("selected", true);
     }
 }
 
@@ -404,6 +420,8 @@ function updateTree(row) {
 function clearTree() {
 
     // ******* TODO: PART VII *******
-
+    paths = d3.selectAll("path.selected");
+    console.log(paths);
+    paths = paths.classed(".link", true);
 
 }
