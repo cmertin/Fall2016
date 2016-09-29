@@ -155,7 +155,8 @@ firstCol = firstCol.style("float", "right").attr("class", function(d) {return d.
                    .style("border-left", "solid 0px #000").text(function(d) {return d.value});
 secondCol = secondCol.text(function(d) {return d.value});
 //textCol = textCol.text(function(d) {return d.value});
-barsCol = barsCol.filter(function(d,i) {return d.type != "game";}).append("svg").attr("height", cellHeight).attr("width", cellWidth);
+barsCol = barsCol.filter(function(d,i) {return d.type != "game";}).append("svg").attr("height", cellHeight + cellBuffer).attr("width", cellWidth);
+                 //attr("transform", "translate(-5,0)");
 
 barsCol.append("rect").style("fill", function(d) {return colorScale(d.value);})
                  .attr("height", barHeight).attr("width",function(d) {return gameScale(d.value);})
@@ -310,14 +311,13 @@ function createTree(treeData) {
                  .parentId(function(d) {if(d.ParentGame != '') {return treeData[d.ParentGame].id; }})
                  (treeData);
 
+    // Adapted the following code code from
+    // http://stackoverflow.com/questions/38440928/how-do-i-create-a-tree-layout-using-json-data-in-d3-v4-without-stratify
     var tree = d3.tree().size([tree_svg_y - tree_padding, tree_svg_x - tree_padding]);
 
     tree(root);
-/////////////////////
-    var tree = d3.selectAll(".view").select("#tree").attr("transform", "translate(" + (2 * tree_padding) + ", 0)");
 
-    // Adapted the following code code from
-    // http://stackoverflow.com/questions/38440928/how-do-i-create-a-tree-layout-using-json-data-in-d3-v4-without-stratify
+    var tree = d3.selectAll(".view").select("#tree").attr("transform", "translate(" + (2 * tree_padding) + ", 0)");
 
     var link = tree.selectAll(".link").data(root.descendants().slice(1))
                    .enter()
