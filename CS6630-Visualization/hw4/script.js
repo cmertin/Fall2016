@@ -287,7 +287,7 @@ goalsCol.append("circle").classed("goalCircle", true)
         .attr("cx", function(d) {return goalScale(d.value.scored_on);}).attr("cy", cellHeight/2);
 
 d3.select("tbody").selectAll("tr").on("click", function(d,i){updateList(i);});
-d3.select("tbody").selectAll("tr").on("mouseover", function(d,i){console.log(d); console.log(i);})
+d3.select("tbody").selectAll("tr").on("mouseover", function(d,i){updateTree(d);})
 }
 
 /**
@@ -312,7 +312,7 @@ function updateList(i) {
     {
       games_list = tableElements[i].value.games;
       //console.log(games_list);
-      if(tableElements[i+1].value.type == "game")
+      if(i != tableElements.length-1 && tableElements[i+1].value.type == "game")
       {
         tableElements.splice(i+1, games_list.length);
       }
@@ -386,8 +386,16 @@ function createTree(treeData) {
 function updateTree(row) {
 
     // ******* TODO: PART VII *******
-
-
+    if(row.value.type == "aggregate")
+    {
+      console.log("aggregate");
+      links = d3.selectAll(".link").data(tableElements).enter();
+      console.log(links);
+    }
+    else
+    {
+      console.log("game");
+    }
 }
 
 /**
