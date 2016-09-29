@@ -47,17 +47,29 @@ var rank = {
     'Group': 0
 };
 
+var RankReversed = {
+    7: "Winner",
+    6: "Runner-Up",
+    5: 'Third Place',
+    4: 'Fourth Place',
+    3: 'Semi Finals',
+    2: 'Quarter Finals',
+    1: 'Round of Sixteen',
+    0: 'Group'
+};
+
 
 
 //For the HACKER version, comment out this call to d3.json and implement the commented out
 // d3.csv call below.
 
+/*
 d3.json('data/fifa-matches.json',function(error,data){
     teamData = data;
     createTable();
     updateTable();
 })
-
+*/
 
 // // ********************** HACKER VERSION ***************************
 // /**
@@ -65,12 +77,41 @@ d3.json('data/fifa-matches.json',function(error,data){
 //  * then calls the appropriate functions to create and populate the table.
 //  *
 //  */
-// d3.csv("data/fifa-matches.csv", function (error, csvData) {
-//
-//    // ******* TODO: PART I *******
-//
-//
-// });
+// Adapted examples from
+// http://stackoverflow.com/questions/34804507/d3-js-nesting-and-rollup-at-same-time
+d3.csv("data/fifa-matches.csv", function (error, csvData)
+{
+    console.log("Implemented \"Hacker Version\"")
+    teamData = d3.nest().key(function(d) {return d.Team;})
+                 .rollup(function(children) {
+                 return{
+                      "Wins": d3.sum(children, function(d) {return d.Wins;}),
+                      "Losses": d3.sum(children, function(d) {return d.Losses;}),
+                      "Goals Made": d3.sum(children, function(d) {return d["Goals Made"];}),
+                      "Goals Conceded": d3.sum(children, function(d) {return d["Goals Conceded"];}),
+                      "Delta Goals": d3.sum(children, function(d) {return d["Delta Goals"];}),
+                      "TotalGames": children.length,
+                      "Result": {"label":RankReversed[d3.max(children, function(d){return rank[d.Result];})],
+                                "ranking": d3.max(children, function(d){return rank[d.Result];})},
+                      "type":"aggregate",
+                      "games": d3.nest().key(function(subChild) {return subChild.Opponent;})
+                                 .rollup(function(subChild) {
+                                   return{
+                                    "Wins": [],
+                                    "Losses": [],
+                                    "TotalGames": [],
+                                    "Goals Made": d3.sum(subChild, function(d) {return d["Goals Made"];}),
+                                    "Goals Conceded": d3.sum(subChild, function(d) {return d["Goals Conceded"];}),
+                                    "Delta Goals": d3.sum(subChild, function(d) {return d["Delta Goals"];}),
+                                    "Result": {"label": RankReversed[d3.max(subChild, function(d){return rank[d.Result];})],
+                                               "ranking": d3.max(subChild, function(d){return rank[d.Result];})},
+                                    "type":"game",
+                                    "Opponent": d3.max(subChild, function(d){return d.Team}),
+                                  }}).entries(children)
+                 }}).entries(csvData);
+      createTable();
+      updateTable();
+});
 // // ********************** END HACKER VERSION ***************************
 
 /**
@@ -202,6 +243,7 @@ goalsCol.append("circle").classed("goalCircle", true)
         .attr("cx", function(d) {return goalScale(d.value.scored_on);}).attr("cy", cellHeight/2);
 
 d3.select("tbody").selectAll("tr").on("click", function(d,i){updateList(i);});
+d3.select("tbody").selectAll("tr").on("mouseover", function(d,i){console.log(d); console.log(i);})
 d3.select("#matchTable").select("tr").selectAll("th, td").on("click", function(d,i){
                         collapseList();
                         //console.log(tableElements[0]);
