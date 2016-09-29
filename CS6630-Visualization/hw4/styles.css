@@ -149,7 +149,7 @@ header {
 }
 
 .treeLabel {
-    fill: #000000;
+    fill: "red";//#000000;
 }
 
 .view {

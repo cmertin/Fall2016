@@ -374,7 +374,7 @@ function createTree(treeData) {
 
     node.append("circle").classed("treeCircle", true);
 
-    node.append("text").attr("class", "treeLabel").attr("dy", text_dy).style("text-anchor", function(d) {if(d.height == 0){return "start";} else{return "end";}})
+    node.append("text").classed("treeLabel", true).attr("dy", text_dy).style("text-anchor", function(d) {if(d.height == 0){return "start";} else{return "end";}})
         .text(function(d) {return d.data.Team}).attr("x", function(d) {if(d.height == 0){return 15;}else{return -15;}});
 };
 
@@ -403,7 +403,6 @@ function updateTree(row) {
     }
     else
     {
-      console.log(row);
       var team = row.key.slice(1);
       var opponent = row.value.Opponent;
       var paths = d3.selectAll(".link").filter(function(d,i) {return d.data.Team == team})
@@ -412,6 +411,25 @@ function updateTree(row) {
       paths = d3.selectAll(".link").filter(function(d,i) {return d.data.Team == opponent})
                                    .filter(function(d,i) {return d.data.Opponent == team});
       paths = paths.classed("selected", true);
+
+      var circ = d3.selectAll(".node circle").filter(function(d,i) {return d.data.Team == team})
+                                      .filter(function(d,i) {return d.data.Opponent == opponent});
+      circ = circ.classed("selected", true);
+
+      circ = d3.selectAll(".node circle").filter(function(d,i) {return d.data.Team == opponent})
+                                         .filter(function(d,i) {return d.data.Opponent == team});
+
+      circ = circ.classed("selected", true);
+
+      var label = d3.selectAll(".treeLabel").filter(function(d,i) {return d.data.Team == team;})
+                                            .filter(function(d,i) {return d.data.Opponent == opponent});
+                                        //.filter(function(d,i) {return d.data.Wins == 1});
+      label = label.classed("selectedLabel", true);
+
+      var label = d3.selectAll(".treeLabel").filter(function(d,i) {return d.data.Team == opponent;})
+                                            .filter(function(d,i) {return d.data.Opponent == team});
+
+      label = label.classed("selectedLabel", true);
     }
 }
 
@@ -426,4 +444,7 @@ function clearTree() {
 
     var circ = d3.selectAll("circle.selected");
     circ = circ.attr("class", "treeCircle");
+
+    var text = d3.selectAll("text.selectedLabel");
+    text = text.attr("class", "treeLabel");
 }
