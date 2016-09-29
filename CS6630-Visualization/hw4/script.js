@@ -102,7 +102,7 @@ var xAxis = d3.axisTop(goalScale);
 var goalsX = d3.select("#goalHeader")
                .append("svg").attr("width", cellWidth * 2)
                .attr("height", cellHeight).append("g")
-               .attr("transform", "translate(5" + "," + (cellBuffer + 2) + ")")
+               .attr("transform", "translate(0" + "," + (cellBuffer + 2) + ")")
                .call(xAxis);
 
 tableElements = teamData;
