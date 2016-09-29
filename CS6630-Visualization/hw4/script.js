@@ -374,8 +374,8 @@ function createTree(treeData) {
 
     node.append("circle").classed("treeCircle", true);
 
-    node.append("text").classed("treeLabel", true).attr("dy", text_dy).style("text-anchor", function(d) {if(d.children == true){return "end";} else{return "start";}})
-        .text(function(d) {return d.data.Team}).attr("x", function(d) {if(d.children == true){return -15;}else{return 15;}});
+    node.append("text").classed("treeLabel", true).attr("dy", text_dy).style("text-anchor", function(d) {console.log(d);if(d.height == 0){return "start";} else{return "end";}})
+        .text(function(d) {return d.data.Team}).attr("x", function(d) {if(d.height == 0){return 15;}else{return -15;}});
 };
 
 /**
@@ -389,23 +389,23 @@ function updateTree(row) {
     // ******* TODO: PART VII *******
     if(row.value.type == "aggregate")
     {
-      paths = d3.selectAll(".link").filter(function(d,i) {return d.data.Team == row.key;})
+      var paths = d3.selectAll(".link").filter(function(d,i) {return d.data.Team == row.key;})
                                    .filter(function(d,i) {return d.data.Wins == 1});
       paths = paths.classed("selected", true);
 
-      circ = d3.selectAll(".treeCircle").filter(function(d,i) {return d.data.Team == row.key;});
+      var circ = d3.selectAll(".treeCircle").filter(function(d,i) {return d.data.Team == row.key;});
                                         //.filter(function(d,i) {return d.data.Wins == 1});
       //circ = circ.classed("selected", true);
 
-      label = d3.selectAll(".treeLabel").filter(function(d,i) {return d.data.Team == row.key;});
+      var label = d3.selectAll(".treeLabel").filter(function(d,i) {return d.data.Team == row.key;});
                                         //.filter(function(d,i) {return d.data.Wins == 1});
-      //label = label.classed("selectedLabel", true);
+      label = label.classed("selectedLabel", true);
     }
     else
     {
-      team = row.key.slice(1);
-      opponent = row.value.Opponent;
-      paths = d3.selectAll(".link").filter(function(d,i) {return d.data.Team == team})
+      var team = row.key.slice(1);
+      var opponent = row.value.Opponent;
+      var paths = d3.selectAll(".link").filter(function(d,i) {return d.data.Team == team})
                                    .filter(function(d,i) {return d.data.Opponent == opponent});
       paths = paths.classed("selected", true);
       paths = d3.selectAll(".link").filter(function(d,i) {return d.data.Team == opponent})
@@ -420,7 +420,7 @@ function updateTree(row) {
 function clearTree() {
 
     // ******* TODO: PART VII *******
-    paths = d3.selectAll("path.selected");
+    var paths = d3.selectAll("path.selected");
     console.log(paths);
     paths = paths.classed(".link", true);
 
