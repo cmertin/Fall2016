@@ -365,7 +365,7 @@ function createTree(treeData) {
                    .append("path")
                    .classed("link", true)
                    .attr("d", function(d)
-                      {return ("M" + d.y + "," + d.x + "C" + ((d.y + d.parent.y)/2) + "," + d.x
+                                {return ("M" + d.y + "," + d.x + "C" + ((d.y + d.parent.y)/2) + "," + d.x
                                 + " " + ((d.y + d.parent.y)/2) + "," + d.parent.x + " " + d.parent.y + "," + d.parent.x);});
 
     var node = tree.selectAll(".node").data(root.descendants()).enter()
@@ -374,7 +374,7 @@ function createTree(treeData) {
 
     node.append("circle").classed("treeCircle", true);
 
-    node.append("text").classed("treeLabel", true).attr("dy", text_dy).style("text-anchor", function(d) {console.log(d);if(d.height == 0){return "start";} else{return "end";}})
+    node.append("text").attr("class", "treeLabel").attr("dy", text_dy).style("text-anchor", function(d) {if(d.height == 0){return "start";} else{return "end";}})
         .text(function(d) {return d.data.Team}).attr("x", function(d) {if(d.height == 0){return 15;}else{return -15;}});
 };
 
@@ -390,12 +390,12 @@ function updateTree(row) {
     if(row.value.type == "aggregate")
     {
       var paths = d3.selectAll(".link").filter(function(d,i) {return d.data.Team == row.key;})
-                                   .filter(function(d,i) {return d.data.Wins == 1});
+                                       .filter(function(d,i) {return d.data.Wins == 1});
       paths = paths.classed("selected", true);
 
       var circ = d3.selectAll(".treeCircle").filter(function(d,i) {return d.data.Team == row.key;});
                                         //.filter(function(d,i) {return d.data.Wins == 1});
-      //circ = circ.classed("selected", true);
+      circ = circ.classed("selected", true);
 
       var label = d3.selectAll(".treeLabel").filter(function(d,i) {return d.data.Team == row.key;});
                                         //.filter(function(d,i) {return d.data.Wins == 1});
@@ -403,10 +403,11 @@ function updateTree(row) {
     }
     else
     {
+      console.log(row);
       var team = row.key.slice(1);
       var opponent = row.value.Opponent;
       var paths = d3.selectAll(".link").filter(function(d,i) {return d.data.Team == team})
-                                   .filter(function(d,i) {return d.data.Opponent == opponent});
+                                       .filter(function(d,i) {return d.data.Opponent == opponent});
       paths = paths.classed("selected", true);
       paths = d3.selectAll(".link").filter(function(d,i) {return d.data.Team == opponent})
                                    .filter(function(d,i) {return d.data.Opponent == team});
@@ -421,7 +422,8 @@ function clearTree() {
 
     // ******* TODO: PART VII *******
     var paths = d3.selectAll("path.selected");
-    console.log(paths);
-    paths = paths.classed(".link", true);
+    paths = paths.attr("class", "link");
 
+    var circ = d3.selectAll("circle.selected");
+    circ = circ.attr("class", "treeCircle");
 }
