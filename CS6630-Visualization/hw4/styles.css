@@ -111,6 +111,9 @@ header {
     r: 5;
 }
 
+.treeCircle{
+  r: 5;
+}
 
 .node circle {
     fill: #be2714;

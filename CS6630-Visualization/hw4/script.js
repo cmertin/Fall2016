@@ -300,9 +300,41 @@ function updateList(i) {
  */
 function createTree(treeData) {
 
+    tree_svg_x = 350
+    tree_svg_y = 900
+    tree_padding = 50
+    text_dy = 2
     // ******* TODO: PART VI *******
+    var root = d3.stratify()
+                 .id(function(d) { return d.id; })
+                 .parentId(function(d) {if(d.ParentGame != '') {return treeData[d.ParentGame].id; }})
+                 (treeData);
 
+    var tree = d3.tree().size([tree_svg_y - tree_padding, tree_svg_x - tree_padding]);
 
+    tree(root);
+/////////////////////
+    var tree = d3.selectAll(".view").select("#tree").attr("transform", "translate(" + (2 * tree_padding) + ", 0)");
+
+    // Adapted the following code code from
+    // http://stackoverflow.com/questions/38440928/how-do-i-create-a-tree-layout-using-json-data-in-d3-v4-without-stratify
+
+    var link = tree.selectAll(".link").data(root.descendants().slice(1))
+                   .enter()
+                   .append("path")
+                   .classed("link", true)
+                   .attr("d", function(d)
+                      {return ("M" + d.y + "," + d.x + "C" + ((d.y + d.parent.y)/2) + "," + d.x
+                                + " " + ((d.y + d.parent.y)/2) + "," + d.parent.x + " " + d.parent.y + "," + d.parent.x);});
+
+    var node = tree.selectAll(".node").data(root.descendants()).enter()
+                   .append("g").attr("class", function(d) {if(d.data.Wins == 1) {return "winner";}})
+                   .classed("node", true).attr("transform", function(d) {return "translate(" + d.y + "," + d.x + ")";});
+
+    node.append("circle").classed("treeCircle", true);
+
+    node.append("text").attr("dy", text_dy).style("text-anchor", function(d) {if(d.children == true){return "end";} else{return "start";}})
+        .text(function(d) {return d.data.Team}).attr("x", function(d) {if(d.children == true){return -13;}else{return 13;}});
 };
 
 /**
