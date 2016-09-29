@@ -303,7 +303,7 @@ function createTree(treeData) {
     tree_svg_x = 350
     tree_svg_y = 900
     tree_padding = 50
-    text_dy = 2
+    text_dy = 4
     // ******* TODO: PART VI *******
     var root = d3.stratify()
                  .id(function(d) { return d.id; })
