@@ -5,6 +5,7 @@
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{bbold}
+\usepackage{algorithm}
 
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
@@ -14,6 +15,7 @@
 \newcommand{\pprime}{\prime \prime}
 \newcommand{\BigO}[1]{\mathcal{O}\left( #1 \right)}
 \newcommand{\Id}{\mathbb{1}}
+\usepackage{algcompatible}
 
 \newenvironment{theorem}[2][Theorem]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
@@ -27,6 +29,9 @@
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
 \newenvironment{corollary}[2][Corollary]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
 
 \DeclareMathOperator{\sech}{sech}
 \DeclareMathOperator{\csch}{csch}
@@ -56,6 +61,23 @@ Determine the condition number of the eigenvalue 4 for the two matrices discusse
 Explain the meaning of your results and how they are related to the observations made in the example.
 
 {\bf Solution:}
+
+\begin{align*}
+\intertext{In Example 4.7, the given matrix and its eigenvalue 4 is}
+A &= \begin{pmatrix}
+    4 & 1\\
+    0 & 4
+\end{pmatrix};\quad\quad \mathbf{x} = \begin{pmatrix}1\\ 0\end{pmatrix};\quad\quad \mathbf{w}=\begin{pmatrix}0\\ 1\end{pmatrix}
+\end{align*}
+
+\begin{align*}
+\intertext{In calculating the condition number, we get}
+S(\lambda) &= \frac{1}{\mathbf{x}^{T}\mathbf{w}}\\
+           &= \frac{1}{0} = \infty
+\end{align*}
+
+This means that the matrix is {\em ill-conditioned} and is the reason for brining out the
+large discrepancy in eigenvalues with such a small perturbation.
 
 %%%%%% Problem 2 %%%%%%
 \item The {\em Gauss-Jordan method} used to solve the prototype linear system can be described
@@ -89,10 +111,42 @@ pivoting ({\em i.e.}, no row interchanging) is required.
 
 {\bf Solution:}
 
+\begin{algorithm}[H]
+\caption{Gauss-Jordan Elimination}
+\begin{algorithmic}[1]
+\REQUIRE {$A\in \mathbb{R}^{n\times m}$}
+\ENSURE $\vec{x}\in \mathbb{R}^{n\times 1}$
+\FOR{$i = 1,\ldots ,n$}
+    \STATE Let $p$ be the smallest integer with $i \leq p \leq n$ and $a_{p,i}\neq 0$
+    \IF{no integer $p$ can be found}
+          \STATE{\textbf{Return} `No unique solution exists'}
+    \ENDIF
+    \IF{$p\neq i$}
+        \STATE $E_{p} \leftrightarrow E_{i}$
+    \ENDIF
+    \FOR{$j = 1,\ldots , i-1, i+1, \ldots,  m$}
+      \STATE $m_{j,i} = \frac{a_{j,i}}{a_{i,i}}$
+      \STATE $(E_{j} - m_{j,i}\cdot E_{i}) \rightarrow E_{j}$
+    \ENDFOR
+\ENDFOR
+\COMMENT{Elimination Process}
+\FOR{$i = 1,\ldots,n$}
+    \STATE $x_{i} = \frac{a_{i,n+1}}{a_{i,i}}$
+\ENDFOR
+\STATE {\textbf{Return} $\vec{x}$}
+\end{algorithmic}
+\end{algorithm}
+
 \item Show that the Gauss-Jordan method requires $n^{3} + \BigO{n^{2}}$ floating point operations
 for one right-hand-side vector $\mathbf{b}$ -- roughly 50\% more than what's needed for Gaussian Elimination
 
 {\bf Solution:}
+
+This can be easily proven (assuming the given matrix is $n\times n$). Line 1
+and 9 of the code produce $\BigO{n^{2}}$ divisions for line 10. However, Line 11
+has to sub in the elements of each row ($\BigO{n}$), which would make that term
+be $\BigO{n^{3}}$ since it has the two for loops, plus iterating over each element
+in the columns to change their values.
 
 
 \end{enumerate}
@@ -118,17 +172,84 @@ or a lower triangular system requires only $\BigO{n^{2}}$ flops). Then, specify 
 
 {\bf Solution:}
 
+By multiplying $T$ from the left to the equation $A\mathbf{x} = \mathbf{b}$ gives us
+$TA\mathbf{x} = T\mathbf{b} = \mathbf{c}$ and $LU\mathbf{x} = \mathbf{c}$. This can be
+solved with normal LU-Decomposition, by first doing a forward and then a backward substitution.
+Multiplying $T$ to vector $b$ needs $\BigO{n^{2}}$ operations, and since solving the
+upper triangular or lower triangular system requires only $\BigO{n^{2}}$ flops, solving this
+equaiton needs $\BigO{n^{2}}$ flops overall.
+
+
+\begin{algorithm}[H]
+\caption{LU Decomposition}
+\begin{algorithmic}[1]
+\STATE $\mathbf{c} = T\mathbf{b}$
+\COMMENT{Multiply $T$ from the left on $A\mathbf{x} = \mathbf{b}$, with RHS as $\mathbf{c}$}
+\STATE $\mathbf{y} = \mathbf{c}$
+\FOR{$i = 2,\ldots,n$}
+    \FOR{$j = 1,\ldots,i-1$}
+        \STATE{$y_{i} = c_{i} - L_{i,j} y_{j}$}
+    \ENDFOR
+\ENDFOR
+\COMMENT{Solve $L\mathbf{y} = \mathbf{b}$ via forward substitution}
+\STATE $\mathbf{x} = \mathbf{y}$
+\STATE $x_{n} = \frac{y_{n}}{U_{n,n}}$
+\FOR{$i = n-1,\ldots,1$}
+    \FOR{$j = i + 1,\ldots,n$}
+      \STATE $x_{i} = \frac{y_{i} - U_{i,j}}{U_{i,i}}$
+    \ENDFOR
+\ENDFOR
+\COMMENT{Solve $U\mathbf{x} = \mathbf{y}$ by backward substitution}
+\end{algorithmic}
+\end{algorithm}
 
 %%%%%% Problem 4 %%%%%%
 \item The classical way to invert a matrix $A$ in a basic linear algebra course augments $A$ by the $n\times n$
 identity matrix $\Id$ and applies the Gauss-Jordan algorithm of Exercise 2 to this augmented matrix
-(including the solutin part, {\em i.e.}, the division by the pivots $a_{k,k}^{(n-1)}$). Then $A^{-1}$
+(including the solution part, {\em i.e.}, the division by the pivots $a_{k,k}^{(n-1)}$). Then $A^{-1}$
 shows up where $\Id$ initially was.
 
 How many floating point operations are required for this method? Compare this to the operation count of
 $\frac{8}{3}n^{3} + \BigO{n^{2}}$ required for the same task using LU-decomposition (see Example 5.5).
 
 {\bf Solution:}
+
+To add (agument) $\Id$ to $A$ in order to find the inverse, this takes $\BigO{n}$ operations.
+Following this, we can convert $A$ into $\Id$ by utilizing row operations, where the {\em former}
+matrix $\Id$ on the right becomes $A^{-1}$.
+
+We can count up the operations in Algorithm~\ref{alg:inv}, to get the total number of operations,
+which results in:
+
+\[
+\sum_{k=1}^{n} \left(2n + 2(2n-1)^{2} + 4n\right) + \BigO{n^{2}} = 8n^{3} + \BigO{n^{2}}
+\]
+
+
+\begin{algorithm}[H]
+\caption{Matrix Inverse}
+\begin{algorithmic}[1]
+\FOR{$i = 1,\ldots,n$}
+    \FOR{$j = 1,\ldots,2n$}
+      \STATE $l_{j,i} = \frac{a_{j,i}}{a_{i,i}}$
+      \FOR{$k = 1,\ldots,2n$}
+          \IF{$i \neq j$}
+              \STATE $a_{j,k} = a_{j,k} - l_{j,i}a_{i,k}$
+          \ENDIF
+      \ENDFOR
+      \STATE $b_{j} = b_{j} - l_{j,i}b_{i}$
+    \ENDFOR
+\ENDFOR
+\FOR{$i = 1,\ldots,n$}
+  \STATE{$b = a_{i,i}$}
+  \FOR{$j = 1,\ldots,2n$}
+    \STATE{$a_{i,j} = \frac{a_{i,j}}{b}$}
+  \ENDFOR
+\ENDFOR
+\COMMENT{Converting the left matrix to $\Id$}
+\end{algorithmic}
+\label{alg:inv}
+\end{algorithm}
 
 %%%%%% Problem 5 %%%%%%
 \item The Cholesky algorithm given on page 116 has all those wretched loops as in the Gaussin Elimination
