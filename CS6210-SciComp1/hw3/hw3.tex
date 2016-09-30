@@ -6,6 +6,8 @@
 \usepackage{graphicx}
 \usepackage{bbold}
 \usepackage{algorithm}
+\usepackage{algcompatible}
+\usepackage{csquotes}
 
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
@@ -15,7 +17,6 @@
 \newcommand{\pprime}{\prime \prime}
 \newcommand{\BigO}[1]{\mathcal{O}\left( #1 \right)}
 \newcommand{\Id}{\mathbb{1}}
-\usepackage{algcompatible}
 
 \newenvironment{theorem}[2][Theorem]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
@@ -260,6 +261,24 @@ Write a code implementing the Cholesky decomposition with only one loop (on $k$)
 
 {\bf Solution:}
 
+\begin{algorithm}[H]
+\caption{Cholesky Factorization (Outer Products)}
+\begin{algorithmic}[1]
+\FOR{$i = 1,\ldots,n$}
+    \STATE $A_{i,i} = \sqrt{A_{i,i}}$
+    \FOR{$j = i+1,\ldots, n$}
+      \STATE $A_{j,i} = \frac{A_{j,i}}{A_{i,i}}$
+    \ENDFOR
+    \FOR{$j = i+1,\ldots,n$}
+      \FOR{$k = j,\ldots,n$}
+        \STATE{$A_{k,j} = A_{k,j} - A_{k,i}A_{j,i}$}
+      \ENDFOR
+    \ENDFOR
+\ENDFOR
+\end{algorithmic}
+\label{alg:chol}
+\end{algorithm}
+
 %%%%%% Problem 6 %%%%%%
 \item Consider the LU decomposition of an upper Hessenberg (no, it's not a place in Germany) matrix,
 defined on the facing page, assuming that no pivoting is needed: $A = LU$.
@@ -269,24 +288,77 @@ defined on the facing page, assuming that no pivoting is needed: $A = LU$.
 
 {\bf Solution:}
 
+\begin{algorithm}[H]
+\caption{LU Decomposition of Upper Hessenberg}
+\begin{algorithmic}[1]
+\FOR{$i = 1,\ldots,n-1$}
+\STATE $j = i+1$
+\COMMENT{Since $p = 2$, the second loop on the iterator $j$ only has a single value}
+\STATE $l_{j,i} = \frac{a_{j,i}}{a_{i,i}}$
+\FOR{$k = i+1,\ldots,i+n-1$}
+    \STATE{$a_{j,k} = a_{j,k} - l_{j,i}a_{i,k}$}
+\ENDFOR
+\ENDFOR
+\end{algorithmic}
+\label{alg:lu_hess}
+\end{algorithm}
+
 \item What is the sparsity structure of the resulting matrix $L$ ({\em i.e.}, where are its non-zeros)?
 
 {\bf Solution:}
+
+In general, $L$ is a lower-triangular matrix and has a lower-bandwidth of $p = 2$ and
+an upper-bandwidth of $q = n$. Therefore, we can use the ``LU Decomposition for Banded Matrices''
+on page 120 in the book, which is stated as Algorithm~\ref{alg:lu_hess} above.
 
 \item How many operations (to a leading order) does it take to solve a linear system $A\mathbf{x} = \mathbf{b}$,
 where $A$ is upper Hessenberg?
 
 {\bf Solution:}
 
+Line 5 in Algorithm~\ref{alg:lu_hess} has $(n-2)$ multiplications and subtractions, resulting
+in a total of $2(n-2)$. Therefore, the total number of operations can be found as
+
+\[
+\sum_{k=1}^{n-1}2(n-2) = 2(n-1)(n-2) = \BigO{n^{2}}
+\]
+
+Where the total time for the decomposition is $\BigO{n^{2}}$, for the forward substitution is $\BigO{n^{2}}$,
+and for the backward substitution is $\BigO{n^{2}}$. Thus, the resulting overall number of
+operations is $\BigO{n^{2}}$.
+
 \item Suppose now that partial pivoting is applied. What are the sparsity patterns of the factors of $A$?
 
 {\bf Solution:}
+
+Page 121 of the text states:
+
+\begin{displayquote}
+``If the usual row partial pivoting is applied, then the band structure may be altered
+due to row interchanges. Using such pivoting, the upper-bandwidth $q$ of $U$ may increase
+to $q + p - 1$.''
+\end{displayquote}
+
+In any Hessenberg Matrix, since $p = 2$ and $q = n$, the upper-bandwith will stay the
+same and partial pivoting does not have any significant effect on the sparsity of it.
+
 \end{enumerate}
 
 \item For the arrow matrices of Example 5.15, determine the overall storage and flop count requirements
 for solving the systems with $A$ and with $B$ in the general $n \times n$ case.
 
 {\bf Solution:}
+
+Converting matrix $A$ to $B$ can be done with an implementation of a row and column swap,
+requiring us to find the flop count for $B$. $B$ can be converted into an upper/lower-triangular
+matrix in $\BigO{n^{2}}$ flops, with $(n-1)$ elementary operations. From here, we can solve the
+linear system with backwards/forwards substitution, which requires $\BigO{n^{2}}$ flops. Therefore,
+the total number of operations is $\BigO{n^{2}}$.
+
+The storage requirements can be determined by only storing the non-zeros of the matrix.
+In the case of an {\em arrow matrix} from Example 5.15, the {\em max} is $\BigO{n}$
+as it would be $\BigO{n}$ along the diagonal, and $\BigO{2n}$ on the ``arrow head''
+part of the matrix, resulting in an overall storage of $\BigO{n}$.
 
 \end{enumerate}
 
