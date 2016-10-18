@@ -14,6 +14,8 @@ function YearChart(electoralVoteChart, tileChart, votePercentageChart, electionW
     self.tileChart = tileChart;
     self.votePercentageChart = votePercentageChart;
     self.electionWinners = electionWinners;
+    console.log(electionWinners);
+
     self.init();
 };
 
@@ -35,7 +37,6 @@ YearChart.prototype.init = function(){
     self.svg = divyearChart.append("svg")
         .attr("width",self.svgWidth)
         .attr("height",self.svgHeight)
-
 };
 
 /**
@@ -64,27 +65,54 @@ YearChart.prototype.update = function(){
     var self = this;
 
     //Domain definition for global color scale
-    var domain = [-60,-50,-40,-30,-20,-10,0,10,20,30,40,50,60 ];
+    var colorDomain = [-60,-50,-40,-30,-20,-10,0,10,20,30,40,50,60 ];
 
     //Color range for global color scale
-    var range = ["#0066CC", "#0080FF", "#3399FF", "#66B2FF", "#99ccff", "#CCE5FF", "#ffcccc", "#ff9999", "#ff6666", "#ff3333", "#FF0000", "#CC0000"];
+    var colorRange = ["#0066CC", "#0080FF", "#3399FF", "#66B2FF", "#99ccff", "#CCE5FF", "#ffcccc", "#ff9999", "#ff6666", "#ff3333", "#FF0000", "#CC0000"];
 
     //Global colorScale to be used consistently by all the charts
     self.colorScale = d3.scaleQuantile()
-        .domain(domain).range(range);
+        .domain(colorDomain).range(colorRange);
+
+    self.yearScale = d3.scaleLinear()
+                       .domain([0, self.electionWinners.length])
+                       .range([self.margin.left, self.svgWidth]);
+
+    console.log("yo");
 
     // ******* TODO: PART I *******
+
+    var svg = d3.select("#year-chart").select("svg");
+
+
+    //Style the chart by adding a dashed line that connects all these years.
+    //HINT: Use .lineChart to style this dashed line
+
+    svg.selectAll("line").data([0]).enter().append("line")
+                         .attr("y1", self.svgHeight/2)
+                         .attr("x1", self.margin.left)
+                         .attr("y2", self.svgHeight/2)
+                         .attr("x2", self.svgWidth - self.margin.right - 20)
+                         .classed("lineChart", true);
 
     // Create the chart by adding circle elements representing each election year
     //The circles should be colored based on the winning party for that year
     //HINT: Use the .yearChart class to style your circle elements
     //HINT: Use the chooseClass method to choose the color corresponding to the winning party.
 
+    svg.selectAll("circle").data(self.electionWinners).enter().append("circle")
+                                  .attr("cx", function(d,i) {return self.yearScale(i);})
+                                  .attr("cy", self.svgHeight/2).attr("r", 7)
+                                  .attr("class", function(d) {return YearChart.prototype.chooseClass(d.PARTY);});
+
     //Append text information of each year right below the corresponding circle
     //HINT: Use .yeartext class to style your text elements
 
-    //Style the chart by adding a dashed line that connects all these years.
-    //HINT: Use .lineChart to style this dashed line
+    svg.selectAll("text").data(self.electionWinners).enter().append("text")
+                         .attr("class", "yeartext")
+                         .text(function(d) {return d.YEAR})
+                         .attr("x", function(d,i) {return self.yearScale(i);})
+                         .attr("y", self.svgHeight/2 + 30);
 
     //Clicking on any specific year should highlight that circle and  update the rest of the visualizations
     //HINT: Use .highlighted class to style the highlighted circle
