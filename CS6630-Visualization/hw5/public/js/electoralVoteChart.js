@@ -26,7 +26,7 @@ ElectoralVoteChart.prototype.init = function(){
     //creates svg element within the div
     self.svg = divelectoralVotes.append("svg")
         .attr("width",self.svgWidth)
-        .attr("height",self.svgHeight)
+        .attr("height",self.svgHeight);
 };
 
 /**
@@ -56,6 +56,8 @@ ElectoralVoteChart.prototype.chooseClass = function (party) {
 
 ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
     var self = this;
+
+    console.log("hey");
 
     // ******* TODO: PART II *******
 
