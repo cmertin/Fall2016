@@ -22,7 +22,7 @@ h1 {
 
 .yeartext, .tilestext, .brushtext{
     text-anchor:middle;
-    font-size: 24px;
+    font-size: 14px;
     fill: #565656;
     stroke-width: 0.1px;
     /*stroke: #e5e5e5;*/
@@ -38,6 +38,13 @@ h1 {
 }
 .end{
     text-anchor:end;
+}
+
+.lineChart{
+  stroke-width: 3;
+  stroke: black;
+  stroke-dasharray: 1.5;
+  opacity: .5;
 }
 
 .nomineeInfoText{
@@ -96,8 +103,8 @@ h1 {
 }
 
 .highlighted{
-    stroke: #404040;;
-    stroke-width:4;
+    stroke: #404040;
+    stroke-width:3;
 }
 
 .brush .selection {
@@ -183,5 +190,3 @@ h3{
     text-anchor:middle;
     font-size: 32px;
 }
-
-
