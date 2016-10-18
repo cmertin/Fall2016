@@ -4,9 +4,12 @@
  *
  * @param shiftChart an instance of the ShiftChart class
  */
-function ElectoralVoteChart(){
-
+function ElectoralVoteChart(electionData, electionYear, colorScale){
     var self = this;
+
+    self.electionData = electionData;
+    self.electionYear = electionYear;
+    self.colorScale = colorScale;
     self.init();
 };
 
@@ -57,7 +60,24 @@ ElectoralVoteChart.prototype.chooseClass = function (party) {
 ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
     var self = this;
 
-    console.log("hey");
+    console.log(self.electionData);
+    console.log(self.electionYear);
+
+    var demStates = self.electionData.filter(function(d) {return d.State_Winner == "D";});
+
+    var repStates = self.electionData.filter(function(d) {return d.State_Winner == "R";});
+
+    var indStates = self.electionData.filter(function(d) {return d.State_Winner == "I";});
+
+    demStates.sort(function(a,b){return d3.descending(a.RD_Difference, b.RD_Difference);});
+
+    repStates.sort(function(a,b){return d3.descending(a.RD_Difference, b.RD_Difference);});
+
+    indStates.sort(function(a,b){return d3.descending(a.RD_Difference, b.RD_Difference);});
+
+    console.log(demStates);
+    console.log(repStates);
+    console.log(indStates);
 
     // ******* TODO: PART II *******
 
