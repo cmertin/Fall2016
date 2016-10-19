@@ -30,7 +30,7 @@ h1 {
 
 .electoralVotesNote, .votesPercentageNote{
     text-anchor:middle;
-    font-size: 24px;
+    font-size: 14px;
 }
 
 .electoralVoteText, .votesPercentageText{
@@ -45,6 +45,11 @@ h1 {
   stroke: black;
   stroke-dasharray: 1.5;
   opacity: .5;
+}
+
+.midLine{
+  stroke-width: 2;
+  stroke: black;
 }
 
 .nomineeInfoText{
@@ -114,7 +119,7 @@ h1 {
 .selected{
     stroke: #404040;;
     stroke-width:4;
-    r:25px;
+    r:15px;
 }
 
 

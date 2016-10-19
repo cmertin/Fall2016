@@ -1,15 +1,13 @@
-
+var globalWidth = 0
+var globalHeight = 0
+var globalMargin = 0
 /**
  * Constructor for the ElectoralVoteChart
  *
  * @param shiftChart an instance of the ShiftChart class
  */
-function ElectoralVoteChart(electionData, electionYear, colorScale){
+function ElectoralVoteChart(){
     var self = this;
-
-    self.electionData = electionData;
-    self.electionYear = electionYear;
-    self.colorScale = colorScale;
     self.init();
 };
 
@@ -25,6 +23,10 @@ ElectoralVoteChart.prototype.init = function(){
     self.svgBounds = divelectoralVotes.node().getBoundingClientRect();
     self.svgWidth = self.svgBounds.width - self.margin.left - self.margin.right;
     self.svgHeight = 150;
+    console.log(self.svgWidth);
+    globalWidth = self.svgWidth;
+    globalHeight = self.svgHeight;
+    globalMargin = self.margin;
 
     //creates svg element within the div
     self.svg = divelectoralVotes.append("svg")
@@ -60,24 +62,62 @@ ElectoralVoteChart.prototype.chooseClass = function (party) {
 ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
     var self = this;
 
-    console.log(self.electionData);
-    console.log(self.electionYear);
+    var barHeight = 25;
 
-    var demStates = self.electionData.filter(function(d) {return d.State_Winner == "D";});
+    var evScale = d3.scaleLinear().range([0, globalWidth])
+                                  .domain([0, d3.sum(electionResult, function(d) {return d.Total_EV})]);
 
-    var repStates = self.electionData.filter(function(d) {return d.State_Winner == "R";});
+    var indStates = electionResult.filter(function(d) {return d.State_Winner == "I";});
+    var demStates = electionResult.filter(function(d) {return d.State_Winner == "D";});
+    var repStates = electionResult.filter(function(d) {return d.State_Winner == "R";});
 
-    var indStates = self.electionData.filter(function(d) {return d.State_Winner == "I";});
+    indStates = indStates.sort(function(a,b) {return d3.descending(a.RD_Difference, b.RD_Difference)});
+    demStates = demStates.sort(function(a,b) {return d3.descending(a.RD_Difference, b.RD_Difference)});
+    repStates = repStates.sort(function(a,b) {return d3.ascending(a.RD_Difference, b.RD_Difference)});
 
-    demStates.sort(function(a,b){return d3.descending(a.RD_Difference, b.RD_Difference);});
+    if(indStates.length > 0)
+    {
+      var evResult = indStates.concat(demStates);
+      evResult = evResult.concat(repStates);
+    }
+    else
+    {
+      var evResult = demStates.concat(repStates);
+    }
 
-    repStates.sort(function(a,b){return d3.descending(a.RD_Difference, b.RD_Difference);});
+    var evChart = d3.select("#electoral-vote").select("svg");
 
-    indStates.sort(function(a,b){return d3.descending(a.RD_Difference, b.RD_Difference);});
+    evChart.selectAll("rect").remove();
+    evChart.selectAll("text").remove();
+    evChart.selectAll("line").remove();
 
-    console.log(demStates);
-    console.log(repStates);
-    console.log(indStates);
+    var bars = evChart.selectAll('rect').data(evResult).enter()
+                      .append('rect')
+                      .attr('width', function (d) {return evScale(d.Total_EV)})
+                      .attr("x", function (d,i) {return evScale(d3.sum(evResult.slice(0,i), function(d) {return d.Total_EV}))})
+                      .attr("fill", function(d) {
+                      if(d.State_Winner == "I")
+                      {return "#45AD6A";}
+                      else {return colorScale(d.RD_Difference);}})
+                      .attr("y", globalHeight/2)
+                      .attr('height', barHeight)
+                      .classed("votesPercentage", true);
+
+      var line = evChart.selectAll("line").data([0]).enter().append("line")
+                    .attr("y1", globalHeight/2 + barHeight + 10)
+                    .attr("x1", evScale(270))
+                    .attr("y2", globalHeight/2 - 10)
+                    .attr("x2", evScale(270))
+                    .classed("midLine", true);
+
+      var text = evChart.selectAll("text").data([0]).enter().append("text")
+                        .attr("y", globalHeight/2 - 15)
+                        .attr("x", evScale(270))
+                        .text("Electoral Votes (270 to win)")
+                        .classed("electoralVotesNote", true);
+
+
+    //.attr('fill', function (d) {return colorScale(d.RD_Difference)})
 
     // ******* TODO: PART II *******
 

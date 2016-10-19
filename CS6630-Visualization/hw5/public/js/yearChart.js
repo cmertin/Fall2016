@@ -14,6 +14,7 @@ function YearChart(electoralVoteChart, tileChart, votePercentageChart, electionW
     self.tileChart = tileChart;
     self.votePercentageChart = votePercentageChart;
     self.electionWinners = electionWinners;
+    self.circleRadius = 7;
     self.init();
 };
 
@@ -77,7 +78,6 @@ YearChart.prototype.update = function(){
                        .range([self.margin.left, self.svgWidth]);
 
     // ******* TODO: PART I *******
-
     var svg = d3.select("#year-chart").select("svg");
 
 
@@ -98,7 +98,7 @@ YearChart.prototype.update = function(){
 
     svg.selectAll("circle").data(self.electionWinners).enter().append("circle")
                                   .attr("cx", function(d,i) {return self.yearScale(i);})
-                                  .attr("cy", self.svgHeight/2).attr("r", 7)
+                                  .attr("cy", self.svgHeight/2).attr("r", self.circleRadius)
                                   .attr("class", function(d) {return YearChart.prototype.chooseClass(d.PARTY);});
 
     //Append text information of each year right below the corresponding circle
@@ -114,16 +114,18 @@ YearChart.prototype.update = function(){
     //HINT: Use .highlighted class to style the highlighted circle
 
     svg.selectAll("circle").on("click", function(d,i) {
-      var className = YearChart.prototype.chooseClass(d.PARTY) + " highlighted";
-      oldSelect = svg.selectAll(".highlighted");
-      oldSelect.attr("class", function(d) {return YearChart.prototype.chooseClass(d.PARTY);});
-      d3.select(this).attr("class", className);
+      var oldSelect = svg.selectAll("circle").classed("selected", false);
+      d3.select(this).classed("selected", true);
       var electionFile = "data/Year_Timeline_" + d.YEAR + ".csv";
-      d3.csv(electionFile, function (error, electoralData) {
-          //pass the instances of all the charts that update on selection change in YearChart
-          var electoralChart = new ElectoralVoteChart(electoralData, d.YEAR, self.colorScale);
-          electoralChart.update();
+      d3.csv(electionFile, function (error, electionResult) {
+          ElectoralVoteChart.prototype.update(electionResult, self.colorScale);
       });
+    })
+    .on("mouseover", function(d,i) {
+      d3.select(this).classed("highlighted", true);
+    })
+    .on("mouseout", function(d,i){
+      var oldSelect = svg.selectAll("circle").classed("highlighted", false);
     });
 
     //Election information corresponding to that year should be loaded and passed to
