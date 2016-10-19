@@ -104,17 +104,60 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
                       .classed("votesPercentage", true);
 
       var line = evChart.selectAll("line").data([0]).enter().append("line")
-                    .attr("y1", globalHeight/2 + barHeight + 10)
-                    .attr("x1", evScale(270))
-                    .attr("y2", globalHeight/2 - 10)
-                    .attr("x2", evScale(270))
-                    .classed("midLine", true);
+                        .attr("y1", globalHeight/2 + barHeight + 10)
+                        .attr("x1", evScale(270))
+                        .attr("y2", globalHeight/2 - 10)
+                        .attr("x2", evScale(270))
+                        .classed("midLine", true);
 
       var text = evChart.selectAll("text").data([0]).enter().append("text")
                         .attr("y", globalHeight/2 - 15)
                         .attr("x", evScale(270))
                         .text("Electoral Votes (270 to win)")
-                        .classed("electoralVotesNote", true);
+                        .classed("electoralVotesNote", true)
+                        .append("text").text("heyoooo");
+
+      if(indStates.length > 0)
+      {
+        evVal = d3.sum(indStates, function(d) {return d.Total_EV});
+        evChart.append("text")
+                      .attr("y", globalHeight/2 - 5)
+                      .attr("x", 0)
+                      .text(evVal)
+                      .classed("democrat", true)
+                      .classed("electoralVoteText", true);
+        evVal = d3.sum(demStates, function(d) {return d.Total_EV});
+        evChart.append("text")
+                      .attr("y", globalHeight/2 - 5)
+                      .attr("x", evScale(d3.sum(indStates, function(d) {return d.Total_EV})))
+                      .text(evVal)
+                      .classed("democrat", true)
+                      .classed("electoralVoteText", true);
+        evVal = d3.sum(repStates, function(d) {return d.Total_EV});
+        evChart.append("text")
+                      .attr("y", globalHeight/2 - 5)
+                      .attr("x", evScale(d3.sum(electionResult, function(d) {return d.Total_EV})))
+                      .text(evVal)
+                      .classed("republican", true)
+                      .classed("electoralVoteText", true);
+      }
+      else
+      {
+        evVal = d3.sum(demStates, function(d) {return d.Total_EV});
+        evChart.append("text")
+                      .attr("y", globalHeight/2 - 5)
+                      .attr("x", 0)
+                      .text(evVal)
+                      .classed("democrat", true)
+                      .classed("electoralVoteText", true);
+        evVal = d3.sum(repStates, function(d) {return d.Total_EV});
+        evChart.append("text")
+                      .attr("y", globalHeight/2 - 5)
+                      .attr("x", evScale(d3.sum(electionResult, function(d) {return d.Total_EV})))
+                      .text(evVal)
+                      .classed("republican", true)
+                      .classed("electoralVoteText", true);
+      }
 
 
     //.attr('fill', function (d) {return colorScale(d.RD_Difference)})
