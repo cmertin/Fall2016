@@ -75,6 +75,8 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
     demStates = demStates.sort(function(a,b) {return d3.descending(a.RD_Difference, b.RD_Difference)});
     repStates = repStates.sort(function(a,b) {return d3.ascending(a.RD_Difference, b.RD_Difference)});
 
+    console.log(electionResult);
+
     if(indStates.length > 0)
     {
       var evResult = indStates.concat(demStates);

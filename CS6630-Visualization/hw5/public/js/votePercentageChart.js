@@ -58,7 +58,7 @@ VotePercentageChart.prototype.tooltip_render = function (tooltip_data) {
     var self = this;
     var text = "<ul>";
     tooltip_data.result.forEach(function(row){
-        text += "<li class = " + self.chooseClass(row.party)+ ">" + row.nominee+":\t\t"+row.votecount+"("+row.percentage+"%)" + "</li>"
+        text += "<li class = " + self.chooseClass(row.party)+ ">" + row.nominee+":\t\t"+row.votecount+" ("+row.percentage+")" + "</li>"
     });
 
     return text;
@@ -72,13 +72,18 @@ VotePercentageChart.prototype.tooltip_render = function (tooltip_data) {
 VotePercentageChart.prototype.update = function(electionResult){
     var self = this;
 
+    function parsePercentage(val)
+    {
+      var temp = val.slice(0, -1);
+      return parseFloat(temp);
+    }
+
     var barHeight = 25;
 
     repData = {"nominee": electionResult[0].R_Nominee_prop, "votecount": electionResult[0].R_Votes, "percentage":electionResult[0].R_PopularPercentage, "party":"R"};
     demData = {"nominee": electionResult[0].D_Nominee_prop, "votecount": electionResult[0].D_Votes, "percentage":electionResult[0].D_PopularPercentage, "party":"D"}
     indData = {"nominee": electionResult[0].I_Nominee_prop, "votecount": electionResult[0].I_Votes, "percentage":electionResult[0].I_PopularPercentage, "party":"I"}
-    console.log(indData);
-    console.log(electionResult[0]);
+
     if(parseInt(indData.percentage) > 0)
     {
         var tooltip_data = {"result":[demData, repData, indData]};
@@ -99,7 +104,7 @@ VotePercentageChart.prototype.update = function(electionResult){
             return [0,0];
         })
         .html(function(d) {
-            var tooltip_html = tooltip_render(tooltip_data);
+            var tooltip_html = VotePercentageChart.prototype.tooltip_render(tooltip_data);
             return tooltip_html;
         });
 
@@ -129,23 +134,22 @@ VotePercentageChart.prototype.update = function(electionResult){
 
     var popChart = d3.select("#votes-percentage").select("svg");
 
+    popChart.call(tip);
+
     popChart.selectAll("rect").remove();
     popChart.selectAll("text").remove();
     popChart.selectAll("line").remove();
 
     var bars = popChart.selectAll("rect").data(data).enter().append("rect")
-                      .attr("width", function(d) {var val = d.percentage; val = parseFloat(val.slice(0, -1)); return percentageScale(val);})
                       .attr("x", function(d,i){
                         if(i > 0)
                         {
                           var pre_percentage = 0;
                           for(j = 0; j < i; ++j)
                             {
-                              var val = data[j].percentage;
-                              val = val.slice(0, -1);
-                              pre_percentage = parseFloat(pre_percentage) + parseFloat(val);}
-                          console.log(pre_percentage);
-                          console.log(percentageScale(pre_percentage));
+                              pre_percentage = pre_percentage + parsePercentage(data[j].percentage);
+                            }
+
                           return percentageScale(pre_percentage);
                         }
                         else
@@ -157,19 +161,117 @@ VotePercentageChart.prototype.update = function(electionResult){
                       .attr("height", barHeight)
                       .attr("class", function(d){
                         if(d.party == "I")
-                        {return "independent"}
+                        {return "independent";}
                         else if(d.party == "D")
-                        {return "democrat"}
+                        {return "democrat";}
                         else
                         {return "republican";}
-                      });
+                      })
+                      .on("mouseover", tip.show)
+                      .on("mouseout", tip.hide)
+                      .transition().duration(1000)
+                      .attr("width", function(d) {
+                                      return percentageScale(parsePercentage(d.percentage));});
 
-      var line = popChart.selectAll("line").data([0]).enter().append("line")
+      var line = popChart.append("line")
                         .attr("y1", globalHeight/2 + barHeight + 10)
                         .attr("x1", percentageScale(50))
                         .attr("y2", globalHeight/2 - 10)
                         .attr("x2", percentageScale(50))
                         .classed("midLine", true);
 
+      var text = popChart.selectAll("text").append("text")
+                         .attr("x", percentageScale(50))
+                         .attr("y", globalHeight/2 - 15)
+                         .classed("votesPercentageNote", true)
+                         .text("Popular Vote (50%)");
 
+
+      if(parseInt(indData.percentage) > 0)
+      {
+        text = popChart.selectAll("text").data(data).enter().append("text")
+                           .attr("y", globalHeight/4)
+                           .style("text-anchor", function(d) {if(d.party == "I"){return "start"} else{return "middle"}})
+                           .attr("class", function(d) {return VotePercentageChart.prototype.chooseClass(d.party)})
+                           .text(function(d) {return d.nominee})
+                           .transition().duration(1000)
+                           .attr("x", function(d,i){
+                             if(i == 0)
+                             {return 0;}
+                             else
+                             {
+                               var total = 0;
+                               for(var j = 0; j < i; j++)
+                               {
+                                  total = total + parsePercentage(data[j].percentage);
+                               }
+                               total = total + parsePercentage(d.percentage)/2;
+                               return percentageScale(total);
+                             }});
+
+        text = popChart.selectAll("text").data(data).enter().append("text")
+                            .attr("x", function(d,i){
+                              if(i == 0)
+                              {return 0;}
+                              else if(i == 1)
+                              {
+                                return percentageScale(parsePercentage(data[0].percentage));
+                              }
+                              else {
+                                return percentageScale(100);
+                              }})
+                            .attr("y", globalHeight/2 - 5)
+                            .attr("class", function(d) {return VotePercentageChart.prototype.chooseClass(d.party)})
+                            .text(function(d) {return d.percentage});
+      }
+      else
+      {
+        text = popChart.selectAll("text").data(data).enter().append("text")
+                           .attr("y", globalHeight/4)
+                           .style("text-anchor", function(d) {if(d.party == "I"){return "start"} else{return "middle"}})
+                           .attr("class", function(d) {return VotePercentageChart.prototype.chooseClass(d.party)})
+                           .text(function(d) {return d.nominee})
+                           .transition().duration(1000)
+                           .attr("x", function(d,i){
+                               var total = 0;
+                               for(var j = 0; j < i; j++)
+                               {
+                                  total = total + parsePercentage(data[j].percentage);
+                               }
+                               total = total + parsePercentage(d.percentage)/2;
+                               return percentageScale(total);
+                             });
+
+        text = popChart.selectAll("text").data(data).enter().append("text")
+                            .attr("x", function(d,i){
+                              if(i == 0)
+                              {
+                                return percentageScale(parsePercentage(data[0].percentage));
+                              }
+                              else {
+                                return percentageScale(100);
+                              }})
+                            .attr("y", globalHeight/2 - 5)
+                            .attr("class", function(d) {return VotePercentageChart.prototype.chooseClass(d.party)})
+                            .text(function(d) {return d.percentage});
+      }
+/*      else
+      {
+        evVal = d3.sum(demStates, function(d) {return d.Total_EV});
+        evChart.append("text")
+                      .attr("y", globalHeight/2 - 5)
+                      .attr("x", 0)
+                      .text(evVal)
+                      .classed("democrat", true)
+                      .classed("electoralVoteText", true);
+        evVal = d3.sum(repStates, function(d) {return d.Total_EV});
+        evChart.append("text")
+                      .attr("y", globalHeight/2 - 5)
+                      .attr("x", evScale(d3.sum(electionResult, function(d) {return d.Total_EV})))
+                      .text(evVal)
+                      .classed("republican", true)
+                      .classed("electoralVoteText", true);
+      }
+
+*/
 };
