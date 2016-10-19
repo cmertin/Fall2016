@@ -119,6 +119,7 @@ YearChart.prototype.update = function(){
       var electionFile = "data/Year_Timeline_" + d.YEAR + ".csv";
       d3.csv(electionFile, function (error, electionResult) {
           ElectoralVoteChart.prototype.update(electionResult, self.colorScale);
+          VotePercentageChart.prototype.update(electionResult, self.colorScale);
       });
     })
     .on("mouseover", function(d,i) {

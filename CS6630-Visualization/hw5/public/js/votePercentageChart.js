@@ -1,3 +1,6 @@
+var globalWidth = 0;
+var globalHeight = 0;
+
 /**
  * Constructor for the Vote Percentage Chart
  */
@@ -19,7 +22,8 @@ VotePercentageChart.prototype.init = function(){
     self.svgBounds = divvotesPercentage.node().getBoundingClientRect();
     self.svgWidth = self.svgBounds.width - self.margin.left - self.margin.right;
     self.svgHeight = 200;
-
+    globalWidth = self.svgWidth;
+    globalHeight = self.svgHeight;
     //creates svg element within the div
     self.svg = divvotesPercentage.append("svg")
         .attr("width",self.svgWidth)
@@ -68,6 +72,26 @@ VotePercentageChart.prototype.tooltip_render = function (tooltip_data) {
 VotePercentageChart.prototype.update = function(electionResult){
     var self = this;
 
+    var barHeight = 25;
+
+    repData = {"nominee": electionResult[0].R_Nominee_prop, "votecount": electionResult[0].R_Votes, "percentage":electionResult[0].R_PopularPercentage, "party":"R"};
+    demData = {"nominee": electionResult[0].D_Nominee_prop, "votecount": electionResult[0].D_Votes, "percentage":electionResult[0].D_PopularPercentage, "party":"D"}
+    indData = {"nominee": electionResult[0].I_Nominee_prop, "votecount": electionResult[0].I_Votes, "percentage":electionResult[0].I_PopularPercentage, "party":"I"}
+    console.log(indData);
+    console.log(electionResult[0]);
+    if(parseInt(indData.percentage) > 0)
+    {
+        var tooltip_data = {"result":[demData, repData, indData]};
+        var data = [indData, demData, repData];
+    }
+    else
+    {
+        var tooltip_data = {"result":[demData, repData]};
+        var data = [demData, repData];
+    }
+    var percentageScale = d3.scaleLinear().range([0, globalWidth])
+                                          .domain([0,100]);
+
     //Use this tool tip element to handle any hover over the chart
     tip = d3.tip().attr('class', 'd3-tip')
         .direction('s')
@@ -75,19 +99,10 @@ VotePercentageChart.prototype.update = function(electionResult){
             return [0,0];
         })
         .html(function(d) {
-            /* populate data in the following format
-             * tooltip_data = {
-             * "result":[
-             * {"nominee": D_Nominee_prop,"votecount": D_Votes,"percentage": D_Percentage,"party":"D"} ,
-             * {"nominee": R_Nominee_prop,"votecount": R_Votes,"percentage": R_Percentage,"party":"R"} ,
-             * {"nominee": I_Nominee_prop,"votecount": I_Votes,"percentage": I_Percentage,"party":"I"}
-             * ]
-             * }
-             * pass this as an argument to the tooltip_render function then,
-             * return the HTML content returned from that method.
-             * */
-            return ;
+            var tooltip_html = tooltip_render(tooltip_data);
+            return tooltip_html;
         });
+
 
 
     // ******* TODO: PART III *******
@@ -111,5 +126,50 @@ VotePercentageChart.prototype.update = function(electionResult){
     //then, vote percentage and number of votes won by each party.
 
     //HINT: Use the chooseClass method to style your elements based on party wherever necessary.
+
+    var popChart = d3.select("#votes-percentage").select("svg");
+
+    popChart.selectAll("rect").remove();
+    popChart.selectAll("text").remove();
+    popChart.selectAll("line").remove();
+
+    var bars = popChart.selectAll("rect").data(data).enter().append("rect")
+                      .attr("width", function(d) {var val = d.percentage; val = parseFloat(val.slice(0, -1)); return percentageScale(val);})
+                      .attr("x", function(d,i){
+                        if(i > 0)
+                        {
+                          var pre_percentage = 0;
+                          for(j = 0; j < i; ++j)
+                            {
+                              var val = data[j].percentage;
+                              val = val.slice(0, -1);
+                              pre_percentage = parseFloat(pre_percentage) + parseFloat(val);}
+                          console.log(pre_percentage);
+                          console.log(percentageScale(pre_percentage));
+                          return percentageScale(pre_percentage);
+                        }
+                        else
+                        {
+                          return 0;
+                        }
+                      })
+                      .attr("y", globalHeight/2)
+                      .attr("height", barHeight)
+                      .attr("class", function(d){
+                        if(d.party == "I")
+                        {return "independent"}
+                        else if(d.party == "D")
+                        {return "democrat"}
+                        else
+                        {return "republican";}
+                      });
+
+      var line = popChart.selectAll("line").data([0]).enter().append("line")
+                        .attr("y1", globalHeight/2 + barHeight + 10)
+                        .attr("x1", percentageScale(50))
+                        .attr("y2", globalHeight/2 - 10)
+                        .attr("x2", percentageScale(50))
+                        .classed("midLine", true);
+
 
 };

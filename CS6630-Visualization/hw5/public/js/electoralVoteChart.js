@@ -100,7 +100,7 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
                       {return "#45AD6A";}
                       else {return colorScale(d.RD_Difference);}})
                       .attr("y", globalHeight/2)
-                      .attr('height', barHeight)
+                      .attr("height", barHeight)
                       .classed("votesPercentage", true);
 
       var line = evChart.selectAll("line").data([0]).enter().append("line")
@@ -124,7 +124,7 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
                       .attr("y", globalHeight/2 - 5)
                       .attr("x", 0)
                       .text(evVal)
-                      .classed("democrat", true)
+                      .classed("independent", true)
                       .classed("electoralVoteText", true);
         evVal = d3.sum(demStates, function(d) {return d.Total_EV});
         evChart.append("text")
