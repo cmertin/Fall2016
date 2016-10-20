@@ -13,13 +13,13 @@ function ElectoralVoteChart(){
  */
 ElectoralVoteChart.prototype.init = function(){
     var self = this;
-    self.margin = {top: 30, right: 20, bottom: 30, left: 50};
+    self.margin = {top: 20, right: 20, bottom: 30, left: 50};
 
     //Gets access to the div element created for this chart from HTML
     var divelectoralVotes = d3.select("#electoral-vote").classed("content", true);
     self.svgBounds = divelectoralVotes.node().getBoundingClientRect();
     self.svgWidth = self.svgBounds.width - self.margin.left - self.margin.right;
-    self.svgHeight = 100;
+    self.svgHeight = 60;
 
     //creates svg element within the div
     self.svg = divelectoralVotes.append("svg")

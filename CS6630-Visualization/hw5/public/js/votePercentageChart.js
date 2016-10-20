@@ -12,7 +12,7 @@ function VotePercentageChart(){
  */
 VotePercentageChart.prototype.init = function(){
     var self = this;
-    self.margin = {top: 30, right: 20, bottom: 30, left: 50};
+    self.margin = {top: 10, right: 20, bottom: 30, left: 50};
     var divvotesPercentage = d3.select("#votes-percentage").classed("content", true);
 
     //Gets access to the div element created for this chart from HTML
@@ -212,14 +212,21 @@ VotePercentageChart.prototype.update = function(electionResult){
                }});
 
          texts.append("text")
-              .attr("class", function(d) {return VotePercentageChart.prototype.chooseClass(d.party)})
+              .attr("class", function(d) {if(d.party == "I" && parsePercentage(d.percentage) < 4){return VotePercentageChart.prototype.chooseClass(d.party)}})
+              .attr("fill", "white")
+              .attr("text-anchor", function(d,i) {
+                if(i == 1 || i == 0)
+                {return "start";}
+                else
+                {return "end";}
+              })
               .transition().duration(1000)
               .attr("x", function(d,i){
                 if(i == 0)
-                {return 0;}
+                {if(parsePercentage(d.percentage) < 4){return 0;}else{return 5;}}
                 else if(i == 1)
                 {
-                  return percentageScale(parsePercentage(data[0].percentage));
+                  return percentageScale(parsePercentage(data[0].percentage)) + 5;
                 }
                 else
                 {
@@ -229,9 +236,15 @@ VotePercentageChart.prototype.update = function(electionResult){
                      total = total + parsePercentage(data[j].percentage);
                   }
                   total = total + parsePercentage(d.percentage);
-                  return percentageScale(total);
+                  return percentageScale(total) - 5;
                 }})
-              .attr("y", self.svgHeight/2 - 5)
+              .attr("y",
+                        function(d){
+                        if(d.party == "I" && parsePercentage(d.percentage) < 4)
+                        {return self.svgHeight/2 - 5;}
+                        else
+                        {return self.svgHeight/2 + barHeight/1.4}
+                      })
               .text(function(d) {return d.percentage});
       }
       else
@@ -255,12 +268,19 @@ VotePercentageChart.prototype.update = function(electionResult){
                });
 
         texts.append("text")
-            .attr("class", function(d) {return VotePercentageChart.prototype.chooseClass(d.party)})
+            //.attr("class", function(d) {return VotePercentageChart.prototype.chooseClass(d.party)})
+            .attr("fill", "white")
+            .attr("text-anchor", function(d,i) {
+              if(i == 0)
+              {return "start";}
+              else
+              {return "end";}
+            })
             .transition().duration(1000)
             .attr("x", function(d,i){
               if(i == 0)
               {
-                return 0;
+                return 5;
               }
               else
               {
@@ -270,9 +290,9 @@ VotePercentageChart.prototype.update = function(electionResult){
                    total = total + parsePercentage(data[j].percentage);
                 }
                 total = total + parsePercentage(d.percentage);
-                return percentageScale(total);
+                return percentageScale(total) - 5;
               }})
-            .attr("y", self.svgHeight/2 - 5)
+            .attr("y", self.svgHeight/2 + barHeight/1.4)
             .text(function(d) {return d.percentage});
       }
 };

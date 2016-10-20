@@ -17,12 +17,12 @@ TileChart.prototype.init = function(){
     //Gets access to the div element created for this chart and legend element from HTML
     var divTileChart = d3.select("#tiles").classed("content", true);
     var legend = d3.select("#legend").classed("content",true);
-    self.margin = {top: 30, right: 20, bottom: 30, left: 50};
+    self.margin = {top: 30, right: 20, bottom: 30, left: 0};
 
     var svgBounds = divTileChart.node().getBoundingClientRect();
     self.svgWidth = svgBounds.width - self.margin.left - self.margin.right;
     self.svgHeight = self.svgWidth/2;
-    var legendHeight = 50;
+    var legendHeight = 40;
 
     //creates svg elements within the div
     self.legendSvg = legend.append("svg")

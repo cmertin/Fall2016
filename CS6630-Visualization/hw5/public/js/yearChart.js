@@ -30,7 +30,7 @@ YearChart.prototype.init = function(){
     //Gets access to the div element created for this chart from HTML
     self.svgBounds = divyearChart.node().getBoundingClientRect();
     self.svgWidth = self.svgBounds.width - self.margin.left - self.margin.right;
-    self.svgHeight = 100;
+    self.svgHeight = 80;
 
     //creates svg element within the div
     self.svg = divyearChart.append("svg")
