@@ -28,6 +28,13 @@ h1 {
     /*stroke: #e5e5e5;*/
 }
 
+.legendtext{
+  font-size: 11px;
+  fill: #565656;
+  stroke-width: 0.2px;
+  text-anchor:middle;
+}
+
 .electoralVotesNote, .votesPercentageNote{
     text-anchor:middle;
     font-size: 14px;

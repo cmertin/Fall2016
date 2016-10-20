@@ -22,7 +22,7 @@ TileChart.prototype.init = function(){
     var svgBounds = divTileChart.node().getBoundingClientRect();
     self.svgWidth = svgBounds.width - self.margin.left - self.margin.right;
     self.svgHeight = self.svgWidth/2;
-    var legendHeight = 150;
+    var legendHeight = 50;
 
     //creates svg elements within the div
     self.legendSvg = legend.append("svg")
@@ -128,14 +128,20 @@ TileChart.prototype.update = function(electionResult, colorScale){
 
     //Creates a legend element and assigns a scale that needs to be visualized
     self.legendSvg.append("g")
-        .attr("class", "legendQuantile");
+        .attr("class", "legendQuantile")
+        .classed("legendtext", true);
 
     var legendQuantile = d3.legendColor()
-        .shapeWidth(120)
+        .shapeWidth(self.svgWidth/12.5)
         .cells(10)
-        .orient('horizontal')
+        .orient("horizontal")
         .scale(colorScale);
 
+
+
+    var legend = d3.select(".legendQuantile");
+    legend.selectAll("#legendCells").exit().remove();
+    legend.call(legendQuantile);
     // ******* TODO: PART IV *******
     //Tansform the legend element to appear in the center and make a call to this element for it to display.
 

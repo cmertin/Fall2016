@@ -19,7 +19,7 @@ ElectoralVoteChart.prototype.init = function(){
     var divelectoralVotes = d3.select("#electoral-vote").classed("content", true);
     self.svgBounds = divelectoralVotes.node().getBoundingClientRect();
     self.svgWidth = self.svgBounds.width - self.margin.left - self.margin.right;
-    self.svgHeight = 150;
+    self.svgHeight = 100;
     console.log(self.svgWidth);
 
     //creates svg element within the div

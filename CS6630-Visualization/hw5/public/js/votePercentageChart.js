@@ -18,7 +18,7 @@ VotePercentageChart.prototype.init = function(){
     //Gets access to the div element created for this chart from HTML
     self.svgBounds = divvotesPercentage.node().getBoundingClientRect();
     self.svgWidth = self.svgBounds.width - self.margin.left - self.margin.right;
-    self.svgHeight = 200;
+    self.svgHeight = 100;
 
     //creates svg element within the div
     self.svg = divvotesPercentage.append("svg")
