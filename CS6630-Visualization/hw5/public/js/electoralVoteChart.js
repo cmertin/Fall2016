@@ -1,6 +1,3 @@
-var globalWidth = 0
-var globalHeight = 0
-var globalMargin = 0
 /**
  * Constructor for the ElectoralVoteChart
  *
@@ -24,9 +21,6 @@ ElectoralVoteChart.prototype.init = function(){
     self.svgWidth = self.svgBounds.width - self.margin.left - self.margin.right;
     self.svgHeight = 150;
     console.log(self.svgWidth);
-    globalWidth = self.svgWidth;
-    globalHeight = self.svgHeight;
-    globalMargin = self.margin;
 
     //creates svg element within the div
     self.svg = divelectoralVotes.append("svg")
@@ -64,18 +58,18 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
 
     var barHeight = 25;
 
-    var evScale = d3.scaleLinear().range([0, globalWidth])
+    var evScale = d3.scaleLinear().rangeRound([0, self.svgWidth])
                                   .domain([0, d3.sum(electionResult, function(d) {return d.Total_EV})]);
 
     var indStates = electionResult.filter(function(d) {return d.State_Winner == "I";});
     var demStates = electionResult.filter(function(d) {return d.State_Winner == "D";});
     var repStates = electionResult.filter(function(d) {return d.State_Winner == "R";});
 
-    indStates = indStates.sort(function(a,b) {return d3.descending(a.RD_Difference, b.RD_Difference)});
-    demStates = demStates.sort(function(a,b) {return d3.descending(a.RD_Difference, b.RD_Difference)});
-    repStates = repStates.sort(function(a,b) {return d3.ascending(a.RD_Difference, b.RD_Difference)});
+    indStates = indStates.sort(function(a,b) {return d3.descending(+a.RD_Difference, +b.RD_Difference)});
+    demStates = demStates.sort(function(a,b) {return d3.ascending(+a.RD_Difference, +b.RD_Difference)});
+    repStates = repStates.sort(function(a,b) {return d3.ascending(+a.RD_Difference, +b.RD_Difference)});
 
-    console.log(electionResult);
+    //console.log(electionResult);
 
     if(indStates.length > 0)
     {
@@ -99,7 +93,7 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
                       if(d.State_Winner == "I")
                       {return "#45AD6A";}
                       else {return colorScale(d.RD_Difference);}})
-                      .attr("y", globalHeight/2)
+                      .attr("y", self.svgHeight/2)
                       .attr("height", barHeight)
                       .classed("votesPercentage", true).transition().duration(1000)
                       .attr("x", function (d,i) {return evScale(d3.sum(evResult.slice(0,i), function(d) {return d.Total_EV}))})
@@ -107,14 +101,14 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
 
 
       var line = evChart.selectAll("line").data([0]).enter().append("line").classed("midLine", true).transition().duration(1000)
-                        .attr("y1", globalHeight/2 + barHeight + 10)
+                        .attr("y1", self.svgHeight/2 + barHeight + 10)
                         .attr("x1", evScale(270))
-                        .attr("y2", globalHeight/2 - 10)
+                        .attr("y2", self.svgHeight/2 - 10)
                         .attr("x2", evScale(270));
 
       var text = evChart.selectAll("text").data([0]).enter().append("text").classed("electoralVotesNote", true)
                         .transition().duration(1000)
-                        .attr("y", globalHeight/2 - 15)
+                        .attr("y", self.svgHeight/2 - 15)
                         .attr("x", evScale(270))
                         .text("Electoral Votes (270 to win)");
 
@@ -125,7 +119,7 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
                       .classed("independent", true)
                       .classed("electoralVoteText", true)
                       .transition().duration(1000)
-                      .attr("y", globalHeight/2 - 5)
+                      .attr("y", self.svgHeight/2 - 5)
                       .attr("x", 0)
                       .text(evVal);
       }
@@ -134,7 +128,7 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
                       .classed("democrat", true)
                       .classed("electoralVoteText", true)
                       .transition().duration(1000)
-                      .attr("y", globalHeight/2 - 5)
+                      .attr("y", self.svgHeight/2 - 5)
                       .attr("x", evScale(d3.sum(indStates, function(d) {return d.Total_EV})))
                       .text(evVal);
 
@@ -143,7 +137,7 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
                       .classed("republican", true)
                       .classed("electoralVoteText", true)
                       .transition().duration(1000)
-                      .attr("y", globalHeight/2 - 5)
+                      .attr("y", self.svgHeight/2 - 5)
                       .attr("x", evScale(d3.sum(electionResult, function(d) {return d.Total_EV})))
                       .text(evVal);
 
