@@ -1,0 +1,27 @@
+Shift Chart 1
+=============
+This shift chart plots as a line chart the votes over the years. What happens,
+is if a state (or the entire country) votes/elects a republican, then the next
+point is going to be +1 and democrat is going to be -1. This will show both
+yearly local and overall trends for both the states and the country as a whole.
+
+This would do well in representing the data and showing the results because
+it would show recent changes and overall trends.
+
+Shift Chart 2
+=============
+This shift chart plots each state as a bar chart on who it elected in a given
+year. The height of the bar chart can be scaled as a proportion to the number
+of electoral votes or the population of a given state. It is also possible to
+use the percentage of the votes with the population to produce a slightly more
+representative chart, such that plotting a double sided bar chart where each
+percentage is on each side of the chart, however this may be a little more
+confusing and "busy."
+
+By scaling by the population or electoral votes, it would help represent the
+overall trend of the US by looking at the relative number of bar charts that
+are either democrat or republican and their size.
+
+This can also be used for individual states, where instead of having "states"
+on the x-axis, it would be counties or districts, and the height of the bar
+chart can be scaled by the population size.
