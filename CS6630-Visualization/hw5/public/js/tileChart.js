@@ -176,12 +176,16 @@ TileChart.prototype.update = function(electionResult, colorScale){
 
     text.append("text")
         .classed("tilestext", true)
+        .on("mouseover", tip.show)
+        .on("mouseout", tip.hide)
         .attr("x", function(d) {return colScale(+d.Space) + blockHeight/2})
         .attr("y", function(d) {return rowScale(+d.Row) + blockWidth/2})
         .text(function(d) {return d.Abbreviation});
 
     text.append("text")
         .classed("tilestext", true)
+        .on("mouseover", tip.show)
+        .on("mouseout", tip.hide)
         .attr("x", function(d) {return colScale(+d.Space) + blockHeight/2})
         .attr("y", function(d) {return rowScale(+d.Row) + blockWidth/2 + 12.5})
         .text(function(d) {return d.Total_EV});
