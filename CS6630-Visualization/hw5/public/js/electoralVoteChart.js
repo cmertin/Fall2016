@@ -58,6 +58,14 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
 
     var barHeight = 25;
 
+    function brushed()
+    {
+
+    }
+
+    var brush = d3.brushX().extent([0,self.svgHeight/2 - 10],[self.svgWith,self.svgHeight/2 + barHeight + 10]).on("end", brushed);
+
+
     var evScale = d3.scaleLinear().range([0, self.svgWidth])
                                   .domain([0, d3.sum(electionResult, function(d) {return d.Total_EV})]);
 
@@ -68,8 +76,6 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
     indStates = indStates.sort(function(a,b) {return d3.descending(+a.RD_Difference, +b.RD_Difference)});
     demStates = demStates.sort(function(a,b) {return d3.ascending(+a.RD_Difference, +b.RD_Difference)});
     repStates = repStates.sort(function(a,b) {return d3.ascending(+a.RD_Difference, +b.RD_Difference)});
-
-    //console.log(electionResult);
 
     if(indStates.length > 0)
     {
@@ -87,6 +93,9 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
     evChart.selectAll("text").remove();
     evChart.selectAll("line").remove();
 
+    var totalEV = d3.sum(evResult, function(d){return d.Total_EV});
+    var halfEV_1 = Math.ceil(totalEV/2) + 1;
+
     var bars = evChart.selectAll('rect').data(evResult).enter()
                       .append('rect')
                       .attr("fill", function(d) {
@@ -102,15 +111,15 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
 
       var line = evChart.selectAll("line").data([0]).enter().append("line").classed("midLine", true).transition().duration(1000)
                         .attr("y1", self.svgHeight/2 + barHeight + 10)
-                        .attr("x1", evScale(270))
+                        .attr("x1", evScale(halfEV_1))
                         .attr("y2", self.svgHeight/2 - 10)
-                        .attr("x2", evScale(270));
+                        .attr("x2", evScale(halfEV_1));
 
       var text = evChart.selectAll("text").data([0]).enter().append("text").classed("electoralVotesNote", true)
                         .transition().duration(1000)
                         .attr("y", self.svgHeight/2 - 15)
-                        .attr("x", evScale(270))
-                        .text("Electoral Votes (270 to win)");
+                        .attr("x", evScale(halfEV_1))
+                        .text("Electoral Votes (" + halfEV_1 + " to win)");
 
       if(indStates.length > 0)
       {
@@ -141,8 +150,6 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
                       .attr("x", evScale(d3.sum(electionResult, function(d) {return d.Total_EV})))
                       .text(evVal);
 
-    //.attr('fill', function (d) {return colorScale(d.RD_Difference)})
-
     // ******* TODO: PART II *******
 
     //Group the states based on the winning party for the state;
@@ -171,5 +178,9 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
     //Implement a call back method to handle the brush end event.
     //Call the update method of shiftChart and pass the data corresponding to brush selection.
     //HINT: Use the .brush class to style the brush.
+
+
+
+
 
 };

@@ -177,6 +177,8 @@ VotePercentageChart.prototype.update = function(electionResult){
                         .attr("y2", self.svgHeight/2 - 10)
                         .attr("x2", percentageScale(50));
 
+      var texts = popChart.selectAll("text");
+
       popChart.append("text")
               .classed("votesPercentageNote", true)
               .attr("id", "percentNote")
@@ -187,14 +189,14 @@ VotePercentageChart.prototype.update = function(electionResult){
 
       if(parseInt(indData.percentage) > 0)
       {
-        var texts = popChart.selectAll("text").data(data).enter();
+        texts = texts.data(data).enter();
 
         texts.append("text")
              .style("text-anchor", function(d) {if(d.party == "I"){return "start"} else{return "middle"}})
              .attr("class", function(d) {return VotePercentageChart.prototype.chooseClass(d.party)})
              .text(function(d) {return d.nominee})
              .transition().duration(1000)
-             .attr("y", self.svgHeight/4)
+             .attr("y", self.svgHeight/5)
              .attr("x", function(d,i){
                if(i == 0)
                {return 0;}
@@ -219,18 +221,25 @@ VotePercentageChart.prototype.update = function(electionResult){
                 {
                   return percentageScale(parsePercentage(data[0].percentage));
                 }
-                else {
-                  return percentageScale(100);
+                else
+                {
+                  var total = 0;
+                  for(var j = 0; j < i; j++)
+                  {
+                     total = total + parsePercentage(data[j].percentage);
+                  }
+                  total = total + parsePercentage(d.percentage);
+                  return percentageScale(total);
                 }})
               .attr("y", self.svgHeight/2 - 5)
               .text(function(d) {return d.percentage});
       }
       else
       {
-        var texts = popChart.selectAll("text").data(data).enter();
+        texts = texts.data(data).enter();
 
         texts.append("text")
-             .attr("y", self.svgHeight/4)
+             .attr("y", self.svgHeight/5)
              .style("text-anchor", function(d) {if(d.party == "I"){return "start"} else{return "middle"}})
              .attr("class", function(d) {return VotePercentageChart.prototype.chooseClass(d.party)})
              .text(function(d) {return d.nominee})
@@ -253,8 +262,15 @@ VotePercentageChart.prototype.update = function(electionResult){
               {
                 return 0;
               }
-              else {
-                return percentageScale(100);
+              else
+              {
+                var total = 0;
+                for(var j = 0; j < i; j++)
+                {
+                   total = total + parsePercentage(data[j].percentage);
+                }
+                total = total + parsePercentage(d.percentage);
+                return percentageScale(total);
               }})
             .attr("y", self.svgHeight/2 - 5)
             .text(function(d) {return d.percentage});
