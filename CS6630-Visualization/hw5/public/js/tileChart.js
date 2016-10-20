@@ -167,10 +167,17 @@ TileChart.prototype.update = function(electionResult, colorScale){
                                        .on("mouseout", tip.hide)
                                        .attr("x", function(d) {return colScale(+d.Space)})
                                        .attr("y", function(d) {return rowScale(+d.Row)})
+                                       .classed("tile", true)
+                                       .transition().duration(1000)
                                        .attr("width", blockHeight)
                                        .attr("height", blockWidth)
-                                       .attr("fill", function(d) {return colorScale(d.RD_Difference)})
-                                       .classed("tile", true);
+                                       .attr("fill", function(d) {
+                                         if(d.State_Winner == "I")
+                                         {return "#45AD6A";}
+                                         else
+                                         {
+                                           return colorScale(d.RD_Difference);
+                                         }});
 
     var text = tileSelect.selectAll("text").data(electionResult).enter();
 
@@ -178,17 +185,20 @@ TileChart.prototype.update = function(electionResult, colorScale){
         .classed("tilestext", true)
         .on("mouseover", tip.show)
         .on("mouseout", tip.hide)
+        .text(function(d) {return d.Abbreviation})
+        .transition().duration(1000)
         .attr("x", function(d) {return colScale(+d.Space) + blockHeight/2})
-        .attr("y", function(d) {return rowScale(+d.Row) + blockWidth/2})
-        .text(function(d) {return d.Abbreviation});
+        .attr("y", function(d) {return rowScale(+d.Row) + blockWidth/2});
 
     text.append("text")
         .classed("tilestext", true)
         .on("mouseover", tip.show)
         .on("mouseout", tip.hide)
+        .text(function(d) {return d.Total_EV})
+        .transition().duration(1000)
         .attr("x", function(d) {return colScale(+d.Space) + blockHeight/2})
-        .attr("y", function(d) {return rowScale(+d.Row) + blockWidth/2 + 12.5})
-        .text(function(d) {return d.Total_EV});
+        .attr("y", function(d) {return rowScale(+d.Row) + blockWidth/2 + 12.5});
+
 
     //text.append("text").classed("tilestext",true)
 
