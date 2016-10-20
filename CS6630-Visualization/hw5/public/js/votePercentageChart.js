@@ -141,6 +141,19 @@ VotePercentageChart.prototype.update = function(electionResult){
     popChart.selectAll("line").remove();
 
     var bars = popChart.selectAll("rect").data(data).enter().append("rect")
+                      .attr("y", globalHeight/2)
+                      .attr("height", barHeight)
+                      .attr("class", function(d){
+                        if(d.party == "I")
+                        {return "independent";}
+                        else if(d.party == "D")
+                        {return "democrat";}
+                        else
+                        {return "republican";}
+                      })
+                      .on("mouseover", tip.show)
+                      .on("mouseout", tip.hide)
+                      .transition().duration(1000)
                       .attr("x", function(d,i){
                         if(i > 0)
                         {
@@ -157,44 +170,31 @@ VotePercentageChart.prototype.update = function(electionResult){
                           return 0;
                         }
                       })
-                      .attr("y", globalHeight/2)
-                      .attr("height", barHeight)
-                      .attr("class", function(d){
-                        if(d.party == "I")
-                        {return "independent";}
-                        else if(d.party == "D")
-                        {return "democrat";}
-                        else
-                        {return "republican";}
-                      })
-                      .on("mouseover", tip.show)
-                      .on("mouseout", tip.hide)
-                      .transition().duration(1000)
                       .attr("width", function(d) {
                                       return percentageScale(parsePercentage(d.percentage));});
 
-      var line = popChart.append("line")
+      var line = popChart.append("line").classed("midLine", true)
+                        .transition().duration(1000)
                         .attr("y1", globalHeight/2 + barHeight + 10)
                         .attr("x1", percentageScale(50))
                         .attr("y2", globalHeight/2 - 10)
-                        .attr("x2", percentageScale(50))
-                        .classed("midLine", true);
+                        .attr("x2", percentageScale(50));
 
-      var text = popChart.selectAll("text").append("text")
+      var text = popChart.selectAll("text").append("text").classed("votesPercentageNote", true)
+                         .transition().duration(1000)
                          .attr("x", percentageScale(50))
                          .attr("y", globalHeight/2 - 15)
-                         .classed("votesPercentageNote", true)
                          .text("Popular Vote (50%)");
 
 
       if(parseInt(indData.percentage) > 0)
       {
         text = popChart.selectAll("text").data(data).enter().append("text")
-                           .attr("y", globalHeight/4)
                            .style("text-anchor", function(d) {if(d.party == "I"){return "start"} else{return "middle"}})
                            .attr("class", function(d) {return VotePercentageChart.prototype.chooseClass(d.party)})
                            .text(function(d) {return d.nominee})
                            .transition().duration(1000)
+                           .attr("y", globalHeight/4)
                            .attr("x", function(d,i){
                              if(i == 0)
                              {return 0;}
@@ -210,6 +210,8 @@ VotePercentageChart.prototype.update = function(electionResult){
                              }});
 
         text = popChart.selectAll("text").data(data).enter().append("text")
+                            .attr("class", function(d) {return VotePercentageChart.prototype.chooseClass(d.party)})
+                            .transition().duration(1000)
                             .attr("x", function(d,i){
                               if(i == 0)
                               {return 0;}
@@ -221,7 +223,6 @@ VotePercentageChart.prototype.update = function(electionResult){
                                 return percentageScale(100);
                               }})
                             .attr("y", globalHeight/2 - 5)
-                            .attr("class", function(d) {return VotePercentageChart.prototype.chooseClass(d.party)})
                             .text(function(d) {return d.percentage});
       }
       else
@@ -243,6 +244,8 @@ VotePercentageChart.prototype.update = function(electionResult){
                              });
 
         text = popChart.selectAll("text").data(data).enter().append("text")
+                            .attr("class", function(d) {return VotePercentageChart.prototype.chooseClass(d.party)})
+                            .transition().duration(1000)
                             .attr("x", function(d,i){
                               if(i == 0)
                               {
@@ -252,7 +255,6 @@ VotePercentageChart.prototype.update = function(electionResult){
                                 return percentageScale(100);
                               }})
                             .attr("y", globalHeight/2 - 5)
-                            .attr("class", function(d) {return VotePercentageChart.prototype.chooseClass(d.party)})
                             .text(function(d) {return d.percentage});
       }
 /*      else

@@ -120,6 +120,7 @@ YearChart.prototype.update = function(){
       d3.csv(electionFile, function (error, electionResult) {
           ElectoralVoteChart.prototype.update(electionResult, self.colorScale);
           VotePercentageChart.prototype.update(electionResult, self.colorScale);
+          //TileChart.prototype.update(electionResult, self.colorScale);
       });
     })
     .on("mouseover", function(d,i) {

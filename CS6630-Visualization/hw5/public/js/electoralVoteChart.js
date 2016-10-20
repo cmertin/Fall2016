@@ -95,72 +95,57 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
 
     var bars = evChart.selectAll('rect').data(evResult).enter()
                       .append('rect')
-                      .attr('width', function (d) {return evScale(d.Total_EV)})
-                      .attr("x", function (d,i) {return evScale(d3.sum(evResult.slice(0,i), function(d) {return d.Total_EV}))})
                       .attr("fill", function(d) {
                       if(d.State_Winner == "I")
                       {return "#45AD6A";}
                       else {return colorScale(d.RD_Difference);}})
                       .attr("y", globalHeight/2)
                       .attr("height", barHeight)
-                      .classed("votesPercentage", true);
+                      .classed("votesPercentage", true).transition().duration(1000)
+                      .attr("x", function (d,i) {return evScale(d3.sum(evResult.slice(0,i), function(d) {return d.Total_EV}))})
+                      .attr('width', function (d) {return evScale(d.Total_EV)});
 
-      var line = evChart.selectAll("line").data([0]).enter().append("line")
+
+      var line = evChart.selectAll("line").data([0]).enter().append("line").classed("midLine", true).transition().duration(1000)
                         .attr("y1", globalHeight/2 + barHeight + 10)
                         .attr("x1", evScale(270))
                         .attr("y2", globalHeight/2 - 10)
-                        .attr("x2", evScale(270))
-                        .classed("midLine", true);
+                        .attr("x2", evScale(270));
 
-      var text = evChart.selectAll("text").data([0]).enter().append("text")
+      var text = evChart.selectAll("text").data([0]).enter().append("text").classed("electoralVotesNote", true)
+                        .transition().duration(1000)
                         .attr("y", globalHeight/2 - 15)
                         .attr("x", evScale(270))
-                        .text("Electoral Votes (270 to win)")
-                        .classed("electoralVotesNote", true)
-                        .append("text").text("heyoooo");
+                        .text("Electoral Votes (270 to win)");
 
       if(indStates.length > 0)
       {
         evVal = d3.sum(indStates, function(d) {return d.Total_EV});
         evChart.append("text")
+                      .classed("independent", true)
+                      .classed("electoralVoteText", true)
+                      .transition().duration(1000)
                       .attr("y", globalHeight/2 - 5)
                       .attr("x", 0)
-                      .text(evVal)
-                      .classed("independent", true)
-                      .classed("electoralVoteText", true);
+                      .text(evVal);
+      }
         evVal = d3.sum(demStates, function(d) {return d.Total_EV});
         evChart.append("text")
+                      .classed("democrat", true)
+                      .classed("electoralVoteText", true)
+                      .transition().duration(1000)
                       .attr("y", globalHeight/2 - 5)
                       .attr("x", evScale(d3.sum(indStates, function(d) {return d.Total_EV})))
-                      .text(evVal)
-                      .classed("democrat", true)
-                      .classed("electoralVoteText", true);
-        evVal = d3.sum(repStates, function(d) {return d.Total_EV});
-        evChart.append("text")
-                      .attr("y", globalHeight/2 - 5)
-                      .attr("x", evScale(d3.sum(electionResult, function(d) {return d.Total_EV})))
-                      .text(evVal)
-                      .classed("republican", true)
-                      .classed("electoralVoteText", true);
-      }
-      else
-      {
-        evVal = d3.sum(demStates, function(d) {return d.Total_EV});
-        evChart.append("text")
-                      .attr("y", globalHeight/2 - 5)
-                      .attr("x", 0)
-                      .text(evVal)
-                      .classed("democrat", true)
-                      .classed("electoralVoteText", true);
-        evVal = d3.sum(repStates, function(d) {return d.Total_EV});
-        evChart.append("text")
-                      .attr("y", globalHeight/2 - 5)
-                      .attr("x", evScale(d3.sum(electionResult, function(d) {return d.Total_EV})))
-                      .text(evVal)
-                      .classed("republican", true)
-                      .classed("electoralVoteText", true);
-      }
+                      .text(evVal);
 
+        evVal = d3.sum(repStates, function(d) {return d.Total_EV});
+        evChart.append("text")
+                      .classed("republican", true)
+                      .classed("electoralVoteText", true)
+                      .transition().duration(1000)
+                      .attr("y", globalHeight/2 - 5)
+                      .attr("x", evScale(d3.sum(electionResult, function(d) {return d.Total_EV})))
+                      .text(evVal);
 
     //.attr('fill', function (d) {return colorScale(d.RD_Difference)})
 

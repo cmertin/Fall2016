@@ -28,13 +28,13 @@ TileChart.prototype.init = function(){
     self.legendSvg = legend.append("svg")
         .attr("width",self.svgWidth)
         .attr("height",legendHeight)
-        .attr("transform", "translate(" + self.margin.left + ",0)")
+        .attr("transform", "translate(" + self.margin.left + ",0)");
 
     self.svg = divTileChart.append("svg")
                         .attr("width",self.svgWidth)
                         .attr("height",self.svgHeight)
                         .attr("transform", "translate(" + self.margin.left + ",0)")
-                        .style("bgcolor","green")
+                        .style("bgcolor","green");
 
 };
 
@@ -68,7 +68,7 @@ TileChart.prototype.tooltip_render = function (tooltip_data) {
     text +=  "Electoral Votes: " + tooltip_data.electoralVotes;
     text += "<ul>"
     tooltip_data.result.forEach(function(row){
-        text += "<li class = " + self.chooseClass(row.party)+ ">" + row.nominee+":\t\t"+row.votecount+"("+row.percentage+"%)" + "</li>"
+        text += "<li class = " + self.chooseClass(row.party)+ ">" + row.nominee+":\t\t"+row.votecount+" ("+row.percentage+"%)" + "</li>"
     });
     text += "</ul>";
     return text;
@@ -95,7 +95,7 @@ TileChart.prototype.update = function(electionResult, colorScale){
 
     //Use this tool tip element to handle any hover over the chart
     tip = d3.tip().attr('class', 'd3-tip')
-        .direction('se')
+        .direction('s')
         .offset(function() {
             return [0,0];
         })
@@ -116,6 +116,9 @@ TileChart.prototype.update = function(electionResult, colorScale){
              * */
             return ;
         });
+
+        //var percentageScale = d3.scaleLinear().range([0, globalWidth])
+        //                                      .domain([0,100]);
 
     //Creates a legend element and assigns a scale that needs to be visualized
     self.legendSvg.append("g")
