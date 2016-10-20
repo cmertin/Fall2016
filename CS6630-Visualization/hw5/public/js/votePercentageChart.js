@@ -77,9 +77,9 @@ VotePercentageChart.prototype.update = function(electionResult){
 
     var barHeight = 25;
 
-    repData = {"nominee": electionResult[0].R_Nominee_prop, "votecount": electionResult[0].R_Votes, "percentage":electionResult[0].R_PopularPercentage, "party":"R"};
-    demData = {"nominee": electionResult[0].D_Nominee_prop, "votecount": electionResult[0].D_Votes, "percentage":electionResult[0].D_PopularPercentage, "party":"D"}
-    indData = {"nominee": electionResult[0].I_Nominee_prop, "votecount": electionResult[0].I_Votes, "percentage":electionResult[0].I_PopularPercentage, "party":"I"}
+    var repData = {"nominee": electionResult[0].R_Nominee_prop, "votecount": electionResult[0].R_Votes, "percentage":electionResult[0].R_PopularPercentage, "party":"R"};
+    var demData = {"nominee": electionResult[0].D_Nominee_prop, "votecount": electionResult[0].D_Votes, "percentage":electionResult[0].D_PopularPercentage, "party":"D"}
+    var indData = {"nominee": electionResult[0].I_Nominee_prop, "votecount": electionResult[0].I_Votes, "percentage":electionResult[0].I_PopularPercentage, "party":"I"}
 
     if(parseInt(indData.percentage) > 0)
     {

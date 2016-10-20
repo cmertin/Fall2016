@@ -68,7 +68,7 @@ TileChart.prototype.tooltip_render = function (tooltip_data) {
     text +=  "Electoral Votes: " + tooltip_data.electoralVotes;
     text += "<ul>"
     tooltip_data.result.forEach(function(row){
-        text += "<li class = " + self.chooseClass(row.party)+ ">" + row.nominee+":\t\t"+row.votecount+" ("+row.percentage+"%)" + "</li>"
+        text += "<li class = " + self.chooseClass(row.party)+ ">" + row.nominee+":\t\t"+row.votecount+" ("+row.percentage+")" + "</li>"
     });
     text += "</ul>";
     return text;
@@ -93,36 +93,37 @@ TileChart.prototype.update = function(electionResult, colorScale){
                                 return +d["Row"];
                         }) + 1;
 
-    console.log(self.maxColumns);
-    console.log(self.maxRows);
-
     var rowScale = d3.scaleLinear().rangeRound([0,self.svgHeight]).domain([0,self.maxRows]);
     var colScale = d3.scaleLinear().rangeRound([0,self.svgWidth]).domain([0,self.maxColumns]);
     var blockWidth = rowScale(1) - rowScale(0);
     var blockHeight = colScale(1) - colScale(0);
 
+    var repData = {"nominee": electionResult[0].R_Nominee_prop, "votecount": electionResult[0].R_Votes, "percentage":electionResult[0].R_PopularPercentage, "party":"R"};
+    var demData = {"nominee": electionResult[0].D_Nominee_prop, "votecount": electionResult[0].D_Votes, "percentage":electionResult[0].D_PopularPercentage, "party":"D"};
+    var indData = {"nominee": electionResult[0].I_Nominee_prop, "votecount": electionResult[0].I_Votes, "percentage":electionResult[0].I_PopularPercentage, "party":"I"};
+
+    if(parseInt(indData.votecount) > 0)
+    {
+      var results = [indData, demData, repData];
+    }
+    else
+    {
+      var results = [demData, repData];
+    }
+
     //Use this tool tip element to handle any hover over the chart
     tip = d3.tip().attr('class', 'd3-tip')
         .direction('s')
         .offset(function() {
-            return [0,0];
+            return [0,3*blockHeight];
         })
         .html(function(d) {
-            /* populate data in the following format
-             * tooltip_data = {
-             * "state": State,
-             * "winner":d.State_Winner
-             * "electoralVotes" : Total_EV
-             * "result":[
-             * {"nominee": D_Nominee_prop,"votecount": D_Votes,"percentage": D_Percentage,"party":"D"} ,
-             * {"nominee": R_Nominee_prop,"votecount": R_Votes,"percentage": R_Percentage,"party":"R"} ,
-             * {"nominee": I_Nominee_prop,"votecount": I_Votes,"percentage": I_Percentage,"party":"I"}
-             * ]
-             * }
-             * pass this as an argument to the tooltip_render function then,
-             * return the HTML content returned from that method.
-             * */
-            return ;
+            tooltip_data = {"state":d.State,
+                            "winner":d.State_Winner,
+                            "electoralVotes":d.Total_EV,
+                            "result":results};
+            var tooltip_html = TileChart.prototype.tooltip_render(tooltip_data);
+            return tooltip_html;
         });
 
     //Creates a legend element and assigns a scale that needs to be visualized
@@ -149,11 +150,15 @@ TileChart.prototype.update = function(electionResult, colorScale){
 
     var tileSelect = d3.select("#tiles").select("svg");
 
+    tileSelect.call(tip);
+
     tileSelect.selectAll("rect").remove();
     tileSelect.selectAll("text").remove();
 
     var tiles = tileSelect.selectAll("rect")
                                        .data(electionResult).enter().append("rect")
+                                       .on("mouseover", tip.show)
+                                       .on("mouseout", tip.hide)
                                        .attr("x", function(d) {return colScale(+d.Space)})
                                        .attr("y", function(d) {return rowScale(+d.Row)})
                                        .attr("width", blockHeight)
