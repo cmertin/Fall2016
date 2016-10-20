@@ -31,10 +31,10 @@ TileChart.prototype.init = function(){
         .attr("transform", "translate(" + self.margin.left + ",0)");
 
     self.svg = divTileChart.append("svg")
-                        .attr("width",self.svgWidth)
-                        .attr("height",self.svgHeight)
-                        .attr("transform", "translate(" + self.margin.left + ",0)")
-                        .style("bgcolor","green");
+                           .attr("width",self.svgWidth)
+                           .attr("height",self.svgHeight)
+                           .attr("transform", "translate(" + self.margin.left + ",0)")
+                           .style("bgcolor","green");
 
 };
 
@@ -48,7 +48,7 @@ TileChart.prototype.chooseClass = function (party) {
     if (party == "R"){
         return "republican";
     }
-    else if (party== "D"){
+    else if (party == "D"){
         return "democrat";
     }
     else if (party == "I"){
@@ -85,13 +85,21 @@ TileChart.prototype.update = function(electionResult, colorScale){
 
     //Calculates the maximum number of columns to be laid out on the svg
     self.maxColumns = d3.max(electionResult,function(d){
-                                return d["Space"];
-                            });
+                                return +d["Space"];
+                            }) + 1;
 
     //Calculates the maximum number of rows to be laid out on the svg
     self.maxRows = d3.max(electionResult,function(d){
-                                return d["Row"];
-                        });
+                                return +d["Row"];
+                        }) + 1;
+
+    console.log(self.maxColumns);
+    console.log(self.maxRows);
+
+    var rowScale = d3.scaleLinear().rangeRound([0,self.svgHeight]).domain([0,self.maxRows]);
+    var colScale = d3.scaleLinear().rangeRound([0,self.svgWidth]).domain([0,self.maxColumns]);
+    var blockWidth = rowScale(1) - rowScale(0);
+    var blockHeight = colScale(1) - colScale(0);
 
     //Use this tool tip element to handle any hover over the chart
     tip = d3.tip().attr('class', 'd3-tip')
@@ -117,9 +125,6 @@ TileChart.prototype.update = function(electionResult, colorScale){
             return ;
         });
 
-        //var percentageScale = d3.scaleLinear().range([0, globalWidth])
-        //                                      .domain([0,100]);
-
     //Creates a legend element and assigns a scale that needs to be visualized
     self.legendSvg.append("g")
         .attr("class", "legendQuantile");
@@ -141,6 +146,36 @@ TileChart.prototype.update = function(electionResult, colorScale){
 
     //HINT: Use .tile class to style your tiles;
     // .tilestext to style the text corresponding to tiles
+
+    var tileSelect = d3.select("#tiles").select("svg");
+
+    tileSelect.selectAll("rect").remove();
+    tileSelect.selectAll("text").remove();
+
+    var tiles = tileSelect.selectAll("rect")
+                                       .data(electionResult).enter().append("rect")
+                                       .attr("x", function(d) {return colScale(+d.Space)})
+                                       .attr("y", function(d) {return rowScale(+d.Row)})
+                                       .attr("width", blockHeight)
+                                       .attr("height", blockWidth)
+                                       .attr("fill", function(d) {return colorScale(d.RD_Difference)})
+                                       .classed("tile", true);
+
+    var text = tileSelect.selectAll("text").data(electionResult).enter();
+
+    text.append("text")
+        .classed("tilestext", true)
+        .attr("x", function(d) {return colScale(+d.Space) + blockHeight/2})
+        .attr("y", function(d) {return rowScale(+d.Row) + blockWidth/2})
+        .text(function(d) {return d.Abbreviation});
+
+    text.append("text")
+        .classed("tilestext", true)
+        .attr("x", function(d) {return colScale(+d.Space) + blockHeight/2})
+        .attr("y", function(d) {return rowScale(+d.Row) + blockWidth/2 + 12.5})
+        .text(function(d) {return d.Total_EV});
+
+    //text.append("text").classed("tilestext",true)
 
     //Call the tool tip on hover over the tiles to display stateName, count of electoral votes
     //then, vote percentage and number of votes won by each party.

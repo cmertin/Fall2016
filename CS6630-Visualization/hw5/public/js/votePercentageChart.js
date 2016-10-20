@@ -91,7 +91,7 @@ VotePercentageChart.prototype.update = function(electionResult){
         var tooltip_data = {"result":[demData, repData]};
         var data = [demData, repData];
     }
-    var percentageScale = d3.scaleLinear().rangeRound([0, self.svgWidth])
+    var percentageScale = d3.scaleLinear().range([0, self.svgWidth])
                                           .domain([0,100]);
 
     //Use this tool tip element to handle any hover over the chart

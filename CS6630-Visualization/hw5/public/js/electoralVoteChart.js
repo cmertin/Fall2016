@@ -58,7 +58,7 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
 
     var barHeight = 25;
 
-    var evScale = d3.scaleLinear().rangeRound([0, self.svgWidth])
+    var evScale = d3.scaleLinear().range([0, self.svgWidth])
                                   .domain([0, d3.sum(electionResult, function(d) {return d.Total_EV})]);
 
     var indStates = electionResult.filter(function(d) {return d.State_Winner == "I";});
