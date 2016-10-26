@@ -131,6 +131,17 @@ step hidden? Explain.
 
 {\bf Solution:}
 
+For normal equations we have
+
+\begin{align*}
+A^{T}A\vect{x} &= A^{T}\vect{b}\\
+\kappa\P{A^{T}A} &= \kappa\P{R^{T}Q^{T}QR} = \kappa\P{R^{T}R}\\
+                 &= \kappa^{2}(R) = \kappa\P{A^{2}}\\
+\intertext{For QR Factorization and sinc $Q$ is orthogonal and can be omitted in $\kappa$}
+\kappa\P{\inv{R}Q^{T}} &= \kappa\P{\inv{R}} = \kappa{R} = \kappa{A}
+\intertext{Since}
+\kappa{R} &= \norm{R} \norm{\inv{R}} = \norm{\inv{R}} \norm{R} = \kappa\P{\inv{R}}
+\end{align*}
 
 
 \end{enumerate}
