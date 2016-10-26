@@ -506,14 +506,54 @@ where $\gamma > 0$ is a parameter.
 
   {\bf Solution:}
 
+  Since $A^{T}A$ is symmetrix positive-definite, its eigenvalues are such that
+  $\lambda_{1} \geq \lambda_{2} \geq \cdots \geq \lambda_{n} \geq 0$. We have
+  \begin{align*}
+    A^{T}A\vect{x} &= \lambda\vect{x}\\
+    &\Rightarrow A^{T}A\vect{x} + \gamma\vect{x} = \lambda\vect{x} + \gamma\vect{x}\\
+    \vect{x} \P{A^{T}A + \gamma} &= \vect{x}\P{\lambda + \gamma}\\
+    \kappa_{2}\P{A^{T}A + \gamma\Id} &= \frac{\lambda_{1} + \gamma}{\lambda_{n} + \gamma}\\
+    \intertext{Since $\kappa^{2}(A) = \kappa\P{A^{T}A}$}
+    \kappa^{2}(A) &= \frac{\lambda_{1}}{\lambda_{n}}\\
+    \intertext{To prove $\kappa_{2}^{2} \geq \kappa_{2}\P{A^{T}A + \gamma\Id}$, we show that $\kappa_{2}^{2}(A) - \kappa_{2}\P{A^{T}A + \gamma\Id} \geq 0$}
+    \kappa_{2}^{2}(A) - \kappa_{2}\P{A^{T}A + \gamma\Id} &= \frac{\lambda_{1}}{\lambda_{n}} - \frac{\lambda_{1} + \gamma}{\lambda_{n} + \gamma}\\
+    &= \frac{\lambda_{1}\lambda_{n} + \lambda_{1}\gamma - \lambda_{1}\lambda_{n} - \lambda_{n}\gamma}{\P{\lambda_{n}}^{2} + \lambda_{n}\gamma}\\
+    &= \frac{\P{\lambda_{1} - \lambda_{n}}\gamma}{\P{\lambda_{n}}^{2} + \lambda_{n}\gamma}
+  \end{align*}
+
+  which is greater than or equal to zero since $\gamma > 0$ and all eigenvalues are greater than or equal to zero.
+
   \item Reformulate the equations for $\mathbf{x}_{\gamma}$ as a linear least
   squares problem.
 
   {\bf Solution:}
 
+  \begin{align*}
+    \underbrace{\left( A^{T}A + \gamma I\right)}_{M}\mathbf{x}_{\gamma} &= A^{T}\mathbf{b}\\
+    \underbrace{AM}_{W}\vect{x}_{\gamma} &= \underbrace{\P{AA^{T}}\vect{b}}_{\vect{d}}\\
+    W\vect{x}_{\gamma} &= \vect{d}\\
+    &\Rightarrow \min_{\vect{x}_{\gamma}}\norm{\vect{d} - W\vect{x}_{\gamma}}_{2}
+  \end{align*}
+
   \item Show that $\norm{\mathbf{x}_{\gamma}}_{2} \leq \norm{\mathbf{x}}_{2}$.
 
   {\bf Solution:}
+
+  From the two equations, we have
+  \begin{align*}
+    A^{T}A\vect{x}_{\gamma} + \gamma\Id\vect{x}_{\gamma} &= A^{T}A \vect{b}\\
+    A^{T}A\vect{x} &= A^{T}\vect{b}\\
+    \intertext{Where we can set these two equal to each other, with $A^{T}A = M$, giving}
+    M\vect{x}_{\gamma} + \gamma\Id\vect{x}_{\gamma} &= M\vect{x}\\
+    \vect{x}_{\gamma} + \inv{M}\gamma\Id\vect{x}_{\gamma} &= \vect{x}\\
+    \vect{x} - \vect{x}_{\gamma} &= \inv{M}\gamma\Id\vect{x}_{\gamma}\\
+    \vect{x} - \vect{x}_{\gamma} &\geq 0
+  \end{align*}
+
+ Where the last term comes about since $A$ is postive definite and the right hand side
+ of the equation would be greater than zero. Since this is true, we can say
+ $\norm{\mathbf{x}_{\gamma}}_{2} \leq \norm{\mathbf{x}}_{2}$.
+
 
   \item Find a bound for the relative error $\frac{\norm{\mathbf{x} - \mathbf{x}_{\gamma}}_{2}}{\norm{\mathbf{x}}_{2}}$
   in terms of either the largest or the smallest singular value of the matrix $A$.
@@ -522,6 +562,22 @@ where $\gamma > 0$ is a parameter.
   error is bounded below a given value $\epsilon$.
 
   {\bf Solution:}
+
+  \begin{align*}
+    \vect{x}_{\alpha} &= \vect{x} - \inv{\P{A^{T}A}}\gamma\vect{x}_{\gamma}\\
+    \vect{x} - \vect{x}_{\alpha} &= \inv{\P{A^{T}A}}\gamma\vect{x}_{\gamma}\\
+    \norm{\vect{x} - \vect{x}_{\alpha}} &= \norm{\inv{\P{A^{T}A}}\gamma\vect{x}_{\gamma}}\\
+              &\leq \gamma\norm{\inv{\P{A^{T}A}}}\norm{\vect{x}_{\gamma}}
+    \intertext{But, since $\norm{\mathbf{x}_{\gamma}}_{2} \leq \norm{\mathbf{x}}_{2}$}
+    \norm{\vect{x} - \vect{x}_{\alpha}} &\leq \gamma\norm{\inv{\P{A^{T}A}}}\norm{\vect{x}}\\
+    \intertext{Finally}
+    \frac{\norm{\vect{x} - \vect{x}_{\alpha}}}{\norm{\vect{x}}}  &\leq \gamma\norm{\inv{\P{A^{T}A}}}\\
+    \intertext{We need the relative error to be less than $\epsilon$, so}
+    \gamma\norm{\inv{\P{A^{T}A}}} &\leq \epsilon\\
+      &\Rightarrow \gamma \leq \frac{\epsilon}{\norm{\inv{\P{A^{T}A}}}}
+    \intertext{giving}
+    \frac{\norm{\vect{x} - \vect{x}_{\alpha}}}{\norm{\vect{x}}}  &\leq \gamma\norm{\inv{\P{A^{T}A}}} \leq \epsilon\\
+  \end{align*}
 
   \item Write a short program to solve the $5 \times 4$ problem in Example 8.8 regularized
   as above, using {\sc Matlab}'s backslash command. Try $\gamma = 10^{-j}$ for
