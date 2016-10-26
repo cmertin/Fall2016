@@ -184,6 +184,10 @@ A^{T}A\vect{x} &= A^{T}\vect{b}\\
   numerically stable than the classical version.
 
   {\bf Solution:}
+
+  A $3 \times 2$ matrix is not possible as both of these algorithms would produce
+  the same result. This is due to the for loops, since both of these produce the same
+  values for the first two columns in the matrix.
 \end{enumerate}
 
 %%%%%% Problem 4 %%%%%%
@@ -493,6 +497,15 @@ are equal to $1/n$, and let $\alpha$ be a scalar, $0 < \alpha < 1$.
 
     {\bf Solution:}
 
+      Since each row in $A$ is scaled to sum upto $n$, if each row in $\vect{v}_{0}$ is
+      scaled to sum up to 1, so will the result of $A\cdot \vect{v}$. This is due
+      to the fact that since each column will scale proportionally to those values in
+      $\vect{v}$ such that they will also scale to 1. With this scaling, none of the
+      norms will have to be taken since they'll be 1. In other words
+
+      \begin{align*}
+        \sum_{i=1}^{n}\P{A^{(k)}\vect{x}}_{i} = \sum_{i=1}^{n}\P{\vect{x}}_{i}
+        \end{align*}
   \end{enumerate}
 \end{enumerate}
 
