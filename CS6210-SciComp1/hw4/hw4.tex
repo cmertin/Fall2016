@@ -2,9 +2,29 @@
 
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amsthm,amssymb}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{bbold}
+\usepackage{algorithm}
+\usepackage{algcompatible}
+\usepackage{csquotes}
+\usepackage{url}
 
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
+\newcommand{\abs}[1]{\left| #1 \right|}
+\newcommand{\norm}[1]{\left|\left| #1 \right|\right|}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\pprime}{\prime \prime}
+\newcommand{\BigO}[1]{\mathcal{O}\left( #1 \right)}
+\newcommand{\proj}[2][]{\textit{proj}_{\vect{#1}}\vect{#2}}
+\newcommand{\vect}{\mathbf}
+\newcommand{\Id}{\mathbb{1}}
+\newcommand{\inv}[1]{ #1^{-1}}
+\newcommand{\minn}{\text{min}}
+\newcommand{\maxx}{\text{max}}
+\renewcommand{\P}[1]{\left( #1 \right)}
 
 \newenvironment{theorem}[2][Theorem]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
@@ -19,6 +39,8 @@
 \newenvironment{corollary}[2][Corollary]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
 
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
 
 \DeclareMathOperator{\sech}{sech}
 \DeclareMathOperator{\csch}{csch}
@@ -27,139 +49,494 @@
 
 \title{CS6210: Homework 1}
 \author{Christopher Mertin}
-\date{September 6, 2016}
+\date{November 1, 2016}
 \maketitle
 
 \begin{enumerate}
 %%%%%% Problem 1 %%%%%%
-\item Carry out calculations similar to those of Example 1.3 for approximating
-the derivative of the function $f(x)=e^{-2x}$ evaluated at $x_{0}=0.5$. Observe
-similarities and differences by comparing your graph against that in Figure 1.3.
+\item Often in practice, an approximation of the form
 
-%%%%%% Problem 2 %%%%%%
-\item Following Example 1.5, assess the conditioning of the problem of evaluating
 \[
-  g(x)=\tanh{(cx)} = \frac{e^{cx}-e^{-cx}}{e^{cx}+e^{-cx}}
+u(t) = \gamma_{1}e^{\gamma_{2}t}
 \]
 
-near $x=0$ as the positive parameter $c$ grows.
+is sought for a data fitting problem, where $\gamma_{1}$ and $\gamma_{2}$ are
+constants. Assume given data $\left(t_{1}, z_{1}\right),\left(t_{2}, z_{2}\right),\ldots,\left(t_{m}, z_{m}\right)$
+where $z_{i} > 0$, $i = \{ 1,2,\ldots,m\}$, and $m > 0$.
+
+\begin{enumerate}
+\item Explain in one brief sentence why the techniques introduced in the present
+chapter cannot be directly applied to find this $u(t)$.
 
 {\bf Solution:}
 
-The condition number measures how sensitive the output of a function is to small
-changes in the input. It can be calculated by:
+Because the equation is not linear in the coefficients $\gamma_{1}$ and $\gamma_{2}$.
+
+\item Considering instead
+
+\[
+v(t) = \ln\left( u(t)\right) = \left(\ln\left( \gamma_{1}\right)\right) + \gamma_{2}t
+\]
+
+it makes sense to define $b_{i} = \ln\left( z_{i}\right)$, $i = \{ 1,2,\ldots,m\}$,
+and then find coefficients $x_{1}$ and $x_{2}$ such that $v(t) = x_{1} + x_{2}t$
+is the best least squares fit for the data
+
+$\left(t_{1}, b_{1}\right),\left(t_{2}, b_{2}\right),\ldots,\left(t_{m}, b_{m}\right)$
+
+Using this method, find $u(t)$ for the data
+
+\begin{table}[H]
+  \centering
+\begin{tabular}{| c | c | c | c |}
+  \hline
+$i$ & 1 & 2 & 3\\
+\hline
+$t_{i}$ & $0.0$ & $1.0$ & $2.0$\\
+\hline
+$z_{i}$ & $e^{0.1}$ & $e^{0.9}$ & $e^{2}$\\
+\hline
+\end{tabular}
+\end{table}
+
+{\bf Solution:}
+
+We can take the exponential of both sides, giving
 
 \begin{align*}
-\text{Condition Number}(g) &= x\frac{g^{\prime}(x)}{g(x)}
+u(t) &= e^{\gamma_{1} + t\gamma_{2}} = e^{\gamma_{1}}e^{\gamma_{2}}\\
+\intertext{with}
+A &= \begin{pmatrix}1 & 0\\1 & 1\\ 1 & 2 \end{pmatrix}\quad \mathbf{b} = \begin{pmatrix}1\\ 0.9\\ 2 \end{pmatrix}
+\intertext{In finding $\mathbf{x}$ in $A\mathbf{x} = \mathbf{b}$, we get}
+x &= \begin{pmatrix}0.05\\ 0.95\end{pmatrix}\\
+u(t) &= e^{0.05}e^{0.95t} = a_{1}e^{ta_{2}}
 \end{align*}
 
-which for the instance of this problem gives us
+\end{enumerate}
 
-\begin{align*}
-  g(x) &= \frac{e^{cx} - e^{-cx}}{e^{cx}+e^{-cx}} = \frac{\frac{e^{cx}-e^{-cx}}{2}}{\frac{e^{cx}+e^{-cx}}{2}}\\
-        &= \frac{\sinh(x)}{\cosh(x)}\\
-  g^{\prime}(x) &= c \sech^{2}(cx)\\
-                &= \frac{c}{\cosh^{2}(cx)}
-\end{align*}
+%%%%%% Problem 2 %%%%%%
+\item \
+\begin{enumerate}
+\item Why can't one directly extend the LU-decomposition to a long and skinny
+matrix in order to solve least squares problems?
 
-with using these formulas, we can plug it into the definition of the condition
-number we get
+{\bf Solution:}
 
-\begin{align*}
-\text{Condition Number}(g) &= x\frac{g^{\prime}(x)}{g(x)} = \frac{cx}{\cosh^{2}(x)\cdot \tanh(cx)}\\
-                            &= cx\frac{\cosh(cx)}{\sinh(cx)} = cx\cdot \coth(cx)
-\intertext{Where we can take the limit of the condition number as $x$ approaches $0$, giving}
-\lim_{x\rightarrow 0} cx\cdot \coth(cx) &= 1
-\end{align*}
+It only works with square matrices.
 
-This shows that the funcion's sensitivity is not dependent upon $c$ and is well conditioned.
+\item When writing $\mathbf{x} = A^{\dagger}\mathbf{b} = \cdots = R^{-1}Q^{T}\mathbf{b}$
+we have somehow moved from the conditioning $\left[\kappa(A)\right]^{2}$ to the
+conditioning $\kappa(A)$ through mathematical equalities. Where is the improvement
+step hidden? Explain.
 
+{\bf Solution:}
+
+
+
+\end{enumerate}
 
 %%%%%% Problem 3 %%%%%%
-\item The function $f_{1}\left(x_{0},h\right) = \sin\left(x_{0}+h\right) - \sin\left(x_{0}\right)$
-can be transformed into another form, $f_{2}\left(x_{0},h\right)$, using the
-trigonometric formula
-\[
-\sin(\phi) - \sin(\psi) = 2\cos\left(\frac{\phi + \psi}{2}\right)\sin\left(\frac{\phi - \psi}{2}\right)
-\]
-Thus $f_{1}$ and $f_{2}$ have the same values, in exact arithmetic, for any given
-argument values $x_{0}$ and $h$.
+\item \
 \begin{enumerate}
-\item Derive $f_{2}\left(x_{0},h\right)$
-\item Suggest a formula that avoids cancellation errors for computing the approximation
-$\left(\left( f\left( x_{0}+h\right) - f\left(x_{0}\right)\right) /h\right)$
-to the derivative of $f(x)=\sin(x)$ at $x=x_{0}$. Write a {\sc Matlab} program
-that implements your formula and computes an approximation of $f^{\prime}(1.2)$
-for $h = \left\{ 10^{-20},10^{-19},\ldots,1\right\}$.
-\item Explain the difference in accuracy between your results and the results
-reported in Example 1.3.
+  \item Explain what may happen during the course of the Gram-Schmidt process if
+  the matrix $A$ is rank deficient.
+
+  {\bf Solution:}
+
+  From page 158 of the text, it states that when $A$ is rank deficient, $r_{i,i}$
+  will be zero for some $i$, and then in calculating $q_{i}$ will lead to a division
+  by zero.
+
+  \item Show that classical Gram-Schmidt and the modified version are mathematically
+  equivalent.
+
+  {\bf Solution:}
+
+  Due to rounding errors, $q_{i}$'s obtained during classical Gram-Schmidt are
+  often {\em not orthogonal}. Therefore, we can rewrite it as
+
+  \begin{align*}
+    q_{k} &= a_{k} - \proj[q_{1}]{a_{k}} - \proj[q_{2}]{a_{k}} - \cdots - \proj[q_{k-1}]{a_{k}}\\
+    \intertext{With the modified version being written as}
+    q_{k}^{(1)} &= a_{k} - \proj[q_{1}]{a_{k}}\\
+                &\vdots\\
+    q_{k}^{(k-2)} &= q_{k}^{(k-3)} - \proj[q_{k-2}]{\left(q_{k}^{(k-3)}\right)}\\
+    q_{k}^{(k-1)} &= q_{k}^{(k-2)} - \proj[q_{k-1}]{\left(q_{k}^{(k-2)}\right)}\\
+    \intertext{where, if we write $q_{k}^{(k-1)}$ recursively, we get back the classical version:}
+    q_{k}^{(k-1)} &= q_{k}^{(k-2)} - \proj[q_{k-1}]q_{k}^{(k-2)}\\
+                  &= \left(q_{k}^{(k-3)} - \proj[q_{k-2}]q_{k}^{(k-3)}\right) - \proj[q_{k-1}]{\left( q_{k}^{(k-3)} - \proj[q_{k-2}]{q_{k}^{(k-3)}} \right)}  \\
+                  &= a_{k} - \proj[q_{1}]{a_{k}} - \proj[q_{2}]{a_{k}} - \cdots - \proj[q_{k-1}]{a_{k}} \qed
+  \end{align*}
+
+  \item Construct a $3\times 2$ example, using a decimal floating point system
+  with a 2-digit fraction, in which modified Gram-Schmidt proves to be more
+  numerically stable than the classical version.
+
+  {\bf Solution:}
 \end{enumerate}
 
 %%%%%% Problem 4 %%%%%%
-\item The function $f_{1}(x,\delta) = \cos(x+\delta)-\cos(x)$ can be transformed
-into another form, $f_{2}(x,\delta)$, using the trigonometric formula
+\item Let $\alpha$ be scalar, and consider the iterative scheme
+
 \[
-\cos(\phi) - \cos(\psi) = -2\sin\left(\frac{\phi + \psi}{2}\right)\sin\left(\frac{\phi - \psi}{2}\right)
+\mathbf{x}_{k+1} = \mathbf{x}_{k} + \alpha\left(\mathbf{b} - A\mathbf{x}_{k} \right)
 \]
-Thus, $f_{1}$ and $f_{2}$ have the same values, in exact arithmetic, for any given
-argument values $x$ and $\delta$.
+
+This is the gradient descent method with a fixed step size $\alpha$.
+
 \begin{enumerate}
-\item Show that, analytically, $f_{1}(x,\delta)/\delta$ or $f_{2}(x,\delta)/\delta$
-are effective approximations of the function $(-\sin(x))$ for $\delta$ sufficiently small.
-\item Derive $f_{2}(x,\delta)$
-\item Write a {\sc Matlab} script which will calculate $g_{1}(x,\delta) = f_{1}(x,\delta)/\delta + \sin(x)$
-and $g_{2}(x,\delta) = f_{2}(x,\delta)/\delta + \sin(x)$ for $x = 3$ and $\delta = 10^{-11}$.
-\item Explain the difference in the results of the two calculations.
+  \item If $A = M - N$ is the splitting associated with this method, state what $M$
+  and the iteration matrix $T$ are.
+
+  {\bf Solution:}
+
+  According to page 182 of the text, we have that $\inv{M} = \alpha \Id$, so $M = \frac{1}{\alpha}\Id$,
+  giving the iteration matrix $T$ as
+
+  \begin{align*}
+    T &= \Id - \inv{M}A\\
+      &= \Id - \alpha A
+  \end{align*}
+
+  \item Suppose $A$ is symmetrix positive definite and its eigenvalues are
+  $\lambda_{1} > \lambda_{2} > \cdots > \lambda_{n} > 0$.
+
+  \begin{enumerate}
+    \item Derive a condition on $\alpha$ that guarentees convergence of the
+    scheme to the solution $\mathbf{x}$ for any initial guess.
+
+    {\bf Solution:}
+
+    \begin{align*}
+      x_{k+1} &= x_{k}\left( \Id - \alpha A\right) + \alpha \vect{b}\\
+      \intertext{If $x_{k}$ is an eigenvector of $A$, then}
+      x_{k+1} &= \alpha \lambda_{i} x_{k} + \alpha \vect{b} = (1 - \alpha \lambda_{i})x_{k} + \alpha \vect{b}\\
+      e_{k+1} &= e_{k}(1 - \alpha \lambda_{i})
+    \end{align*}
+
+    For the series to be convergent, we need
+
+    \begin{align*}
+      \frac{e_{k+1}}{e_{k}} &< 1\\
+      \abs{1 - \alpha \lambda_{i}} &< 1
+    \end{align*}
+
+    We have two inequalities: $1 - \alpha \lambda_{i} < 1$ and $1 - \alpha \lambda_{i} > -1$, giving the following
+
+    \begin{align*}
+      1 - \alpha \lambda_{i} &< 1\\
+      \Rightarrow \alpha &> 0\\
+      \alpha &< \frac{2}{\lambda_{i}}
+    \end{align*}
+
+    If we put the biggest eigenvalue, $\lambda_{1}$, the inequality holds and thus does for
+    all eigenvalues. In other words,
+
+    \[
+      0 < \alpha < \frac{2}{\lambda_{i}}\quad i=\{ 1, 2, \ldots, n\}
+    \]
+
+    \item Express the condition on $\alpha$ in terms of the spectral condition
+    number of $A$, $\kappa(A)$.
+
+    {\bf Solution:}
+
+    We can simply substitute $\kappa (A) = \frac{\lambda_{1}}{\lambda_{n}}$ into the above
+    inequality, which gives
+
+    \begin{align*}
+      0 < \alpha < \frac{2}{\lambda_{n}\kappa (A)}
+    \end{align*}
+
+    \item Show that the best value for the step size in terms of maximizing the
+    speed of convergence is
+
+    \[
+      \alpha = \frac{2}{\lambda_{1} + \lambda_{2}}
+    \]
+
+    Find the spectral radius of the iteration matrix in this case, and express
+    it in terms of the condition number $A$.
+
+    {\bf Solution:}
+
+    We have that $T = \Id - \alpha A$, so we can compute $\kappa (T)$ as
+
+    \begin{align*}
+      \kappa (T) &= \frac{\abs{1 - \lambda_{1}\alpha}}{\abs{1 - \lambda_{n}\alpha}}
+      \intertext{Where the best value for the step size would happen with $\kappa (T) = 1$, so}
+      1 &= \frac{\abs{1 - \lambda_{1}\alpha}}{\abs{1 - \lambda_{n}\alpha}}\\
+      \left( 1 - \lambda_{1}\alpha\right)^{2} &= \left( 1 - \lambda_{n}\alpha\right)^{2}\\
+      \alpha^{2} \P{\lambda_{1}^{2} - \lambda_{n}^{2}} - 2\alpha\P{\lambda_{1} - \lambda_{n}} = 0\\
+      \alpha^{2}\P{\lambda_{1} + \lambda_{n}} &= 2\alpha
+    \end{align*}
+
+    Since $\alpha > 0$, the above equation results in
+    \[
+    \alpha = \frac{2}{\lambda_{1} + \lambda_{n}}
+    \]
+    \item Determine whether the following statement is true or false. Justify
+    your answer
+
+    ``If $A$ is strictly diagonally dominant and $\alpha = 1$, then the iterative
+    scheme converges to the solution for any initial guess $\mathbf{x}_{0}$.''
+
+    {\bf Solution:}
+
+    This can be done with an example
+
+    \[
+        A = \begin{pmatrix}3 & 0\\0 & 4 \end{pmatrix}
+    \]
+
+    Matrix $A$ is strictly diagonally dominant and also since it is diagonal its eigenvalues
+    are $\{ 3, 4\}$, so it is positive semi-definite as well. With its largest eigenvalue being 4,
+    for this to be convergent $\alpha$ needs to be restricted by $0 < \alpha < 1/4$. The question
+    states that $\alpha = 1$, so therefore it is not convergent.
+  \end{enumerate}
 \end{enumerate}
 
 %%%%%% Problem 5 %%%%%%
-\item Consider the approximation of the first derivative
-\[
-f^{\prime}(x) \approx \frac{f(x+h)-f(x)}{h}
-\]
-The {\em truncation error} for this formula is $\mathcal{O}(h)$. Suppose that the
-absolute error in evaluating the function $f$ is bounded by $\epsilon$ and
-let us ignore the errors generated in basic arithmetic operations.
-\begin{enumerate}
-\item Show that the total computational error (truncation error and rounding combined)
-is bounded by
-\[
-\frac{Mh}{2} + \frac{2\epsilon}{h}
-\]
-where $M$ is a bound on $\left| f^{\prime\prime}(x)\right|$.
-\item What is the value of $h$ for which the above is minimized?
-\item The rounding unit we employ is approximately equal to $10^{-16}$. Use this
-to explain the behavior of the graph in Example 1.3. Make sure to explain the shape
-of the graph as well as the value where the apparent minimum is attained.
-\item It is not difficult to show, using Taylor expansions, that $f^{\prime}(x)$ can
-be approximated more accurately (in terms of truncation error) by
-\[
-f^{\prime}(x) \approx \frac{f(x+h) - f(x-h)}{2h}
-\]
-For this approximation, the truncation error is $\mathcal{O}\left(h^{2}\right)$.
-Generate a graph similar to Figure 1.3 for the same function and the same value
-of $x$, namely, for $\sin(1.2)$, and compare the two graphs. Explain the meaning
-of your results.
-\end{enumerate}
+\item Consider the linear system $A\mathbf{x} = \mathbf{b}$, where $A$ is a symmetric
+matrix. Suppose that $M - N$ is a splitting of $A$, where $M$ is symmetric positive
+definite and $N$ is symmetric. Show that if $\lambda_{\minn}(M) > \rho(N)$, then
+the iterative scheme $M\mathbf{x}_{k+1} = N\mathbf{x}_{k} + \mathbf{b}$ converges
+to $\mathbf{x}$ for any initial guess $\mathbf{x}_{0}$.
+
+{\bf Solution:}
+
+The question states that $\lambda_{\minn} > \rho(N)$, so we can use the fact that
+
+\begin{align}
+  \lambda_{\minn}(M) &= \frac{1}{\lambda_{\maxx}\P{\inv{M}}}\nonumber\\
+  \intertext{By substituting this equation into the previous, we get}
+  \lambda_{\minn}(M) &> \rho(N)\nonumber\\
+  &\Rightarrow 1 > \lambda_{\maxx}\P{\inv{M}}\rho(N)\nonumber\\
+  &= \rho\P{\inv{M}}\rho(N)\nonumber\\
+  &\Rightarrow 1 > \rho\P{\inv{M}}\rho(N)\label{eq:ineq_5}
+\end{align}
+
+Now, to show that it is convergent with any starting point
+
+\begin{align*}
+  Mx_{k+1} &= Nx_{k} + \vect{b}\\
+  &\Rightarrow x_{k+1} = \inv{M}Nx_{k} + \inv{M}\vect{b}\\
+  e_{k+1} &= \P{\inv{M}N}e_{k}\\
+  &\Rightarrow \norm{e_{k+1}} = \norm{\inv{M}Ne_{k}}\\
+  &\leq \norm{\inv{M}}\norm{N}\norm{e_{k}}\\
+  \frac{\norm{e_{k+1}}}{\norm{e_{k}}} &\leq \norm{\inv{M}} \norm{N}
+\end{align*}
+
+Equation~\ref{eq:ineq_5} completes the proof, giving
+
+\begin{align*}
+  \norm{\inv{M}} \norm{N} &< 1\\
+  &\Rightarrow \frac{\norm{e_{k+1}}}{\norm{e_{k}}} < 1
+\end{align*}
 
 %%%%%% Problem 6 %%%%%%
-\item In the statistical treatment of data one often needs to compute the quantities
-\[
-\bar{x} = \frac{1}{n}\sum_{i=1}^{n}x_{i},\quad \sigma^{2}=\frac{1}{n}\sum_{i=1}^{n}\left(x_{i}-\bar{x}\right)^{2}
-\]
-where $\left\{ x_{1}, x_{2}, \ldots, x_{n}\right\}$ are the given data. Assume that $n$
-is large, say, $n = 10000$. It is easy to see that $\sigma^{2}$ can also be written as
-\[
-\sigma^{2} = \frac{1}{n}\sum_{i=1}^{n} x_{i}^{2} - \bar{x}^{2}
-\]
+\item \
 \begin{enumerate}
-\item Which of the two methods to calculate $\sigma^{2}$ is cheaper in terms of
-overall computational cost? Assume $\bar{x}$ has already been calculated and give
-the operation counts for these two options.
-\item Which of the two methods is expected to give more accurate results for
-$\sigma^{2}$ in general?
-\item Give a small example, using a decimal system with precision $t = 2$ and
-numbers of your choice, validate your claims.
+\item Write a program for solving the linear least squares problems that arise
+throughout the iterations of the {\sc Gmres} method, using Givens rotations,
+where the matrix is a non-square $(k+1) \times k$ upper Hessenberg matrix. Specifically,
+solve
+
+\[
+\min_{\vect{z}} \norm{\rho e_{1} - H_{k+1,k}\mathbf{z}}
+\]
+
+Provide a detailed explanation of how this is done in your program, and state
+what $Q$ and $R$ in the associated QR-Factorization are.
+
+{\bf Solution:}
+
+The upper Hessenberg matrix is formed via iterative QR Factorizations and is
+of the form $H_{k} = Q_{k} R_{k}$, and can be formed from Givens Rotation Matrix.
+Following which, we can get the solution to the minimization problem by solving
+the system
+
+\[
+    R_{k} \vect{x}_{k} = Q_{k}^{T}\vect{b}
+\]
+
+which can be iterated over for to get the values. In our instance, $\rho = \vect{b} - A\vect{x}_{k}$
+and $e_{1} = \left(1, 0, 0, \ldots, 0 \right)\in \mathbb{R}^{n}$. This gives the minimization problem
+that we have to solve as being
+
+\[
+    R_{k}\vect{z} = Q_{k}^{T}\rho e_{1}
+\]
+
+Where the code for this can be found in {\tt prob6a.py}
+
+\item Given $H_{k+1,k}$, suppose we perform a step of the Arnoldi process. As a
+result, we now have a new upper Hessenberg matrix $H_{k+2,k+1}$. Describe the
+relationship between the old and the new upper Hessenberg matrices and explain
+how this relationship can be used to solve the new least squares problem in an
+economical fashion.
+
+{\bf Solution:}
+
+The system produced in the minimization problem is
+
+\[
+  AQ_{n} = Q_{n+1} \widetilde{H}_{n}
+\]
+
+and the produced upper Hessenberg matrix is of dimensions $(m + 1) \times m$ while
+the original matrix $AQ_{n}$ is $m \times n$. Therefore, it produces a smaller matrix
+with the new iteration which can be used to save on computation time.
+
+\item The least squares problems throughout the iterations can be solved using a
+QR decomposition approach. Show that the upper triangular factor cannot be singular
+unless $\mathbf{x}_{k} = \mathbf{x}$, the exact solution.
+
+{\bf Solution: }
+
+\begin{align*}
+  A^{T}A\vect{x} &= A^{T}\vect{b}\\
+  R^{T}Q^{T}QR\vect{x} &= R^{T}Q^{T}\vect{b}\\
+  R^{T}R\vect{x} &= R^{T}Q^{T}\vect{b}\quad \P{Q^{T}Q = \Id}\\
+  R\vect{x} &= Q^{T}\vect{b}\\
+  \vect{x} &= \inv{R} Q^{T} \vect{b}
+\end{align*}
+
+where $R$ is non-singular, or else it wouldn't be invertable.
+
+
+\end{enumerate}
+
+%%%%%% Problem 7 %%%%%%
+\item A column-stochastic matrix $P$ is a matrix whose entries are nonnegative
+and whose column sums are all equal to $1$. In practice, such matrices are often
+large and sparse.
+
+Let $E$ be a matrix of the same size as $P$, say, $n\times n$, all of whose entries
+are equal to $1/n$, and let $\alpha$ be a scalar, $0 < \alpha < 1$.
+
+\begin{enumerate}
+  \item Show that $A(\alpha) = \alpha P + (1-\alpha )E$ is also a column-stochastic matrix.
+
+  {\bf Solution:}
+
+  We can write any arbitrary element of each matrix in the above given equation, giving
+
+  \begin{align*}
+    A_{i,j} &= \alpha P_{i,j} + (1 - \alpha) E_{i,j}\\
+    \intertext{Now in taking a summation of an arbitrary column from above}
+    \sum_{i=1}^{n}A_{i,j} &= \alpha \sum_{i=1}^{n}P_{i,j} + (1-\alpha)\sum_{i=1}^{n}E_{i,j}\\
+    &= \alpha + (1 - \alpha) = 1
+  \end{align*}
+
+  Which is due to the fact that $E$ and $P$ are column-stochastic matrices.
+
+  \item What are the largest eigenvalue and corresponding eigenvector of $A(\alpha)$?
+
+  {\bf Solution:}
+
+  The text states that the largest eigenvalue of a {\em row-stochastic matrix} is 1. $A(\alpha)$
+  is a {\em column-stochastic matrix}, so its transpose is a {\em row-stochastic matrix}
+  with a largest eigenvalue of 1. Therefore, the largest eigenvalue of $A(\alpha)$ is
+  also 1 since the eigenvalues of a matrix and its transpose are the same as it's based
+  on the linear dependence of the rows/columns.
+
+  \item Show that the second largeset eigenvalue of $A(\alpha)$ is bounded (in absolute value)
+  by $\alpha$.
+
+  {\bf Solution:}
+
+    [Extracted from \url{http://nlp.stanford.edu/pubs/secondeigenvalue.pdf}]
+
+    We know that the second eigenvector $\vect{x}_{2}$ of $A$ must be an eigenvector
+    $\vect{y}_{i}$ of $P^{T}$, and the corresponding eigenvalue is $\gamma_{i} = \lambda_{2}/\alpha$.
+
+    So, since $\lambda_{2} = \alpha \gamma_{i}$, and since we know $P$ is stochastic,
+    we have $\abs{\gamma_{i}} \leq 1$, and therefore $\abs{\lambda_{2}} \leq \alpha$.
+
+
+  \item Suppose the dominant eigenvector of $A(\alpha)$ is to be computed using
+  the power method. This vector, if normalized so that its $\ell_{1}$-norm is
+  equal to 1, is called the stationary distribution vector.
+
+  \begin{enumerate}
+    \item Show how matrix-vector products with $P(\alpha)$ can be performed in an
+    efficient manner in terms of storage. (Assume $n$ is very large, and recall
+    that $E$ is dense).
+
+    {\bf Solution:}
+
+    If $P(\alpha)$ has elemental values of $1/n$, a matrix vector multiplication can be computed
+    efficiently in storage by simply storing the value of $\alpha /n$ in a single float, and
+    the resulting scalar vector multiplicatio from $\alpha /n$ and a vector would produce the
+    same results as if you did the enitre matrix vector multiplication since all elements
+    in the matrix have the same value.
+
+    If, they infact, do not have the same values, then you can store only the non-zero elements and their
+    indices, and simply do a matrix vector multpilcation that way, where you would ignore all the zeros as
+    they wouldn't produce any meaningful results. Something such as {\sc csr} matrix format.
+
+    \item Show that if the power method is applied, then if the initial guess $\mathbf{v}_{0}$
+    satisfies $\norm{\mathbf{v}_{0}}_{1} = 1$, then all subsequent iterates $\mathbf{v}_{k}$
+    also have a unit $\ell_{1}$-norm, and hence there is no need to normalize throughout the iteration.
+
+    {\bf Solution:}
+
+  \end{enumerate}
+\end{enumerate}
+
+%%%%%% Problem 8 %%%%%%
+\item Consider the least squares problem
+
+\[
+\min_{x} \norm{\mathbf{b} - A\mathbf{x}}_{2}
+\]
+
+where we know that $A$ is ill-conditioned. Consider the {\em regularization} approach
+that replaces the normal equations by the modified, better-conditioned system
+
+\[
+\left( A^{T}A + \gamma I\right)\mathbf{x}_{\gamma} = A^{T}\mathbf{b},
+\]
+
+where $\gamma > 0$ is a parameter.
+
+\begin{enumerate}
+  \item Show that $\kappa_{2}^{2}(A) \geq \kappa_{2}\left( A^{T}A + \gamma I \right)$
+
+  {\bf Solution:}
+
+  \item Reformulate the equations for $\mathbf{x}_{\gamma}$ as a linear least
+  squares problem.
+
+  {\bf Solution:}
+
+  \item Show that $\norm{\mathbf{x}_{\gamma}}_{2} \leq \norm{\mathbf{x}}_{2}$.
+
+  {\bf Solution:}
+
+  \item Find a bound for the relative error $\frac{\norm{\mathbf{x} - \mathbf{x}_{\gamma}}_{2}}{\norm{\mathbf{x}}_{2}}$
+  in terms of either the largest or the smallest singular value of the matrix $A$.
+
+  State a sufficient condition on the value of $\gamma$ that would guarentee that the relative
+  error is bounded below a given value $\epsilon$.
+
+  {\bf Solution:}
+
+  \item Write a short program to solve the $5 \times 4$ problem in Example 8.8 regularized
+  as above, using {\sc Matlab}'s backslash command. Try $\gamma = 10^{-j}$ for
+  $j = \{ 0, 3, 6, 12\}$. For each $\gamma$, calculate the $\ell_{2}$-norms of the
+  residual, $\norm{B\mathbf{x}_{\gamma} - \mathbf{b}}$, and the solution, $\norm{\mathbf{x}_{\gamma}}$.
+  Compare to the results for $\gamma = 0$ and to those using SVD as reported in
+  Example 8.8. What are your conclusions?
+
+  {\bf Solution:}
+
+  \item For large ill-conditioned least squares problems, what is the potential advantage
+  of the regularization with $\gamma$ presented here over minimum norm truncated SVD?
+
+  {\bf Solution:}
+
 \end{enumerate}
 \end{enumerate}
 
