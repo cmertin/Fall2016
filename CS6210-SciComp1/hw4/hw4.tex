@@ -593,6 +593,17 @@ where $\gamma > 0$ is a parameter.
 
   {\bf Solution:}
 
+  In calculating the SVD, the higher the condition number of the matrix, the better.
+  With using a minimum norm truncated SVD on a matrix with a low condition number, the
+  ratio between the max singular value and the minimum singular value is low. In doing a
+  minimum norm, there is no stability on the number of eigenvalues that are being removed.
+  For example, if you're looking for a norm truncation of 0.9, and all the values are below 1,
+  you will have to remove a good majority of the eigenvalues to get the norm that low.
+
+  With this method, it is independent on the removal of the eigenvalues and essentially
+  ``feeds'' any error back into the system with $\gamma\Id$, and removes error. Also,
+  there's no possibility of removing {\em all} of the eigenvalues in the system.
+
 \end{enumerate}
 \end{enumerate}
 
