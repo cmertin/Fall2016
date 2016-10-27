@@ -612,6 +612,50 @@ where $\gamma > 0$ is a parameter.
 
   {\bf Solution:}
 
+  The matrix system that is being solved is $A\vect{x} = \vect{b}$ which is
+
+  \[
+        A = \begin{pmatrix}1 & 0 & 1 & 2\\
+                           2 & 3 & 5 & 10\\
+                           5 & 3 & -2& 6\\
+                           3 & 5 & 4 & 12\\
+                           -1 & 6 & 3 & 8\end{pmatrix}\quad \vect{x} = \begin{pmatrix}4\\-2\\5\\-2\\1\end{pmatrix}
+  \]
+
+  where we can solve for this system with regularization, which is stated in the proposed
+  minimizatio problem above, and leads to
+
+  \begin{align*}
+    W^{T}W\vect{x}_{\gamma} &= W^{T}AA^{T}\vect{b}\\
+    R^{T}QQ^{T}R\vect{x}_{\gamma} &= R^{T}Q^{T}AA^{T}\vect{b}\\
+    \vect{x}_{\gamma} &= \inv{R}Q^{T}AA^{T}\vect{b}
+  \end{align*}
+
+  where the QR decomposition was taken against $W$. This solves the system based
+  on the regularization technique discussed in this problem. In solving this system,
+  we get the following results
+
+  \begin{table}[H]
+    \centering
+    \begin{tabular}{c c c c}
+      \hline\hline
+      $j$ & $\norm{A\vect{x}_{\gamma} - \vect{b}}_{2}$ & $\norm{\vect{x}_{\gamma}}_{2}$ & $\norm{A^{T}A\vect{x}_{\gamma} - A^{T}\vect{b}}_{2}$\\
+      \hline
+      0 & 5.02675 & 1.82337 & 1.57531\\
+      3 & 5.02505 & 3.31057 & 0.28440\\
+      6 & 5.02519 & 0.95478 & 0.38355\\
+      12 & 5.04030 & 1.87860 & 8.38387\\
+      \hline
+    \end{tabular}
+  \end{table}
+
+  which makes sense for the final column. As $j$ became larger, the $\lambda$ value became
+  smaller and it approached closer to the {\em non-regularized} equation as it approached
+  roundoff errors.
+
+  For using {\sc Numpy}'s built in equation solver, {\tt numpy.linalg.solve}, we got\\
+  $\norm{A\vect{x} - \vect{b}}_{2} = 5.02500$ and $\norm{\vect{x}}_{2} = 0.94733$
+
   \item For large ill-conditioned least squares problems, what is the potential advantage
   of the regularization with $\gamma$ presented here over minimum norm truncated SVD?
 
