@@ -25,6 +25,9 @@
 \newcommand{\minn}{\text{min}}
 \newcommand{\maxx}{\text{max}}
 \renewcommand{\P}[1]{\left( #1 \right)}
+\newcommand{\diag}[1]{\text{diag}\P{#1}}
+\newcommand{\grad}{\nabla}
+\newcommand{\laplacian}{\nabla^{2}}
 
 \newenvironment{theorem}[2][Theorem]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
@@ -56,7 +59,7 @@
 %%%%%% Problem 1 %%%%%%
 \item An $n \times n$ linear system of equations $A\vect{x} = \vect{b}$ is modified
 in the following manner: For each $i = \{1,\ldots,n\}$, the value $b_{i}$ on
-the right-hand side of the $i^{\text{th}}$ equation is replaced by $b_{i} - x_{i}^{3}$.
+the right-hand side of the $i^{th}$ equation is replaced by $b_{i} - x_{i}^{3}$.
 Obviously, the modified system of equations (for the unknowns $x_{i}$) is now nonlinear.
 
 \begin{enumerate}
@@ -64,11 +67,43 @@ Obviously, the modified system of equations (for the unknowns $x_{i}$) is now no
 
   {\bf Solution:}
 
+  After making the nonlinearity change, each row in the linear system
+  has the following format:
+
+  \begin{align*}
+    a_{i,1}x_{1} + \cdots + a_{i,n}x_{n} &= b_{i} - x_{i}^{3}
+    \intertext{Where we can add a vector of $\vect{x}^{3}$ (denoting the cubing of each element independently) to each side, giving}
+    a_{i,1}x_{1} + \cdots + \left( a_{i,i}x_{i} + x_{i}^{3}\right) + \cdots + a_{i,n}x_{n} &= b_{i}
+  \end{align*}
+
+  Giving the Jacobian of $A$ as being
+
+  \begin{align*}
+    J[A] &= \begin{pmatrix}
+            a_{1,1} + 3x_{1}^{2} & a_{1,2} & \cdots & a_{1,n}\\
+            a_{2,1} & a_{2,2} + 3x_{2}^{2} & \cdots & a_{2,n}\\
+            \vdots & \vdots & \ddots & \vdots\\
+            a_{n,1} & a_{n,2} & \cdots & a_{n,n} + 3x_{n}^{2}
+            \end{pmatrix}
+  \end{align*}
+
   \item Given that $A$ is strictly diagonally dominant with positive elements on
   its diagonal, state whether or not it is guarenteed that the Jacobian matrix at
   each iterate is nonsingular.
 
   {\bf Solution:}
+
+  We can look at the matrix $J^{\prime}$ to determine this, with
+  $J = J^{\prime} = A + \text{diag}\P{3x_{i}^{2}}$, with $A$ being the coefficient matrix
+  and the diagonal matrix being the nonlinear elements added to $J$ along the
+  diagonal.
+
+  As $A$ is diagonally dominant, and since the off-diagonals of $\text{diag}\P{3x_{i}^{2}}$
+  are zero, making it diagonally dominant as well, we can say that $J^{\prime}$ (and $J$)
+  are also diagonally dominant since the sum of two diagonally dominant matrices are
+  diagonally dominant themselves. There is also a theorem which guarentees that every
+  diagonally dominant matrix is non-singular, meaning that $J$
+  is guarenteed to be non-singular.
 
   \item Suppose that $A$ is symmetric positive definition (not necessarily
   diagonally dominant) and that Newton's method is applied to solve the nonlinear
@@ -76,6 +111,17 @@ Obviously, the modified system of equations (for the unknowns $x_{i}$) is now no
 
   {\bf Solution:}
 
+  The definition of a matrix to be symmetric positive definite, then with $\vect{z}$
+  being a positive vector, we should get
+  \begin{align*}
+  \vect{z}^{T}J\vect{z} &= \vect{z}^{T}\left( A + \diag{3x_{i}^{2}}\right)\\
+   &= \vect{z}^{T}A\vect{z} + \vect{z}^{T}\diag{3x_{i}^{2}}\vect{z}
+  \end{align*}
+
+  with $\vect{z}^{T}A\vect{z}$ being positive since $A$ is symmetric positive definite.
+  $\diag{3x_{i}^{2}}$ is always positive along the diagonal, so $\vect{z}^{T}\diag{3x_{i}^{2}}\vect{z}$
+  is also always positive, and symmetric (due to the off diagonals being zero). Therefore,
+  $J$ is symmetric positive definite and Newton's Method will converge.
 \end{enumerate}
 
 %%%%%% Problem 2 %%%%%%
@@ -87,12 +133,30 @@ Obviously, the modified system of equations (for the unknowns $x_{i}$) is now no
 
   {\bf Solution:}
 
+  The equation for Newton's Method is
+  \begin{align*}
+    J[\vect{x}]p_{k} &= -f(\vect{x})\\
+    \intertext{So we have to calculate the Jacobian of $f(x) = A\vect{x} - \vect{b}$, which is $J[\vect{x}] = A$, giving}
+    Ap_{k} &= -f(\vect{x})\\
+    \intertext{with a given $\vect{x}_{0}$ of an initial guess, it gives}
+    Ap_{0} &= -\left( A\vect{x}_{0} - \vect{b}\right)\\
+    \intertext{Where we can multiply by the interverse of $A$, giving}
+    p_{0} &= -\vect{x}_{0} + \inv{A}\vect{b}
+    \intertext{where we can finally show that it will require only one iteration for convergence}
+    \vect{x}_{1} &= \vect{x}_{0} + p_{0} = \vect{x}_{0} + \left( -\vect{x}_{0} + \inv{A}\vect{b}\right) = \inv{A}\vect{b}
+  \end{align*}
+
   \item Suppose the Jacobian matrix is singular at the solution of a nonlinear system
   of equations. Speculate what can occur in terms of convergence and the rate of convergence.
   Specifically, is it possible to have a situation where the newton iteration converges but
   convergence is not quadratic?
 
   {\bf Solution:}
+
+  The text states that the Jacobian matrix should have a bounded inverse and also
+  a continuous derivative to guarentee that Newton's Method can converge quadratically.
+  However, the question states that the Jacobian is singular, so it won't converge
+  quadratically.
 
 \end{enumerate}
 
@@ -112,9 +176,44 @@ Explain why the BFGS method requires significantly more iterations than Newton's
 
 {\bf Solution:}
 
+\begin{itemize}
+  \item {\sc Broyden-Fletcher-Goldfarb-Shanno (BFGS)}
+
+  The necessary condition for minimization at $\widetilde{\vect{x}}$ is $\grad\phi\P{\widetilde{\vect{x}}} = 0$,
+  so in finding $\grad\phi(\vect{x})$
+  \begin{align*}
+    \phi(\vect{x}) &= \vect{c}^{T}\vect{x} + \frac{1}{2}\vect{x}^{T}H\vect{x}\\
+    \grad\phi(\vect{x}) &= H\vect{x} + \vect{c}\\
+    \intertext{By setting $\grad\phi(\vect{x}) = 0$}
+    H\vect{x} + \vect{c} &= 0\\
+    \vect{x} &= -\inv{H}\vect{c} = \begin{pmatrix}2212.33\\ 2119.56\\ 1912.67\\ 1711.33\end{pmatrix}
+  \end{align*}
+  \item {\sc Newton}
+
+  For Newton's Method, the requirement is
+
+  \begin{align*}
+    \laplacian\phi(\vect{x}_{k})p_{k} &= -\grad\phi(\vect{x}_{k})\\
+    \vect{x}_{k+1} &= \vect{x}_{k} + p_{k}\\
+    \intertext{So, in solving for $\laplacian\phi$}
+    \grad\phi(\vect{x}) &= H\vect{x} + \vect{c}\\
+    \laplacian\phi(\vect{x}) &= H
+    \intertext{And in solving for $p_{k}$}
+    p_{k} &= -\inv{\P{\laplacian\phi(\vect{x}_{k})}}\grad\phi(\vect{x}_{k})\\
+          &= -\inv{H}\P{H\vect{x}_{k} + \vect{c}} = -\vect{x}_{k} - \inv{H}\vect{c}
+   \intertext{Giving us $\vect{x}_{k+1}$ as being}
+   \vect{x}_{k+1} &= \vect{x}_{k} - \vect{x}_{k} - \inv{H}\vect{c}\\
+                  &= -\inv{H}\vect{c}
+  \end{align*}
+\end{itemize}
+
+So the initial guess was independent of the convergence. Newton's Method is faster
+at converging than {\sc BFGS} since it uses the second derivative. In the given question,
+the second derivative is independent of $x$, and would thus only need one iteration.
+
 
 %%%%%% Problem 4 %%%%%%
-\item Wit the notation of Exercise 21, for $p = 2$ the problem can be solved as
+\item With the notation of Exercise 21, for $p = 2$ the problem can be solved as
 in Example 9.15 using SVD. But it can also be solved using thge techniques of
 constrained optimization:
 
@@ -123,10 +222,23 @@ constrained optimization:
 
   {\bf Solution:}
 
+  Multiplying a function by a constant will not change the minimization problem, just
+  the final value will be shifted by that multiplicative factor.
+
   \item Form the KKT conditions of the resulting constrained optimization problem,
   obtaining a linear system of equations.
 
   {\bf Solution:}
+
+  The conditions for KKT in the constrained minimization problem are
+
+  \begin{align*}
+    1 - \grad_{y}L\left( \widetilde{y}, \widetilde{\lambda}\right) &= 0\\
+    2 - C_{i}\P{\widetilde{y}} &= 0\\
+    3 - \widetilde{\lambda_{i}}C_{i}\P{\widetilde{y}} &= \grad\phi(y)
+  \end{align*}
+
+  for every Lagrangian Multiplier $\widetilde{\lambda_{i}}$.
 
   \item Devise an example and solve it using the method developed as well as the one
   from Example 9.15. Compare and discuss.
@@ -140,7 +252,7 @@ constrained optimization:
 interpolating cubic polynomial
 
 \begin{itemize}
-  \item Using the monomial basis
+  \item Using the Monomial basis
   \item Using the Lagrange basis
   \item Using the Newton basis
 \end{itemize}
@@ -149,10 +261,65 @@ Show that the three representations give the same polynomial.
 
 {\bf Solution:}
 
+\begin{itemize}
+  \item {\sc Monomial Basis}
+
+  We should use a polynomial interpolant of degree 4, of the form
+
+  \begin{align*}
+    p(x) &= c_{0} + c_{1}x + c_{2}x^{2} + c_{3}x^{3}
+    \intertext{Where we can start by putting the points in $p(x)$, giving}
+    1 &= c_{0} - c_{1} - c_{2} - c_{3}\\
+    1 &= c_{0}\\
+    2 &= c_{0} + c_{1} + c_{2} + c_{3}\\
+    0 &= c_{0} + 2c_{1} + 4c_{2} + 8c_{3}\\
+    \intertext{where solving this system of equations gives}
+    c_{0} &= 1\\
+    c_{1} &= \frac{7}{6}\\
+    c_{2} &= \frac{1}{2}\\
+    c_{3} &= -\frac{2}{3}\\
+    \intertext{where putting it back in $p(x)$ gives}
+    p(x) &= 1 + \frac{7}{6}x + \frac{1}{2}x^{2} - \frac{2}{3}x^{3}
+  \end{align*}
+
+  \item {\sc Lagrange Basis}
+  The Lagrange Interpolant is
+
+  \begin{align*}
+    p(x) &= \sum_{j=0}^{n}y_{j}L_{j}(x)\\
+    \intertext{and the Lagrange Polynomials being}
+    L_{j}(x) &= \prod_{i=0}^{n}\frac{x - x_{i}}{x_{j} - x_{i}}\\
+    \intertext{for $i\neq j$, so solving for the polynomials gives}
+    L_{0}(x) &= \frac{x(x+1)(x-2)}{(-1-0)(-1-1)(-1-2)} = -\frac{x(x+1)(x-2)}{6}\\
+    L_{1}(x) &= \frac{(x+1)(x-1)(x-2)}{1(-1)(-2)} = \frac{(x+1)(x-1)(x-2)}{2}\\
+    L_{2}(x) &= \frac{(x+1)x(x-2)}{(1+1)1(1-2)} = -\frac{(x+1)x(x-2)}{2}\\
+    L_{3}(x) &= \frac{(x+1)x(x-1)}{(2+1)2(2-1)} = \frac{(x+1)x(x-1)}{6}\\
+    \intertext{and plugging back into $p(x)$ gives}
+    p(x) &= L_{0}(x) + L_{1}(x) + 2L_{3}(x) + 0\\
+         &= 1 + \frac{7}{6}x + \frac{1}{2}x^{2} - \frac{2}{3}x^{3}
+  \end{align*}
+
+  \item {\sc Newton Basis}
+
+  The Newton Interpolant is
+
+  \begin{align*}
+    p(x) &= \sum_{j=0}^{3}c_{j}\prod_{i=0}^{j-1}\P{x - x_{j}}\\
+    p(x) &= c_{0} + c_{1}(x + 1) + c_{2}(x+1)x + c_{3}(x+1)x(x-1)\\
+    \intertext{Where we can input the points}
+    p(-1) &= c_{0} = 1\\
+    p(0) &= c_{0} + c_{1} = 1\\
+    p(1) &= c_{0} + 2c_{1} + 2c_{2} = 2\\
+    p(2) &= c_{0} + 3c_{1} + 6c_{2} + 6c_{3} = 0\\
+    \intertext{And after solving this system of equations gives}
+    p(x) &= 1 + \frac{7}{6}x + \frac{1}{2}x^{2} - \frac{2}{3}x^{3}
+  \end{align*}
+\end{itemize}
+
 
 %%%%%% Problem 6 %%%%%%
 \item Suppose we are given 137 uniformly spaced data pairs at distinct abscissae:
-$\left( x_{i}, y_{i}\right),i = 0,1,\ldots,136$. These data are thought to represent
+$\left( x_{i}, y_{i}\right),i = \{ 0,1,\ldots,136\}$. These data are thought to represent
 a function which is piecewise smooth; that is, the unknown function $f(x)$ which
 gave rise to these data values has many bounded derivatives everywhere expect for
 a few points where it jups discontinuously. (Imagine drawing a curve smoothly from
@@ -164,6 +331,28 @@ This involves choosing good neighbors to interpolate at.
 Propose an algorithm for this task. Justify.
 
 {\bf Solution:}
+
+A cubic interpolation requires four points for each subinterval. Two of the points
+are trivial and can be used as the end points. The other two we can choose neighbor
+points of the subinterval endpoints.
+
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+\IF{Sub Interval is $\P{x_{0},x_{1}}$}
+    \STATE{Find a cubic interpolation by using $\{ x_{0},x_{1},x_{2},x_{3}\}$}
+\ELSIF{Sub Interval is $\P{x_{i}, x_{i+1}}$}
+    \STATE{Find a cubic interpolation by using $\{ x_{i-1}, x_{i}, x_{i+1}, x_{i+2}\}$}
+\ELSIF{Sub Interval is $\P{x_{n-2}, x_{n-1}}$}
+    \STATE{Find a cubic interpolation by using $\{ x_{n-4}, x_{n-3}, x_{n-2}, x_{n-1}\}$}
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+Since we are using the exact values of $\P{x_{i}, y_{i}}$, it should give an ``accurate''
+interpolation as the question asked. If we wanted an approximation, we could instead
+of used midpoints such as $\P{\frac{x_{i} + x_{i+1}}{2}, \frac{y_{i} + y_{i+1}}{2}}$
+and $\P{\frac{x_{i} + x_{i-1}}{2}, \frac{y_{i} + y_{i-1}}{2}}$ as the points, except
+for the endpoints.
 
 
 %%%%%% Problem 7 %%%%%%
@@ -180,10 +369,39 @@ and set $\widetilde{x}$ as the minimum of the interpolant.
 
   {\bf Solution:}
 
-\item Show that the quadratic interpolant has a unique minimum satisfying $0 < \widetilde{x} < 1$.
-Can you show the same for the function $f$ itself?
+  The interpolant is
 
-{\bf Solution:}
+  \begin{align*}
+    p(x) &= c_{0} + c_{1}x + c_{2}x^{2}\\
+    \intertext{Where we can utilize 3 equations to get the coefficients}
+    p(0) &= c_{0} = 1\\
+    p(1) &= c_{0} + c_{1}x + c_{2}x^{2} = 1 + c_{1}x + c_{2}x^{2}\\
+    p^{\prime}(x) &= c_{1} + 2c_{2}x\\
+                  &\Rightarrow p^{\prime}(0) = c_{1} = -1\\
+    \intertext{Plugging in the coefficients gives}
+    p(x) &= 1 - x + 2x^{2}\\
+    \intertext{Where finding the minimum gives}
+    p^{\prime}(x) &= -1 + 4x = 0\\
+    x &= \frac{1}{4}
+  \end{align*}
+
+  \item Show that the quadratic interpolant has a unique minimum satisfying $0 < \widetilde{x} < 1$.
+  Can you show the same for the function $f$ itself?
+
+  {\bf Solution:}
+
+  Since the interpolant is of degree one, it has a single root. So the minimum
+  has to be unique. Since the point $(1/4)$, is between 0 and 1, it is satisfied.
+
+  For $f$, we have the constraints of $f(0) < f(1)$ and $f^{\prime}(0) < 0$. The
+  second constraint states that the slope of the function at $x=0$ is decreasing,
+  and the first states that the first point is strictly less than the last, and
+  must have a positive slope at some point in the interval such that it can reach
+  $f(1)$ since it is continuous. This point where the slope switches is the minimum
+  in the interval.
+
+  Rolle's theorem can also be used to show that at some point $c$ in $(0, 1)$ we
+  have $f^{\prime}(c) = 0$, the minimum of $f$.
 
 \end{enumerate}
 
