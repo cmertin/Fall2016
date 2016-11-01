@@ -214,7 +214,7 @@ the second derivative is independent of $x$, and would thus only need one iterat
 
 %%%%%% Problem 4 %%%%%%
 \item With the notation of Exercise 21, for $p = 2$ the problem can be solved as
-in Example 9.15 using SVD. But it can also be solved using thge techniques of
+in Example 9.15 using SVD. But it can also be solved using the techniques of
 constrained optimization:
 
 \begin{enumerate}
@@ -400,7 +400,7 @@ and set $\widetilde{x}$ as the minimum of the interpolant.
   $f(1)$ since it is continuous. This point where the slope switches is the minimum
   in the interval.
 
-  Rolle's theorem can also be used to show that at some point $c$ in $(0, 1)$ we
+  Rolle's Theorem can also be used to show that at some point $c$ in $(0, 1)$ we
   have $f^{\prime}(c) = 0$, the minimum of $f$.
 
 \end{enumerate}
@@ -422,9 +422,64 @@ where $nh = b-a$. Assume further that $f^{\prime}(a)$ is given as well.
 
   {\bf Solution:}
 
+  With $3n$ coefficients, we need $3n$ equations. We have $n$ equations from
+  $x_{i}\P{x_{i}} = a_{i} + 0 + 0 = f\P{x_{i}}$, and another $n$ from
+  $s_{i}\P{x_{i+1}} = f\P{x_{i+1}}$. The third will come from being $C^{1}$
+  continuous, thus the $s_{i}$'s need to be differentiable in the interval
+  $\P{x_{i}, x_{i+1}}$. At each point of $x_{i}$, $d/dx\P{s_{i}} = d/dx\P{s_{i+1}}$. This gives
+
+  \begin{align*}
+    \frac{d}{dx}s_{i-1}\P{x_{i-1}} &= \frac{d}{dx}s_{i}\P{x_{i-1}}\\
+    s_{i}(x) &= a_{i} + b_{i}(x - x_{i}) + c_{i}(x - x_{i})^{2}\\
+    s_{i-1}(x) &= a_{i-1} + b_{i-1}(x - x_{i-1}) + c_{i-1}(x - x_{i-1})^{2}\\
+    \intertext{Now, in taking the derivative of the last two}
+    s_{i}^{\prime}(x) &= b_{i} + 2c_{i}(x - x_{i})\\
+    s_{i-1}^{\prime}(x) &= b_{i-1} + 2c_{i-1}(x - x_{i-1})\\
+    \intertext{We can impose $x = x_{i-1}$, resulting in}
+    s_{i}^{\prime}(x) &= b_{i} + 2c_{i}(x_{i-1} - x_{i})\\
+    s_{i-1}^{\prime}(x) &= b_{i-1}\\
+    \intertext{Finally}
+    b_{i-1} &= b_{i} + 2c_{i}(x_{i-1} - x_{i})
+  \end{align*}
+
   \item How accurate do you expect this approximation to be as a function of $h$? Justify.
 
   {\bf Solution:}
+
+  Page 336 of the text gives the boundary errors as being:
+  \begin{itemize}
+    \item {\sc Constant}
+
+      \[
+          \frac{h}{2}\max{\abs{f^{\prime}(\epsilon)}}
+      \]
+
+    \item {\sc Linear}
+
+    \[
+        \frac{h^{2}}{2!2^{2}}\max{\abs{f^{\prime\prime}(\epsilon)}}
+    \]
+
+    \item {\sc Cubic}
+
+    \[
+        \frac{h^4}{4!2^4}\max{\abs{f^{(4)}(\epsilon)}}
+    \]
+  \end{itemize}
+
+  So the quadratic should be
+
+  \[
+      \frac{h^3}{3!2^3}\max{\abs{f^{(3)}(\epsilon)}}
+  \]
+
+  This can be proven with the same method on page 334, expect we'd use
+
+  \[
+      \abs{f(x) - v(x)} \leq \frac{h^{3}}{3!2^3}\max{\abs{f^{(3)}(\epsilon)}}
+  \]
+
+  since we need to use three points instead of two.
 
 \end{enumerate}
 
@@ -433,6 +488,54 @@ where $nh = b-a$. Assume further that $f^{\prime}(a)$ is given as well.
 for piecewise Hermite cubic interpolation.
 
 {\bf Solution:}
+
+\begin{itemize}
+
+  \item {\sc Piecewise Linear Interpolation}
+
+  Based on ``Spline Methods Draft'' by Tom Lyche and Knut Morken, page 38.
+
+  Since piecewise linear interpolation, it just needs to be $C^{0}$ continuous, which
+  it is. It is not required to be everywhere differentiable, so the sequence of nodes
+  are
+
+  \begin{align*}
+    (x_{0}, x_{1}, \ldots, x_{n}) &= (t_{0}, t_{0}, t_{1}, t_{2}, \ldots, t_{n-1}, t_{n}, t_{n})\\
+    \intertext{Which is a B-spline of order 1. From ``Spline Methods Draft,'' polynomials of degree 1 are}
+    B_{j,1}(x) &= \left\{ \begin{array}{ll}
+                  \frac{x-t_{j}}{t_{j+1} - t_{j}} & t_{j} \leq x < t_{j+1}\\
+                  \frac{t_{j+2} - x}{t_{j+2} - t_{j+1}} & t_{j+1} \leq x < t_{j+2}\\
+                  0 & \text{Else}
+                \end{array}\right.
+  \end{align*}
+
+  Finally, the linear spline is $\sum_{j=1}^{n} B_{j,1}(x)$, for which $y_{j}$ is the
+  original value at $x_{j}$.
+
+  \item {\sc Piecewise Hermite Cubic Interpolation}
+
+  Since it is a cubic interpolation, we need four points, where we can use
+  four points of $x_{1}$ and four points of $x_{n}$. The knot vector is
+
+  \[
+      (x_{1}, x_{1}, x_{1}, x_{1}, x_{2}, x_{2}, \ldots, x_{n-1}, x_{n-1}, x_{n}, x_{n}, x_{n}, x_{n})
+  \]
+
+  Which is a B-spline of degree $\ell = 3$. Page 108 of ``Spline Methods Draft'' states
+  that the B-spline basis representation for Piecewise Hermite Cubic Interpolation is
+
+  \[
+      \sum_{i=1}^{2n}c_{i}B_{i,3}
+  \]
+
+  for which
+
+  \begin{align*}
+      c_{2i-1} &= f(x_{i}) - \frac{1}{3}\Delta x_{i-1}f^{\prime}(x_{i})\\
+      c_{2i} &= f(x_{i}) - \frac{1}{3}\Delta x_{i}f^{\prime}(x_{i})\\
+      \Delta x_{j} &= x_{j+1} - x_{j}
+  \end{align*}
+\end{itemize}
 
 
 %%%%%% Problem 10 %%%%%%
