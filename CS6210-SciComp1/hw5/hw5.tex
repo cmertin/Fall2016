@@ -560,9 +560,21 @@ comment on their respective properties:
 
   {\bf Solution:}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=.75\textwidth]{poly_plot.pdf}
+\caption{Polynomial Interpolation. Chose $n = 6$ since there were 7 points}
+\end{figure}
+
   \item Cubic Spline Interpolant
 
   {\bf Solution:}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.75\textwidth]{cubic_plot.pdf}
+\caption{Cubic Spline Interpolation using {\tt scipy.interpolate.UnivariateSpline}}
+\end{figure}
 
   \item The Interpolant
 
@@ -589,6 +601,14 @@ comment on their respective properties:
   Make as many observations as you can. What will happen if we let $\epsilon \rightarrow 0$?
 
   {\bf Solution:}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.75\textwidth]{int_plot.pdf}
+\caption{Interpolation based on the given function for different values of $\epsilon$}
+\end{figure}
+
+As the value of $\epsilon$ decreased, the interpolation function became more linear. As you increase $\epsilon$, the graph smooths out.
 
 
 \end{enumerate}
