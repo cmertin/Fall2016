@@ -2,9 +2,33 @@
 
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amsthm,amssymb}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{bbold}
+\usepackage{algorithm}
+\usepackage{algcompatible}
+\usepackage{csquotes}
+\usepackage{url}
+\usepackage{enumerate}
 
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
+\newcommand{\abs}[1]{\left| #1 \right|}
+\newcommand{\norm}[1]{\left|\left| #1 \right|\right|}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\pprime}{\prime \prime}
+\newcommand{\BigO}[1]{\mathcal{O}\left( #1 \right)}
+\newcommand{\proj}[2][]{\textit{proj}_{\vect{#1}}\vect{#2}}
+\newcommand{\vect}{\mathbf}
+\newcommand{\Id}{\mathbb{1}}
+\newcommand{\inv}[1]{ #1^{-1}}
+\newcommand{\minn}{\text{min}}
+\newcommand{\maxx}{\text{max}}
+\renewcommand{\P}[1]{\left( #1 \right)}
+\newcommand{\diag}[1]{\text{diag}\P{#1}}
+\newcommand{\grad}{\nabla}
+\newcommand{\laplacian}{\nabla^{2}}
 
 \newenvironment{theorem}[2][Theorem]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
@@ -19,148 +43,209 @@
 \newenvironment{corollary}[2][Corollary]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
 
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
 
 \DeclareMathOperator{\sech}{sech}
 \DeclareMathOperator{\csch}{csch}
 
 \begin{document}
 
-\title{CS6210: Homework 1}
+\title{CS6210: Homework 6}
 \author{Christopher Mertin}
-\date{September 6, 2016}
+\date{December 8, 2016}
 \maketitle
 
 \begin{enumerate}
 %%%%%% Problem 1 %%%%%%
-\item Carry out calculations similar to those of Example 1.3 for approximating
-the derivative of the function $f(x)=e^{-2x}$ evaluated at $x_{0}=0.5$. Observe
-similarities and differences by comparing your graph against that in Figure 1.3.
+\item 
 
-%%%%%% Problem 2 %%%%%%
-\item Following Example 1.5, assess the conditioning of the problem of evaluating
-\[
-  g(x)=\tanh{(cx)} = \frac{e^{cx}-e^{-cx}}{e^{cx}+e^{-cx}}
-\]
+\begin{enumerate}
+\item Using an orthogonal polynomial basis, find the best least squares polynomial approximations, $q_{2}(t)$ of degree at most 2 and $q_{3}(t)$ of degree at most 3, to $f(t) = e^{-3t}$ over the interval $[0,3]$.
 
-near $x=0$ as the positive parameter $c$ grows.
+[Hint: For a polynomial $p(x)$ of degree $n$ and a scalar $a > 0$ we have $\int e^{-ax}p(x)\text{d}x = -\frac{e^{-ax}}{a}\ \left( \sum_{j=0}^{n} \frac{p^{(j)}(x)}{a^{j}}\right)$, where $p^{(j)}(x)$ is the $j^{th}$ derivative of $p(x)$. Alternatively, just use numerical quadrature, e.g., the {\sc Matlab} function {\tt quad}.]
 
 {\bf Solution:}
 
-The condition number measures how sensitive the output of a function is to small
-changes in the input. It can be calculated by:
+\item Plot the error functions $f(t) - q_{2}(t)$ and $f(t) - q_{3}(t)$ on the same graph on the interval $[0,3]$. Compare the errors of the two approximating polynomials. In the least squares sense, which polynomial provides the better approximation?
+
+[Hint: In each case you may compute the {\em norm} of the error, $\left( \int_{a}^{b}(f(t) - q_{n}(t))^{2}\text{d}t \right)^{2}$, using the {\sc Matlab} function {\tt quad}]
+
+{\bf Solution:}
+
+\item Without any computation, prove that $q_{3}(t)$ generally provides a least squares fit, which is never worse than with $q_{2}(t)$. 
+
+{\bf Solution:}
+\end{enumerate}
+
+\item Let $f(x)$ be a given function that can be evaluated at points $x_{0} \pm jh,\ j=\{0,1,2,\ldots\}$ for any fixed value of $h$, $0 < h \ll 1$.
+
+\begin{enumerate}
+\item Find a second order formula (i.e., trunctation error $\BigO{h^{2}}$) approximating the third derivative $f^{\prime \prime \prime}(x_{0})$. Give the formula, as well as an expression for the truncation error, i.e. not just its order
+
+{\bf Solution:}
+
+\item Use your formula to provide approximations to $f^{\prime \prime \prime}(0)$ for the function $f(x) = e^{x}$ employing values $h = \{ 10^{-1}, 10^{-2}, \ldots, 10^{-9}\}$, with the default ${\tt Matlab}$ arithmetic. Verify that for the larger values of $h$ your formula is indeed second order accurate. Which value of $h$ gives the closest approximation to $e^{0} = 1$?
+
+{\bf Solution:}
+
+\item For the formual that you derived in (a), how does the roundoff error behave as a function of $h$, as $h\rightarrow 0$.
+
+{\bf Solution:}
+
+\item How would you go about obtaining a forth order formula for $f^{\prime \prime \prime}(x_{0})$ in general? (You don't have to actually derive it: just describe in one or two sentences.) How many points would this formula require?
+
+{\bf Solution:}
+\end{enumerate}
+
+\item Consider the derivation of an approximate formula for the second derivative $f^{\prime \prime}(x_{0})$ of a smooth function $f(x)$ using three points $x_{-1},\ x_{0}=x_{-1} + h_{0},\ \text{and}\ x_{1}=x_{0}+h_{1}$, where $h_{0} \neq h_{1}$. 
+
+Consider the following two methods:
+
+\begin{enumerate}[i.]
+\item Define $g(x) = f^{\prime}(x)$ and seek a {\em staggered mesh}, centered approximiations as follows:
 
 \begin{align*}
-\text{Condition Number}(g) &= x\frac{g^{\prime}(x)}{g(x)}
+g_{1/2} &= \frac{f(x_{1}) - f(x_{0})}{h_{1}};\quad g_{-1/2} = \frac{f(x_{0}) - f(x_{-1})}{h_{0}}\\
+f^{\prime \prime}(x_{0}) &\approx \frac{g_{1/2} - g_{-1/2}}{(h_{0} + h_{1})/2}
 \end{align*}
 
-which for the instance of this problem gives us
+The idea is that all of the differences are short(i.e., not long differences) and centered.
 
-\begin{align*}
-  g(x) &= \frac{e^{cx} - e^{-cx}}{e^{cx}+e^{-cx}} = \frac{\frac{e^{cx}-e^{-cx}}{2}}{\frac{e^{cx}+e^{-cx}}{2}}\\
-        &= \frac{\sinh(x)}{\cosh(x)}\\
-  g^{\prime}(x) &= c \sech^{2}(cx)\\
-                &= \frac{c}{\cosh^{2}(cx)}
-\end{align*}
+\item Using the second degree interpolating polynomial in Newton form, differentiated twice, define
 
-with using these formulas, we can plug it into the definition of the condition
-number we get
-
-\begin{align*}
-\text{Condition Number}(g) &= x\frac{g^{\prime}(x)}{g(x)} = \frac{cx}{\cosh^{2}(x)\cdot \tanh(cx)}\\
-                            &= cx\frac{\cosh(cx)}{\sinh(cx)} = cx\cdot \coth(cx)
-\intertext{Where we can take the limit of the condition number as $x$ approaches $0$, giving}
-\lim_{x\rightarrow 0} cx\cdot \coth(cx) &= 1
-\end{align*}
-
-This shows that the funcion's sensitivity is not dependent upon $c$ and is well conditioned.
-
-
-%%%%%% Problem 3 %%%%%%
-\item The function $f_{1}\left(x_{0},h\right) = \sin\left(x_{0}+h\right) - \sin\left(x_{0}\right)$
-can be transformed into another form, $f_{2}\left(x_{0},h\right)$, using the
-trigonometric formula
 \[
-\sin(\phi) - \sin(\psi) = 2\cos\left(\frac{\phi + \psi}{2}\right)\sin\left(\frac{\phi - \psi}{2}\right)
+f^{\prime \prime}(x_{0}) \approx 2f[x_{-1}, x_{0}, x_{1}]
 \]
-Thus $f_{1}$ and $f_{2}$ have the same values, in exact arithmetic, for any given
-argument values $x_{0}$ and $h$.
-\begin{enumerate}
-\item Derive $f_{2}\left(x_{0},h\right)$
-\item Suggest a formula that avoids cancellation errors for computing the approximation
-$\left(\left( f\left( x_{0}+h\right) - f\left(x_{0}\right)\right) /h\right)$
-to the derivative of $f(x)=\sin(x)$ at $x=x_{0}$. Write a {\sc Matlab} program
-that implements your formula and computes an approximation of $f^{\prime}(1.2)$
-for $h = \left\{ 10^{-20},10^{-19},\ldots,1\right\}$.
-\item Explain the difference in accuracy between your results and the results
-reported in Example 1.3.
+
 \end{enumerate}
 
-%%%%%% Problem 4 %%%%%%
-\item The function $f_{1}(x,\delta) = \cos(x+\delta)-\cos(x)$ can be transformed
-into another form, $f_{2}(x,\delta)$, using the trigonometric formula
-\[
-\cos(\phi) - \cos(\psi) = -2\sin\left(\frac{\phi + \psi}{2}\right)\sin\left(\frac{\phi - \psi}{2}\right)
-\]
-Thus, $f_{1}$ and $f_{2}$ have the same values, in exact arithmetic, for any given
-argument values $x$ and $\delta$.
+Here is where you come in:
+
 \begin{enumerate}
-\item Show that, analytically, $f_{1}(x,\delta)/\delta$ or $f_{2}(x,\delta)/\delta$
-are effective approximations of the function $(-\sin(x))$ for $\delta$ sufficiently small.
-\item Derive $f_{2}(x,\delta)$
-\item Write a {\sc Matlab} script which will calculate $g_{1}(x,\delta) = f_{1}(x,\delta)/\delta + \sin(x)$
-and $g_{2}(x,\delta) = f_{2}(x,\delta)/\delta + \sin(x)$ for $x = 3$ and $\delta = 10^{-11}$.
-\item Explain the difference in the results of the two calculations.
+\item Show that the above two methods are one in the same
+
+{\bf Solution:}
+
+\item Show that this method is only first order accurate in general
+
+{\bf Solution:}
+
+\item Run the two methods for the example depicted in Table 14.2 (but for the second derivative of $f(x) = e^{x}$). Report your findings
+
+{\bf Solution:}
+
 \end{enumerate}
 
-%%%%%% Problem 5 %%%%%%
-\item Consider the approximation of the first derivative
+\item Continuing with the notation of Exercise 12 (page 437), one could define 
+
 \[
-f^{\prime}(x) \approx \frac{f(x+h)-f(x)}{h}
+	g_{1/2} = \frac{f_{1} - f_{0}}{h}\quad \text{and}\quad g_{-1/2}=\frac{f_{0} - f_{-1}}{h}
 \]
-The {\em truncation error} for this formula is $\mathcal{O}(h)$. Suppose that the
-absolute error in evaluating the function $f$ is bounded by $\epsilon$ and
-let us ignore the errors generated in basic arithmetic operations.
+
+These approximate to second order the first derivative values $f^{\prime}(x_{0} + h/2)$ and $f^{\prime}(x_{0} - h/2)$, respectively. Then define
+
+\[
+	f_{pp_{0}} = \frac{g_{1/2} - g_{-1/2}}{h}
+\]
+
+All three derivative approximations here are centered (hence second order), and they are applied to first derivatives and hence have roundoff error increeasing proportionally to $h^{-1}$, not $h^{-2}$. Can we manage to (partially) cheat the hangman way?!
+
 \begin{enumerate}
-\item Show that the total computational error (truncation error and rounding combined)
-is bounded by
-\[
-\frac{Mh}{2} + \frac{2\epsilon}{h}
-\]
-where $M$ is a bound on $\left| f^{\prime\prime}(x)\right|$.
-\item What is the value of $h$ for which the above is minimized?
-\item The rounding unit we employ is approximately equal to $10^{-16}$. Use this
-to explain the behavior of the graph in Example 1.3. Make sure to explain the shape
-of the graph as well as the value where the apparent minimum is attained.
-\item It is not difficult to show, using Taylor expansions, that $f^{\prime}(x)$ can
-be approximated more accurately (in terms of truncation error) by
-\[
-f^{\prime}(x) \approx \frac{f(x+h) - f(x-h)}{2h}
-\]
-For this approximation, the truncation error is $\mathcal{O}\left(h^{2}\right)$.
-Generate a graph similar to Figure 1.3 for the same function and the same value
-of $x$, namely, for $\sin(1.2)$, and compare the two graphs. Explain the meaning
-of your results.
+\item Show that in exact arithmetic $f_{pp_{0}}$ defined above and in Exercise 12 are one in the same
+
+{\bf Solution:}
+
+\item Implement this method and compare to the results of Exercise 12. Explain your observations
+
+{\bf Solution:}
 \end{enumerate}
 
-%%%%%% Problem 6 %%%%%%
-\item In the statistical treatment of data one often needs to compute the quantities
+\item Consider the numerical differentiation of the function $f(x) = c(x) e^{x/\pi}$ defined on $[0, \pi]$, where 
+
 \[
-\bar{x} = \frac{1}{n}\sum_{i=1}^{n}x_{i},\quad \sigma^{2}=\frac{1}{n}\sum_{i=1}^{n}\left(x_{i}-\bar{x}\right)^{2}
+	c(x) = j, \quad \frac{1}{4}(j-1)\pi \leq x < \frac{1}{4}j\pi, \quad j = \{ 1, 2, 3, 4\}
 \]
-where $\left\{ x_{1}, x_{2}, \ldots, x_{n}\right\}$ are the given data. Assume that $n$
-is large, say, $n = 10000$. It is easy to see that $\sigma^{2}$ can also be written as
-\[
-\sigma^{2} = \frac{1}{n}\sum_{i=1}^{n} x_{i}^{2} - \bar{x}^{2}
-\]
+
 \begin{enumerate}
-\item Which of the two methods to calculate $\sigma^{2}$ is cheaper in terms of
-overall computational cost? Assume $\bar{x}$ has already been calculated and give
-the operation counts for these two options.
-\item Which of the two methods is expected to give more accurate results for
-$\sigma^{2}$ in general?
-\item Give a small example, using a decimal system with precision $t = 2$ and
-numbers of your choice, validate your claims.
+\item Contemplating a difference approximation with step size $h = n/\pi$, explain why it is a very good idea to ensure that $n$ is an integer multiple of $4,\ n = 4l$. 
+
+{\bf Solution:}
+
+\item With $n = 4l$, show that the expression $h^{-1}c(t_{i})\left( e^{x_{i+1}/\pi} - e^{x_{i}/\pi}\right)$ provides a second order approximation (i.e., $\BigO{h^{2}}$ error) of $f^{\prime}(t_{i})$, where $t_{i} = x_{i} + h/2 = (i + 1/2)h, i = \{ 0, 1, \ldots, n-1\}$
+
+{\bf Solution:}
+
+
 \end{enumerate}
+
+\item The basic trapezoidal rule for approximating $I_{f} = \int_{a}^{b}f(x)\text{d}x$ is based on linear interpolation of $f$ at $x_{0} = a$ and $x_{1} = b$. The Simpson rule is likewise based on quadratic polynomial interpolation. Consider now a cubic Hermite polynomial, interpolating both$f$ and its derivative $f^{\prime}$ at $a$ and $b$. The osculating interpolation formula gives
+
+\[
+	p_{3}(x) = f(a) + f^{\prime}(a)(x-a) + f[a,a,b,b](x-1)^{2}(x - b)
+\]
+
+and integrating this yields (after some algebra)
+
+\[
+	I_{f} \approx \int_{a}^{b} p_{3}(x)\text{d}x = \frac{b-a}{2}[f(a) + f(b)] + \frac{(b-a)^{2}}{12}[f^{\prime}(a) - f^{\prime}(b)]
+\]
+
+This formula is called the {\bf corrected trapezoidal rule}
+
+\begin{enumerate}
+\item Show that the error in the basic corrected trapezoidal rule can be estimated by
+
+\[
+	E(f) = \frac{f^{(4)}(\eta)}{720}(b-a)^{5}
+\]
+
+{\bf Solution:}
+
+\item Use the basic corrected trapezoidal rule to evaluate approximations for $\int_{0}^{1}e^{x}\text{d}x$ and $\int_{0.9}^{1}e^{x}\text{d}x$. Compare errors to those of Example 15.2. What are your observations?
+
+{\bf Solution:}
+
+\end{enumerate}
+
+\item 
+
+\begin{enumerate}
+\item Derive a formula for the {\em composite midpoint rule}. How many function evaluations are required?
+
+{\bf Solution:}
+
+\item Obtain an expression for the error in the composite midpoint rule. Conclude that this method is second order accurate
+
+{\bf Solution:}
+\end{enumerate}
+
+\item Suppose that the interval of integration $[a, b]$ is divided into equal subintervals of length $h$ each such that $r = (b - a)/h$ is even. Denote by $R_{1}$ the result of applying the composite trapezoidal method with step size $2h$ and by $R_{2}$ the result of applying the same method with step size $h$. Show that one application of Richardson extrapolation, reading 
+
+\[
+S = \frac{4R_{2} - R_{1}}{3}
+\]
+
+yields the composite Simpson method
+
+{\bf Solution:}
+
+\item Using Romberg integration, compute $\pi$ to 8 digits (i.e. 3.xxxxxxxx) by obtaining approximations to the integral
+
+\[
+\pi = \int_{0}^{1}\left( \frac{4}{1 + x^{2}}\right)\text{d}x
+\]
+
+Describe your solution approach and provide the appropriate Romberg table.
+
+Comapre the computational effort (function evaluations) of Romberg integration to that using the adaptive routine developed in Section 15.4 with {\tt tol}$= 10^{-7}$.
+
+You may find for some of the rows of your Romberg table that only the first step of extrapolation improves the approximation. Explain this phenomenon.
+
+[Hint: Reconsider the assumed form of the composite trapezoidal method's truncation error and the effects of extrapolation for this particular integration]
+
+{\bf Solution:}
+
 \end{enumerate}
 
 %\begin{proof}
