@@ -67,6 +67,29 @@
 
 {\bf Solution:}
 
+In the general case, we can use Legendre Polynomials. Were first we can find $x$ with respect to $t$ as being
+
+\begin{align*}
+x &= \frac{2t-a-b}{b-a} = \frac{2t-0-3}{3-0} = \frac{2t-3}{3} = \frac{2}{3}t - 1\\
+\intertext{Giving us our parameters to be}
+\phi_{0} &= 1\\
+\phi_{1} &= x = \frac{2}{3}t - 1\\
+\phi_{2} &= \frac{1}{2}\left( 3x^{2} - 1\right) = \frac{1}{2}\left( 3 \left(\frac{2}{3}t - 1\right)^{2}-1\right) = \frac{2}{3}t^{2} - 2t + 1\\
+\phi_{3} &= \frac{1}{27}\left( 20t^{3} - 90t^{2} + 114t - 36\right)\\
+c_{0} &= \frac{\int_{0}^{3}e^{-3t}\text{d}t}{\int_{0}^{3}\text{d}t} = \frac{1 - e^{-9}}{9}\\
+c_{1} &= \frac{\int_{0}^{3}\left( \frac{2}{3}t - 1\right) e^{-3t}\text{d}t}{\int_{0}^{3}\left( \frac{2}{3}t - 1\right)^{2}\text{d}t} = \frac{-7 -11e^{-9}}{27}\\
+c_{2} &= \frac{\int_{0}^{3}\left( \frac{2}{3}t^{2} - 2t + 1\right)e^{-3t}\text{d}t}{\int_{0}^{3}\left( \frac{2}{3}t^{2} - 2t + 1 \right)^{2}\text{d}t} = \frac{65 - 245 e^{-9}}{243}\\
+c_{3} &= \frac{\int_{0}^{3}\left( \frac{1}{27}\left( 20t^{3} - 90t^{2} + 114t - 36\right)\right)e^{-3t}\text{d}t}{\int_{0}^{3}\left( \frac{1}{27}\left( 20t^{3} - 90t^{2} + 114t - 36\right)\right)^{2}\text{d}t} = \frac{-413 - 5299e^{-9}}{2187}
+\end{align*}
+
+We can then put $\phi_{i}$ and $c_{i}$ into our approximation of the formua:
+
+\[
+v(x) = \sum_{j=0}^{n}c_{j}\phi_{j}(x)
+\]
+
+By using $n = 2$ we get $q_{2}(x)$ and by using $n = 3$ we get $q_{3}(x)$.
+
 \item Plot the error functions $f(t) - q_{2}(t)$ and $f(t) - q_{3}(t)$ on the same graph on the interval $[0,3]$. Compare the errors of the two approximating polynomials. In the least squares sense, which polynomial provides the better approximation?
 
 [Hint: In each case you may compute the {\em norm} of the error, $\left( \int_{a}^{b}(f(t) - q_{n}(t))^{2}\text{d}t \right)^{2}$, using the {\sc Matlab} function {\tt quad}]
@@ -76,6 +99,8 @@
 \item Without any computation, prove that $q_{3}(t)$ generally provides a least squares fit, which is never worse than with $q_{2}(t)$. 
 
 {\bf Solution:}
+
+In general, for lower power polynomial expressions the higher polynomial that is used, the more accurate the result. Therefore $q_{3}(t)$ would provide the better approximation since it is $n = 3$ compared to $n = 2$ for $q_{2}(x)$, and the powers are not high enough to produce high oscillations. 
 \end{enumerate}
 
 \item Let $f(x)$ be a given function that can be evaluated at points $x_{0} \pm jh,\ j=\{0,1,2,\ldots\}$ for any fixed value of $h$, $0 < h \ll 1$.
@@ -85,7 +110,43 @@
 
 {\bf Solution:}
 
-\item Use your formula to provide approximations to $f^{\prime \prime \prime}(0)$ for the function $f(x) = e^{x}$ employing values $h = \{ 10^{-1}, 10^{-2}, \ldots, 10^{-9}\}$, with the default ${\tt Matlab}$ arithmetic. Verify that for the larger values of $h$ your formula is indeed second order accurate. Which value of $h$ gives the closest approximation to $e^{0} = 1$?
+We can use the following four equations:
+
+\begin{align*}
+f(x_{0}+h) &= f(x_{0}) + hf^{\prime}(x_{0}) + \frac{h^{2}}{2}f^{\pprime}(x_0) + \frac{h^{3}}{6}f^{(3)}(x_{0}) + \frac{h^{4}}{24}f^{(4)}(x_{0}) + \frac{h^{5}}{120}f^{(5)}(\xi_{1})\\
+f(x_{0}-h) &= f(x_{0}) - hf^{\prime}(x_{0}) + \frac{h^{2}}{2}f^{\pprime}(x_0) - \frac{h^{3}}{6}f^{(3)}(x_{0}) + \frac{h^{4}}{24}f^{(4)}(x_{0}) - \frac{h^{5}}{120}f^{(5)}(\xi_{1})\\
+f(x_{0}+2h) &= f(x_{0}) + 2hf^{\prime}(x_{0}) + 2h^{2}f^{\pprime}(x_0) + \frac{8h^{3}}{6}f^{(3)}(x_{0}) + \frac{16h^{4}}{24}f^{(4)}(x_{0}) + \frac{32h^{5}}{120}f^{(5)}(\xi_{1})\\
+f(x_{0}-2h) &= f(x_{0}) - 2hf^{\prime}(x_{0}) + 2h^{2}f^{\pprime}(x_0) - \frac{8h^{3}}{6}f^{(3)}(x_{0}) + \frac{16h^{4}}{24}f^{(4)}(x_{0}) - \frac{32h^{5}}{120}f^{(5)}(\xi_{1})\\
+\end{align*}
+
+After subtracting the first two equations and using the intermediate value theorem:
+
+\begin{align*}
+f(x_{0} + h) - f(x_{0} - h) &= 2hf^{\prime}(x_{0}) + \frac{h^{3}}{3}f^{(3)}(x_{0}) + \frac{h^{5}}{60}f^{(5)}(\eta_{1})
+\end{align*}
+
+Finding $f^{\prime}(x_{0})$
+
+\begin{align*}
+2hf^{\prime}(x_{0}) &= f(x_{0} + h) - f(x_{0} - h) - \frac{h^{3}}{3}f^{(3)}(x_{0}) - \frac{h^{5}}{60}f^{(5)}(\eta_{1})\\
+f^{\prime}(x_{0}) &= \frac{1}{2h}\left( f(x_{0} + h) - f(x_{0} - h) - \frac{h^{3}}{3}f^{(3)}(x_{0}) - \frac{h^{5}}{60}f^{(5)}(\eta_{1})\right)\\
+\intertext{After subtracting the second two equations and using the intermediate value theorem for the error terms:}
+f(x_{0} + 2h) -& f(x_{0} - 2h) = 4hf^{\prime}(x_{0}) + \frac{8h^{3}}{3}f^{(3)}(x_{0}) + \frac{32h^{5}}{60}f^{(5)}(\eta_{2})\\
+\intertext{Finding $f^{\prime}(x_{0})$:}
+4hf^{\prime}(x_{0}) &= f(x_{0} + 2h) - f(x_{0} - 2h) - \frac{8h^{3}}{3}f^{(3)}(x_{0}) - \frac{32h^{5}}{60}f^{(5)}(\eta_{2})\\
+f^{\prime}(x_{0}) &= \frac{1}{4h}\left( f(x_{0} + 2h) - f(x_{0} - 2h) - \frac{8h^{3}}{3}f^{(3)}(x_{0}) - \frac{32h^{5}}{60}f^{(5)}(\eta_{2})\right)
+\end{align*}
+
+After subtracting these two equations for $f^{\prime}(x_{0})$ and solving for $f^{(3)}(x_{0})$, we have
+
+\begin{align*}
+\frac{6h^{3}}{2}f^{(3)}(x_{0}) &= \frac{1}{4h}\left( f(x_{0} + 2h) - f(x_{0} - 2h) + 2f(x_{0} - h) - 2f(x_{0} + h) - \frac{1}{2}h^{5}f^{(5)}(\eta)\right)\\
+f^{(3)}(x_{0}) &=\frac{1}{8h^{3}}\left( f(x_{0} + 2h) - f(x_{0} - 2h) + 2f(x_{0} - h) - 2f(x_{0} + h) - \frac{1}{2}h^{5}f^{(5)}(\eta)\right)
+\end{align*}
+
+We used the intermediate value theorem to find $\eta$. 
+
+\item Use your formula to provide approximations to $f^{(3)}(0)$ for the function $f(x) = e^{x}$ employing values $h = \{ 10^{-1}, 10^{-2}, \ldots, 10^{-9}\}$, with the default ${\tt Matlab}$ arithmetic. Verify that for the larger values of $h$ your formula is indeed second order accurate. Which value of $h$ gives the closest approximation to $e^{0} = 1$?
 
 {\bf Solution:}
 
@@ -93,9 +154,31 @@
 
 {\bf Solution:}
 
-\item How would you go about obtaining a forth order formula for $f^{\prime \prime \prime}(x_{0})$ in general? (You don't have to actually derive it: just describe in one or two sentences.) How many points would this formula require?
+$\widetilde{f}(x)$ is the approximation for $f(x)$:
+
+\begin{align*}
+\widetilde{f}(x) + f(x) + e_{r}(x)\\
+\intertext{We do the same calculations on page 422}
+\abs{f^{\prime}(x_{0}) - \widetilde{D}} &= \abs{ (f^{\prime}(x_{0}) - D) + (D - \widetilde{D})} \leq \abs{ f^{\prime}(x_{0}) - D} + \abs{D - \widetilde{D}}\\
+\intertext{As we calculated in part a}
+\abs{f^{\prime}(x_{0}) - D} &= \frac{1}{16}h^{2}f^{(5)}(\eta)\\
+\intertext{And if $M$ is a maximum for $f^{(5)}(x)$ on its whole domain, then}
+\abs{f^{\prime}(x_{0}) - D} &\leq \frac{1}{16}h^{2}M\\
+\intertext{As an upper bound for $\abs{D - \widetilde{D}}$ we have $6\epsilon/h^{3}$ because: two $\epsilon$ for points $x_{0} + h$ and $x_{0} - h$ and two $2\epsilon$ for $x_{0} + 2h$ and $x_{0} - 2h$}
+\abs{D - \widetilde{D}} &= \frac{6\epsilon}{h^{3}}\\
+\end{align*}
+
+Puttin these two together
+
+\[
+\abs{f^{\prime}(x_{0}) - \widetilde{D}} = \abs{(f^{\prime}(x_{0}) - D) + (D - \widetilde{D})} \leq \abs{f^{\prime}(x_{0}) - D} + \abs{D - \widetilde{D}} \leq \frac{1}{16}h^{2}M + \frac{6\epsilon}{h^{3}}
+\]
+
+\item How would you go about obtaining a forth order formula for $f^{(3)}(x_{0})$ in general? (You don't have to actually derive it: just describe in one or two sentences.) How many points would this formula require?
 
 {\bf Solution:}
+
+We can use seven points: $x_{0}$, $x_{0} + h$, $x_{0} - h$, $x_{0} + 2h$, $x_{0} - 2h$, $x_{0} + 3h$, $x_{0} - 3h$, and do similar computations for the fourth order as we did above.
 \end{enumerate}
 
 \item Consider the derivation of an approximate formula for the second derivative $f^{\prime \prime}(x_{0})$ of a smooth function $f(x)$ using three points $x_{-1},\ x_{0}=x_{-1} + h_{0},\ \text{and}\ x_{1}=x_{0}+h_{1}$, where $h_{0} \neq h_{1}$. 
@@ -127,11 +210,53 @@ Here is where you come in:
 
 {\bf Solution:}
 
+\begin{align*}
+f^{\pprime}(x_{0}) &= \frac{g_{1/2} - g_{-1/2}}{(h_{0} + h_{1})/2} = \frac{\frac{f(x_{1}) - f(x_{0})}{x_{1} - x_{0}} - \frac{f(x_{0}) - f(x_{-1})}{x_{0} - x_{-1}}}{\frac{x_{1} - x_{-1}}{2}}\\
+&= \frac{\frac{f(x_{1}) - f(x_{0})}{x_{1} - x_{0}} - \frac{f(x_{0}) - f(x_{-1})}{x_{0} - x_{-1}}}{x_{1} - x_{-1}} = 2f[x_{-1}, x_{0}, x_{1}]
+\end{align*}
+
 \item Show that this method is only first order accurate in general
 
 {\bf Solution:}
 
-\item Run the two methods for the example depicted in Table 14.2 (but for the second derivative of $f(x) = e^{x}$). Report your findings
+We can use the Taylor expansion of $f$ around $x_{1}$:
+
+\begin{align*}
+f(x_{1}) &= f(x_{0} + h_{1}) = f(x_{0}) + h_{1}f^{\prime}(x_{0}) + \frac{h_{1}^{2}}{2}f^{\pprime}(x_{0}) + \frac{h_{1}^{3}}{3!}f^{(3)}(\eta_{1})\\
+\intertext{Now we can rewrite $g_{1/2}$ as}
+g_{1/2} &= \frac{f(x_{1}) - f(x_{0})}{h_{1}} = f^{\prime}(x_{0}) + \frac{h_{1}}{2}f^{\pprime}(x_{0}) + \frac{h_{1}^{2}}{3!}f^{(3)}(\eta_{1})
+\end{align*}
+
+We can use the Taylor expansion of $f$ around $x_{0}$:
+
+\begin{align*}
+f(x_{0}) &= f(x_{-1} + h_{0}) = f(x_{-1}) + h_{0}f^{\prime}(x_{-1}) + \frac{h_{0}^{2}}{2}f^{\pprime}(x_{-1}) + \frac{h_{0}^{3}}{3!}f^{(3)}(\eta_{2})\\
+\intertext{Now we can rewrite $g_{-1/2}$ as}
+g_{-1/2} &= \frac{f(x_{0}) - f(x_{-1})}{h_{0}} = f^{\prime}(x_{-1}) + \frac{h_{0}}{2}f^{\pprime}(x_{-1}) + \frac{h_{0}^{2}}{3!}f^{(3)}(\eta_{2})
+\end{align*}
+
+To prove that $f^{\pprime}(x_{0})$ is first order accurate we just need to consider the last expression in $g_{1/2}$ and $g_{-1/2}$ in the formula $f^{\pprime}(x_{0})$. The formula for $f^{\pprime}(x_{0})$ is:
+
+\[
+f^{\pprime}(x_{0}) = \frac{g_{1/2} - g_{-1/2}}{(h_{0} + h_{1})/2}
+\]
+
+So we just consider the last expression in $g_{1/2}$ and $g_{-1/2}$:
+
+\[
+f^{\pprime}(x_{0}) = 2\frac{\frac{h_{1}^{2}}{3!}f^{(3)}(\eta_{1}) - \frac{h_{0}^{2}}{3!}f^{(3)}(\eta_{2})}{h_{0} + h_{1}}
+\]
+
+we find $\eta$ by using the intermediate value theorem:
+
+\begin{align*}
+f^{\pprime} &=  2\frac{\frac{h_{1}^{2}}{3!}f^{(3)}(\eta_{1}) - \frac{h_{0}^{2}}{3!}f^{(3)}(\eta_{2})}{h_{0} + h_{1}}\\
+                    &= 2 \frac{\left(\frac{h_{1}^{2}}{3!} - \frac{h_{0}^{2}}{3!}\right)f^{(3)}(\eta)}{h_{0} + h_{1}}
+\end{align*}
+
+The numerator is of $\BigO{h^{2}}$ while the denominator is $\BigO{h}$, so it's overall $\BigO{h}$.
+
+\item Run the two methods for the example depicted in Table 14.2 (but for the second derivative of $f(x) = e^{x}$). Report your findings.
 
 {\bf Solution:}
 
@@ -156,6 +281,13 @@ All three derivative approximations here are centered (hence second order), and 
 
 {\bf Solution:}
 
+\begin{align*}
+pp_{0} &= \frac{g_{1/2} - g_{-1/2}}{h} = \frac{\frac{f_{1} - f_{0}}{h} - \frac{f_{0} - f_{-1}}{h}}{h}\\
+             &= \frac{f_{1} - f_{0} - f_{0} + f_{-1}}{h^{2}}
+\end{align*}
+
+Which is equal to the expression in Exercise 12.
+
 \item Implement this method and compare to the results of Exercise 12. Explain your observations
 
 {\bf Solution:}
@@ -168,18 +300,52 @@ All three derivative approximations here are centered (hence second order), and 
 \]
 
 \begin{enumerate}
-\item Contemplating a difference approximation with step size $h = n/\pi$, explain why it is a very good idea to ensure that $n$ is an integer multiple of $4,\ n = 4l$. 
+\item Contemplating a difference approximation with step size $h = \pi/n$ [fixed from errata], explain why it is a very good idea to ensure that $n$ is an integer multiple of $4,\ n = 4l$. 
 
 {\bf Solution:}
+
+We can simply show what happens at one boundary point, and the same argument holds true for the other
+
+\begin{align*}
+\intertext{$j = 1$:}
+0 \leq\ &x \leq \frac{1}{4}\pi\\
+\intertext{$f(\pi/4) = e^{1/4}$}
+\intertext{$j = 2$:}
+\frac{1}{4}\pi \leq\ &x \leq \frac{2}{4}\pi
+\end{align*}
+
+Where the value at $f(\pi/4)$ is $2e^{1/4}$, so the boundary points are discontinuous, which is the reason we want to split the interval to subintervals in which the boundary points are where the function is discontinuous.
 
 \item With $n = 4l$, show that the expression $h^{-1}c(t_{i})\left( e^{x_{i+1}/\pi} - e^{x_{i}/\pi}\right)$ provides a second order approximation (i.e., $\BigO{h^{2}}$ error) of $f^{\prime}(t_{i})$, where $t_{i} = x_{i} + h/2 = (i + 1/2)h, i = \{ 0, 1, \ldots, n-1\}$
 
 {\bf Solution:}
 
+In order for the expression to be second order approximate, we need to find an approximation of $f^{\prime}(x)$ of the form
+
+\begin{align*}
+f^{\prime}(t_{i}) &= c(t_{i})\frac{e^{\left(t_{i} + \frac{h}{2}\right)/\pi} - e^{\left(t_{i} - \frac{h}{2}\right)/\pi}}{h} - \frac{h^{2}}{A}f^{B}(\xi)\\
+\intertext{For which, $A$ and $B$ are constants. We start with the Taylor Series about two points}
+f\left( t_{i} + \frac{h}{2}\right) &= f(t_{i}) + \frac{h}{2}f^{\prime}(t_{i}) + \frac{h^{2}}{2!\cdot 4}f^{\pprime}(t_{i}) + \frac{h^{3}}{3!\cdot 8}f^{(3)}(\xi_{1})\\
+f\left( t_{i} - \frac{h}{2}\right) &= f(t_{i}) - \frac{h}{2}f^{\prime}(t_{i}) + \frac{h^{2}}{2!\cdot 4}f^{\pprime}(t_{i}) - \frac{h^{3}}{3!\cdot 8}f^{(3)}(\xi_{2})\\
+\intertext{In subtracting the two and solving for $f^{\prime}(t_{i})$ we get}
+f^{\prime}(t_{i}) &= \frac{f\left( t_{i} + \frac{h}{2}\right) - f\left( t_{i} - \frac{h}{2}\right)}{h} - \frac{h^{2}}{3!\cdot 4}f^{(3)}(\xi)\\
+\intertext{where we have from the posed quesiton}
+x_{i} &= t_{i} - \frac{h}{2}\\
+x_{i+1} &= t_{i} + \frac{h}{2}
+\end{align*}
+
+Using the above values for $x_{i}$ with our equation for $f^{\prime}(t_{i})$
+
+\begin{align*}
+f^{\prime}(t_{i}) &= \frac{f(x_{i+1}) - f(x_{i})}{h} - \frac{h^{2}}{3!\cdot 4}f^{(3)}(\xi)\\
+                            &= \frac{c(x_{i+1})e^{x_{i+1}/\pi} - c(x_{i})e^{x_{i}/\pi} - f(x_{i})}{h} - \frac{h^{2}}{3!\cdot 4}f^{(3)}(\xi)
+\end{align*}
+
+As the interval is on $[x_{i}, x_{i+1}]$, the function is constant in that subinterval since $c(x_{i+1}) = c(x_{i}) = c(t_{i})$
 
 \end{enumerate}
 
-\item The basic trapezoidal rule for approximating $I_{f} = \int_{a}^{b}f(x)\text{d}x$ is based on linear interpolation of $f$ at $x_{0} = a$ and $x_{1} = b$. The Simpson rule is likewise based on quadratic polynomial interpolation. Consider now a cubic Hermite polynomial, interpolating both$f$ and its derivative $f^{\prime}$ at $a$ and $b$. The osculating interpolation formula gives
+\item The basic trapezoidal rule for approximating $I_{f} = \int_{a}^{b}f(x)\text{d}x$ is based on linear interpolation of $f$ at $x_{0} = a$ and $x_{1} = b$. The Simpson rule is likewise based on quadratic polynomial interpolation. Consider now a cubic Hermite polynomial, interpolating both $f$ and its derivative $f^{\prime}$ at $a$ and $b$. The osculating interpolation formula gives
 
 \[
 	p_{3}(x) = f(a) + f^{\prime}(a)(x-a) + f[a,a,b,b](x-1)^{2}(x - b)
@@ -202,9 +368,53 @@ This formula is called the {\bf corrected trapezoidal rule}
 
 {\bf Solution:}
 
+Page 320 from the text tells us that for the Hermite Cubic Interpolation we have $m_{0} = m_{1} = 1$. Using the formula on page 321, we get the repitition of the first interpolation point, $a$, is $m_{0} + 1 = 2$. The second interpolation point $b$ is $m_{1} + 1  = 2$. From page 443, the interpolation error is:
+
+\begin{align*}
+f(x) - p_{n}(x) &= f[x_{0}, x_{1}, \ldots, x_{n}, x] \prod_{i=0}^{n}(x - x_{i})\\
+\intertext{We should use two $a$'s and two $b$'s as the interpolation points, giving}
+E(f) &= \int_{a}^{b}f[a,a,b,b,x]\left((x-a)^{2}(x-b)^{2} \right)\text{d}x
+\intertext{Since the integrand is always positive, we can use the intermediate value problem to find $\xi$ in $[a,b]$ such that}
+E(f) &= \int_{a}^{b}f[a,a,b,b,\xi]\left((x-a)^{2}(x-b)^{2} \right)\text{d}x
+\intertext{where $f$ can be taken out of the integral since it's now independent of $x$}
+E(f) &= f[a,a,b,b,\xi]\int_{a}^{b}\left((x-a)^{2}(x-b)^{2} \right)\text{d}x
+\end{align*}
+
+Now we can separate the two and solve for their values, giving
+
+\begin{align}
+\int_{a}^{b}\left((x-a)^{2}(x-b)^{2} \right)\text{d}x &= 0 - 2\frac{(a - b)^{5}}{3(4)5}= \frac{4(b-a)^{5}}{5!}
+\end{align}
+
+And from page 312 we have
+
+\begin{align}
+f[a,a,b,b,\xi] &= \frac{f^{(4)}(\eta)}{4!}
+\end{align}
+
+for some $\eta$ in $[a,b]$. Putting Equations (1) and (2) together, we get
+
+\begin{align*}
+E(f) = \frac{f^{(4)}(\eta)}{4!} \cdot \frac{4(b-a)^{5}}{5!} = \frac{f^{(4)}(\eta)(a - b)^{5}}{720}
+\end{align*}
+
 \item Use the basic corrected trapezoidal rule to evaluate approximations for $\int_{0}^{1}e^{x}\text{d}x$ and $\int_{0.9}^{1}e^{x}\text{d}x$. Compare errors to those of Example 15.2. What are your observations?
 
 {\bf Solution:}
+
+\begin{align*}
+I_{f} &= \frac{b-a}{2}(f(a) + f(b)) + \frac{(b-a)^{2}}{12}(f^{\prime}(a) - f^{\prime}(b))
+\intertext{For $a=0$ and $b=1$}
+I_{f} &= \frac{1}{2}(1 + e) + \frac{1}{12}(1-e) = 1.7160\\
+\intertext{For $a = 0.9$ and $b = 1$}
+I_{f} &= \frac{1}{2}\left( e^{0.9} + e\right) + \frac{1}{12}\left( e^{0.9} - e\right) = 2.5674
+\intertext{According to Example 15.2, the actual value is given, so we can find the error by the corrected trapezoidal rule, for $a = 0$ and $b = 1$}
+E(f) &= \abs{1.7183 - 1.7160} = 0.0023\\
+\intertext{for $a = 0.9$ and $b = 1$}
+E(f) &= \abs{1.7183 - 2.5674} = 0.8491
+\end{align*}
+
+In $[0,1]$, the corrected trapezoidal rule is more accurate than the regular trapezoidal rule and the midpoint rule, though it still underperforms when compared to Simpson's rule ($\xi = 0.0006$). However, in $[0.9, 1]$ all of the methods are more accurate than the corrected trapezoidal rule.
 
 \end{enumerate}
 
