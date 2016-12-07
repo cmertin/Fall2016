@@ -4,7 +4,7 @@ import numpy as np
 def f_pi(x):
     return (4/(1 + x**2))
 
-def Romberg(a, b, fn, n=100, tol=10**(-7)):
+def Romberg(a, b, fn, n=100, tol=1e-7):
     h = (b - a)
     idx = 1
     R = np.zeros((n,n), dtype=np.float64)
@@ -52,7 +52,7 @@ for i in range(0, itr):
         if(j != itr):
             print(" & ", end="")
     print("\\\\")
-print("\\hline")
+print("\\hline\\hline")
 print("\\end{tabular}")
 print("\\caption{Romberg Table, see {\\tt prob9.py}}")
 print("\\end{table}")

@@ -561,7 +561,7 @@ leading to
 
 Where if we divide the above by 3, it completes the proof.
 
-\item Using Romberg integration, compute $\pi$ to 8 digits (i.e. 3.xxxxxxxx) by obtaining approximations to the integral
+\item Using Romberg integration, compute $\pi$ to 8 digits (i.e. 3.xxxxxxx) by obtaining approximations to the integral
 
 \[
 \pi = \int_{0}^{1}\left( \frac{4}{1 + x^{2}}\right)\text{d}x
@@ -569,7 +569,7 @@ Where if we divide the above by 3, it completes the proof.
 
 Describe your solution approach and provide the appropriate Romberg table.
 
-Compare the computational effort (function evaluations) of Romberg integration to that using the adaptive routine developed in Section 15.4 with {\tt tol}$= 10^{-7}$.
+Compare the computational effort (function evaluations) of Romberg integration to that using the adaptive routine developed in Section 15.4 with {\tt tol}\ $ = 10^{-7}$.
 
 You may find for some of the rows of your Romberg table that only the first step of extrapolation improves the approximation. Explain this phenomenon.
 
@@ -579,20 +579,21 @@ You may find for some of the rows of your Romberg table that only the first step
 
 \begin{table}[H]
 \centering
-\begin{tabular}{c c c c c c }
+\begin{tabular}{c c c c c }
 \hline\hline
-3.00000000 &  &  &  &  & \\
-3.10000000 & 3.13333333 &  &  &  & \\
-3.13117647 & 3.14156863 & 3.14211765 &  &  & \\
-3.13898849 & 3.14159250 & 3.14159409 & 3.14158578 &  & \\
-3.14094161 & 3.14159265 & 3.14159266 & 3.14159264 & 3.14159267 & \\
-3.14142989 & 3.14159265 & 3.14159265 & 3.14159265 & 3.14159265 & 3.14159265\\
-\hline
+3.00000000 &  &  &  & \\
+3.10000000 & 3.13333333 &  &  & \\
+3.13117647 & 3.14156863 & 3.14211765 &  & \\
+3.13898849 & 3.14159250 & 3.14159409 & 3.14158578 & \\
+3.14094161 & 3.14159265 & 3.14159266 & 3.14159264 & 3.14159267\\
+\hline\hline
 \end{tabular}
 \caption{Romberg Table, see {\tt prob9.py}}
 \end{table}
 
-Function Evaluations: 33
+This was calculated within 8 digit precision in 5 iterations. To calculate the function evaluations, a counter was put into the code, resulting in a total of 13 function evaluations. This was much less than the adaptive routine in Section 15.4 required 33 function evaluations from page 466.
+
+The reason that the first step improves the approximation significantly is that $h$ scales as $\BigO{(b-a)/2^{i}}$ for a given iteration. In other words, the mesh becomes finer with each iteration, so there is not as much ``change'' that can be made as there will be less and less error in the result.
 
 \end{enumerate}
 
