@@ -109,6 +109,8 @@ By using $n = 2$ we get $q_{2}(x)$ and by using $n = 3$ we get $q_{3}(x)$.
 In general, for lower power polynomial expressions the higher polynomial that is used, the more accurate the result. Therefore $q_{3}(t)$ would provide the better approximation since it is $n = 3$ compared to $n = 2$ for $q_{2}(x)$, and the powers are not high enough to produce high oscillations. 
 \end{enumerate}
 
+\newpage
+
 \item Let $f(x)$ be a given function that can be evaluated at points $x_{0} \pm jh,\ j=\{0,1,2,\ldots\}$ for any fixed value of $h$, $0 < h \ll 1$.
 
 \begin{enumerate}
@@ -207,6 +209,8 @@ Puttin these two together
 We can use seven points: $x_{0}$, $x_{0} + h$, $x_{0} - h$, $x_{0} + 2h$, $x_{0} - 2h$, $x_{0} + 3h$, $x_{0} - 3h$, and do similar computations for the fourth order as we did above.
 \end{enumerate}
 
+\newpage
+
 \item Consider the derivation of an approximate formula for the second derivative $f^{\prime \prime}(x_{0})$ of a smooth function $f(x)$ using three points $x_{-1},\ x_{0}=x_{-1} + h_{0},\ \text{and}\ x_{1}=x_{0}+h_{1}$, where $h_{0} \neq h_{1}$. 
 
 Consider the following two methods:
@@ -287,6 +291,25 @@ The numerator is of $\BigO{h^{2}}$ while the denominator is $\BigO{h}$, so it's 
 {\bf Solution:}
 
 
+\begin{table}[H]
+\centering
+\begin{tabular}{l c r}
+\hline\hline
+$h$ & $e_{n}$ & $e_{m}$\\
+\hline
+0.1  &  1.7302e-02  &  1.7302e-02 \\
+0.01  &  1.6729e-03  &  1.6729e-03 \\
+0.001  &  1.6673e-04  &  1.6673e-04 \\
+0.0001  &  1.6662e-05  &  1.6662e-05 \\
+0.00001  &  8.2742e-08  &  8.2755e-08 \\
+\hline
+\end{tabular}
+\caption{See {\tt prob3.py}}
+\end{table}
+
+Where $e_{n}$ stands for the newton method and $e_{m}$ is for the mesh. What these results show is that both of the methods are linear in $h$ and both agree in value {\em until} they get down to $10^{-5}$, at which point they start to vary, but not a lot. This variance is most likely due to numerical error/truncation. Both methods are $\BigO{h}$ which agrees with our derivations above.
+
+
 
 \end{enumerate}
 
@@ -310,7 +333,7 @@ All three derivative approximations here are centered (hence second order), and 
 {\bf Solution:}
 
 \begin{align*}
-pp_{0} &= \frac{g_{1/2} - g_{-1/2}}{h} = \frac{\frac{f_{1} - f_{0}}{h} - \frac{f_{0} - f_{-1}}{h}}{h}\\
+f_{pp_{0}} &= \frac{g_{1/2} - g_{-1/2}}{h} = \frac{\frac{f_{1} - f_{0}}{h} - \frac{f_{0} - f_{-1}}{h}}{h}\\
              &= \frac{f_{1} - f_{0} - f_{0} + f_{-1}}{h^{2}}
 \end{align*}
 
@@ -324,31 +347,36 @@ Which is equal to the expression in Exercise 12.
 \centering
 \begin{tabular}{l r}
 \hline \hline
-$j$ & $f_{pp_{0}}$\\
+$h$ & $f_{pp_{0}}$\\
 \hline
-1 & -0.85691243732 \\
-2 & -0.924297937378 \\
-3 & -0.931262645582 \\
-4 & -0.931961418632 \\
-5 & -0.932031319001 \\
-6 & -0.932038309265 \\
-7 & -0.932039008195 \\
-8 & -0.932039077028 \\
-9 & -0.932039079249 \\
-10 & -0.932039001533 \\
-11 & -0.932037780288 \\
-12 & -0.932032229186 \\
-13 & -0.93192120687 \\
-14 & -0.931477117702 \\
-15 & -0.921485110439 \\
-16 & -0.777156116494 \\
-17 & 0.0 \\
+$10^{-0.0}$  &  -0.85691 \\
+$10^{-0.5}$  &  -0.92430 \\
+$10^{-1.0}$  &  -0.93126 \\
+$10^{-1.5}$  &  -0.93196 \\
+$10^{-2.0}$  &  -0.93203 \\
+$10^{-2.5}$  &  -0.93204 \\
+$10^{-3.0}$  &  -0.93204 \\
+$10^{-3.5}$  &  -0.93204 \\
+$10^{-4.0}$  &  -0.93204 \\
+$10^{-4.5}$  &  -0.93204 \\
+$10^{-5.0}$  &  -0.93204 \\
+$10^{-5.5}$  &  -0.93203 \\
+$10^{-6.0}$  &  -0.93192 \\
+$10^{-6.5}$  &  -0.93148 \\
+$10^{-7.0}$  &  -0.92149 \\
+$10^{-7.5}$  &  -0.77716 \\
+$10^{-8.0}$  &   0.00000 \\
 \hline
 \end{tabular}
 \caption{See {\tt prob4.py}}
 \end{table}
 
+As $h$ was made smaller from $1$ down to $10^{-7}$, the values stated mostly consistent and within 10\% of each other. However, once the 
+values were down below $10^{-7}$, the value of $f_{pp_{0}}$ dropped significantly. This is most likely due to the numerical precision, as the function could not be evaluated accurately enough below this point without roundoff errors. 
+
 \end{enumerate}
+
+\newpage
 
 \item Consider the numerical differentiation of the function $f(x) = c(x) e^{x/\pi}$ defined on $[0, \pi]$, where 
 
@@ -402,10 +430,12 @@ As the interval is on $[x_{i}, x_{i+1}]$, the function is constant in that subin
 
 \end{enumerate}
 
+\newpage
+
 \item The basic trapezoidal rule for approximating $I_{f} = \int_{a}^{b}f(x)\text{d}x$ is based on linear interpolation of $f$ at $x_{0} = a$ and $x_{1} = b$. The Simpson rule is likewise based on quadratic polynomial interpolation. Consider now a cubic Hermite polynomial, interpolating both $f$ and its derivative $f^{\prime}$ at $a$ and $b$. The osculating interpolation formula gives
 
 \[
-	p_{3}(x) = f(a) + f^{\prime}(a)(x-a) + f[a,a,b,b](x-1)^{2}(x - b)
+	p_{3}(x) = f(a) + f^{\prime}(a)(x-a) + f[a,a,b](x-a)^{2} + f[a,a,b,b](x-1)^{2}(x - b)
 \]
 
 and integrating this yields (after some algebra)
@@ -431,7 +461,7 @@ Page 320 from the text tells us that for the Hermite Cubic Interpolation we have
 f(x) - p_{n}(x) &= f[x_{0}, x_{1}, \ldots, x_{n}, x] \prod_{i=0}^{n}(x - x_{i})\\
 \intertext{We should use two $a$'s and two $b$'s as the interpolation points, giving}
 E(f) &= \int_{a}^{b}f[a,a,b,b,x]\left((x-a)^{2}(x-b)^{2} \right)\text{d}x
-\intertext{Since the integrand is always positive, we can use the intermediate value problem to find $\xi$ in $[a,b]$ such that}
+\intertext{Since the integrand is always positive, we can use the intermediate value theorem to find $\xi$ in $[a,b]$ such that}
 E(f) &= \int_{a}^{b}f[a,a,b,b,\xi]\left((x-a)^{2}(x-b)^{2} \right)\text{d}x
 \intertext{where $f$ can be taken out of the integral since it's now independent of $x$}
 E(f) &= f[a,a,b,b,\xi]\int_{a}^{b}\left((x-a)^{2}(x-b)^{2} \right)\text{d}x
@@ -529,6 +559,8 @@ Which can be completed by adding the norm.
 
 \end{enumerate}
 
+\newpage
+
 \item Suppose that the interval of integration $[a, b]$ is divided into equal subintervals of length $h$ each such that $r = (b - a)/h$ is even. Denote by $R_{1}$ the result of applying the composite trapezoidal method with step size $2h$ and by $R_{2}$ the result of applying the same method with step size $h$. Show that one application of Richardson extrapolation, reading 
 
 \[
@@ -576,6 +608,9 @@ You may find for some of the rows of your Romberg table that only the first step
 [Hint: Reconsider the assumed form of the composite trapezoidal method's truncation error and the effects of extrapolation for this particular integration]
 
 {\bf Solution:}
+
+The derivation of the algorithm that was used can be found on page 207 of {\em Numerical Analysis}, $8^{th}$ Edition by Richard Burden. Upon modifying this algorithm to store the {\em entire} Romberg Table, it produced the following results. Note: The stopping condition that was implemented was comparing the last two elements added to the table. If their difference was less than the set tolerance, than the program terminated. This resulted in saving an extra iteration of function evaluations, instead of comparing the last element of the row to the first element of that given row.
+
 
 \begin{table}[H]
 \centering

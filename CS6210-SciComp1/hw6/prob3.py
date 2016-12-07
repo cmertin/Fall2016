@@ -1,35 +1,51 @@
 from __future__ import print_function, division
 import numpy as np
 
-def stag(f, x0, h):
-    h0 = h/2
-    h1 = h
-    hmid = (h0 + h1)/2
-    xneg = x0 - h0
-    xplus = x0 + h1
-    ghalf = (f(xplus) - f(x0))/h1
-    gnhalf = (f(x0) - f(xneg))/h0
-    return (ghalf - gnhalf)/hmid
+def Mesh(f, x0, h_):
+    vals = []
+    for h in h_:
+        h1 = h
+        h0 = 1/2 * h
+        xp1 = x0 + h1
+        xn1 = x0 - h0
+        dder = (2/(h0 + h1))*(((f(xp1) - f(x0))/h1) - (f(x0) - f(xn1))/h0)
+        temp = abs(np.exp(x0) - dder)
+        vals.append(temp)
+    return vals
 
-def newton(f, xneg, x0, xplus):
-    f01 = (f(xplus) - f(x0))/(xplus - x0)
-    fn0 = (f(x0) - f(xneg))/(x0 - xneg)
-    return 2 * (f01 - fn0)/(xplus - xneg)
+def Newton(f, x0, h_):
+    vals = []
+    for h in h_:
+        h1 = h
+        h0 = 1/2 * h
+        xp1 = x0 + h1
+        xn1 = x0 - h0
+        dder = 2 * (((f(xp1) - f(x0))/((xp1 - xn1)*(xp1 - x0))) - ((f(x0) - f(xn1))/((x0 - xn1) * (xp1 - xn1))))
+        temp = abs(np.exp(x0) - dder)
+        vals.append(temp)
+    return vals
 
 def fn(x):
     return np.exp(x)
 
+h_ = [0.1, 0.01, 0.001, 0.0001, 0.00001]
 x0 = 0
 
-stag_lst = []
-newt_lst = []
+newton_lst = Newton(fn, x0, h_)
+mesh_lst = Mesh(fn, x0, h_)
 
-for i in range(1, 6):
-    h = 10**(-i)
-    temp = stag(fn, x0, h)
-    stag_lst.append([h, temp])
-    temp = newton(fn, x0-h, x0, x0+h)
-    newt_lst.append([h, temp])
-
-print(stag_lst)
-print(newt_lst)
+print("\\begin{table}[H]")
+print("\\centering")
+print("\\begin{tabular}{l c r}")
+print("\\hline\\hline")
+print("$h$ & $e_{n}$ & $e_{m}$\\\\")
+print("\\hline")
+for i in range(0, len(h_)):
+    t1 = str(h_[i])
+    t2 = "%.4e" % newton_lst[i]
+    t3 = "%.4e" % mesh_lst[i]
+    print(t1, " & ", t2, " & ", t3, "\\\\")
+print("\\hline")
+print("\\end{tabular}")
+print("\\caption{See {\\tt prob3.py}}")
+print("\\end{table}")
