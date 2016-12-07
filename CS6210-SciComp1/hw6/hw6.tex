@@ -96,6 +96,12 @@ By using $n = 2$ we get $q_{2}(x)$ and by using $n = 3$ we get $q_{3}(x)$.
 
 {\bf Solution:}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=.75\textwidth]{plot1.pdf}
+\caption{See {\tt prob1.py}}
+\end{figure}
+
 \item Without any computation, prove that $q_{3}(t)$ generally provides a least squares fit, which is never worse than with $q_{2}(t)$. 
 
 {\bf Solution:}
@@ -149,6 +155,26 @@ We used the intermediate value theorem to find $\eta$.
 \item Use your formula to provide approximations to $f^{(3)}(0)$ for the function $f(x) = e^{x}$ employing values $h = \{ 10^{-1}, 10^{-2}, \ldots, 10^{-9}\}$, with the default ${\tt Matlab}$ arithmetic. Verify that for the larger values of $h$ your formula is indeed second order accurate. Which value of $h$ gives the closest approximation to $e^{0} = 1$?
 
 {\bf Solution:}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l r}
+\hline \hline
+$h$ & $f^{\prime}(x_{0})$\\
+\hline
+0.1 & 2.50625625351e-07\\
+0.01 & 2.50006250091e-13\\
+0.001 & 2.50000076196e-19\\
+0.0001 & 2.50022225146e-25\\
+1e-05 & 2.77555756156e-31\\
+1e-06 & 0.0\\
+1e-07 & 5.55111512313e-38\\
+1e-08 & 0.0\\
+1e-09 & 0.0\\
+\hline
+\end{tabular}
+\caption{See {\tt prob2.py}}
+\end{table}
 
 \item For the formual that you derived in (a), how does the roundoff error behave as a function of $h$, as $h\rightarrow 0$.
 
@@ -260,6 +286,8 @@ The numerator is of $\BigO{h^{2}}$ while the denominator is $\BigO{h}$, so it's 
 
 {\bf Solution:}
 
+
+
 \end{enumerate}
 
 \item Continuing with the notation of Exercise 12 (page 437), one could define 
@@ -291,6 +319,35 @@ Which is equal to the expression in Exercise 12.
 \item Implement this method and compare to the results of Exercise 12. Explain your observations
 
 {\bf Solution:}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l r}
+\hline \hline
+$j$ & $f_{pp_{0}}$\\
+\hline
+1 & -0.85691243732 \\
+2 & -0.924297937378 \\
+3 & -0.931262645582 \\
+4 & -0.931961418632 \\
+5 & -0.932031319001 \\
+6 & -0.932038309265 \\
+7 & -0.932039008195 \\
+8 & -0.932039077028 \\
+9 & -0.932039079249 \\
+10 & -0.932039001533 \\
+11 & -0.932037780288 \\
+12 & -0.932032229186 \\
+13 & -0.93192120687 \\
+14 & -0.931477117702 \\
+15 & -0.921485110439 \\
+16 & -0.777156116494 \\
+17 & 0.0 \\
+\hline
+\end{tabular}
+\caption{See {\tt prob4.py}}
+\end{table}
+
 \end{enumerate}
 
 \item Consider the numerical differentiation of the function $f(x) = c(x) e^{x/\pi}$ defined on $[0, \pi]$, where 
@@ -425,9 +482,51 @@ In $[0,1]$, the corrected trapezoidal rule is more accurate than the regular tra
 
 {\bf Solution:}
 
+We want to prove the following equation
+
+\[
+\int_{a}^{b}f(x)\text{d}x = h\sum_{i=1}^{r}f\left( a + (i - 1/2)h\right)
+\]
+
+with $h = (b-a)/r$. According to the formula on page 447, we have
+
+\begin{align*}
+\int_{a}^{b}f(x)\text{d}x &= \sum_{i=1}^{r}\int_{t_{i-1}}^{t_{i}}f(x)\text{d}x\\
+\intertext{where $t_{i} = t_{i-1} + h$ since $[a,b]$ was divided evenly. Therefore, by induction we have $t_{i-1} = t_{i-2} + h = \ldots = a + (i-1)h$. From page 443, the value for the integral in the normal midpoint rule is:}
+\int_{t_{i-1}}^{t_{i}} f(x)\text{d}x &= (t_{i} - t_{i-1})f\left( \frac{t_{i-1} + t_{i}}{2}\right) = hf\left( \frac{t_{i-1} + t_{i-1} + h}{2}\right)\\
+                                                          &= hf(t_{i-1} + h/2) = hf(a + (i-1)h + h/2) = hf(a + (i-1 + 1/2)h)\\
+                                                          &= hf(a + (i - 1/2)h)
+\intertext{Finally, giving}
+\int_{a}^{b}f(x)\text{d}x &= \sum_{i=1}^{r}\int_{t_{i-1}}^{t_{i}}f(x)\text{d}x = h\sum_{i=1}^{r}f(a + (i - 1/2)h)
+\end{align*}
+
 \item Obtain an expression for the error in the composite midpoint rule. Conclude that this method is second order accurate
 
 {\bf Solution:}
+
+From page 453, the upper bound should be of the form 
+
+\[
+\frac{f^{\pprime}(\xi)(b-a)h^{2}}{24}
+\]
+
+and from page 445, the error for the midpoint rule is
+
+\[
+\frac{f^{\pprime}(\xi)(b - a)^{3}}{24}
+\]
+
+Where we can find the error of the function as being
+
+\begin{align*}
+E(f) &= \sum_{i=1}^{r}f^{\pprime}(\xi_{i})\frac{(t_{i} - t_{i-1})^{3}}{24} = \sum_{i=1}^{r}f^{\pprime}(\xi_{i})\frac{h^{3}}{24}
+\intertext{Where we can find $\xi$ for the entire domain $[a, b]$, instead of $\xi_{i}$ for each subinterval $[t_{i-1}, t_{i}]$, so:}
+E(f) &= \sum_{i=1}^{r}f^{\pprime}(\xi)\frac{h^{3}}{24} = rf^{\pprime}(\xi)\frac{h^{3}}{24}\\
+       &= f^{\pprime}(\xi)\frac{h^{3}}{24}\frac{b-a}{h} = f^{\pprime}(\xi)\frac{h^{2}(b-a)}{24}
+\end{align*}
+
+Which can be completed by adding the norm.
+
 \end{enumerate}
 
 \item Suppose that the interval of integration $[a, b]$ is divided into equal subintervals of length $h$ each such that $r = (b - a)/h$ is even. Denote by $R_{1}$ the result of applying the composite trapezoidal method with step size $2h$ and by $R_{2}$ the result of applying the same method with step size $h$. Show that one application of Richardson extrapolation, reading 
@@ -440,6 +539,28 @@ yields the composite Simpson method
 
 {\bf Solution:}
 
+\begin{align*}
+\intertext{$R_{2}:$ step size: $h$}
+R_{2} : \int_{a}^{b}f(x)\text{d}x &= \frac{h}{2}\left( f(a) + 2\sum_{k=1}^{r-1} f(a + kh) + f(b)\right)\\
+\intertext{Where we can split the summation into even and odd, giving}
+&= \frac{h}{2}\left( f(a) + 2\sum_{k=1}^{r/2 - 1} f(a + 2kh) + 2\sum_{k=1}^{r/2-1}f(a + (2k - 1)h) + f(b) \right)
+\end{align*}
+
+\begin{align*}
+\intertext{$R_{1}:$ step size: $2h$. With it being $2h$, the number of subintervals is $r/2$}
+R_{1}: \int_{a}^{b}f(x)\text{d}x &= \frac{2h}{2}\left( f(a) + 2\sum_{k=1}^{r/2-1} f(a + 2kh) + f(b) \right)\\
+\end{align*}
+
+leading to
+
+\begin{align*}
+4R_{2} - R_{1} &= 2hf(a) + 4h\sum_{k=1}^{r/2-1} f(t_{2k-1}) + 4h\sum_{k=1}^{r/2-1}f(t_{2k}) + 2hf(b) - hf(a)\ldots \\
+                          &\ldots - 2h\sum_{k=1}^{r/2-1}f(t_{2k}) - hf(b)\\
+                          &= hf(a) + 4h\sum_{k=1}^{r/2-1}f(t_{2k-1}) + 2h\sum_{k=1}^{r/2-1} f(t_{2k}) + hf(b)
+\end{align*}
+
+Where if we divide the above by 3, it completes the proof.
+
 \item Using Romberg integration, compute $\pi$ to 8 digits (i.e. 3.xxxxxxxx) by obtaining approximations to the integral
 
 \[
@@ -448,7 +569,7 @@ yields the composite Simpson method
 
 Describe your solution approach and provide the appropriate Romberg table.
 
-Comapre the computational effort (function evaluations) of Romberg integration to that using the adaptive routine developed in Section 15.4 with {\tt tol}$= 10^{-7}$.
+Compare the computational effort (function evaluations) of Romberg integration to that using the adaptive routine developed in Section 15.4 with {\tt tol}$= 10^{-7}$.
 
 You may find for some of the rows of your Romberg table that only the first step of extrapolation improves the approximation. Explain this phenomenon.
 
