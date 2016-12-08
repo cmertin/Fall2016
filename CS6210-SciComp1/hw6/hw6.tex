@@ -163,7 +163,7 @@ We used the intermediate value theorem to find $\eta$.
 \centering
 \begin{tabular}{l r}
 \hline \hline
-$h$ & $f^{\prime}(x_{0})$\\
+$h$ & $f^{(3)}(x_{0})$\\
 \hline
 0.1 & 2.5063e-07\\
 0.01 & 2.5001e-13\\
@@ -179,6 +179,8 @@ $h$ & $f^{\prime}(x_{0})$\\
 \caption{See {\tt prob2.py}}
 \end{table}
 
+Which shows that the formula is indeed $2^{nd}$ order accurate. The best value of $h$ that would be the most accurate is the largest, $h = 0.1$, which produces a value that is closest to the true value.
+
 \item For the formual that you derived in (a), how does the roundoff error behave as a function of $h$, as $h\rightarrow 0$.
 
 {\bf Solution:}
@@ -186,7 +188,7 @@ $h$ & $f^{\prime}(x_{0})$\\
 $\widetilde{f}(x)$ is the approximation for $f(x)$:
 
 \begin{align*}
-\widetilde{f}(x) + f(x) + e_{r}(x)\\
+\widetilde{f}(x) = f(x) + e_{r}(x)\\
 \intertext{We do the same calculations on page 422}
 \abs{f^{\prime}(x_{0}) - \widetilde{D}} &= \abs{ (f^{\prime}(x_{0}) - D) + (D - \widetilde{D})} \leq \abs{ f^{\prime}(x_{0}) - D} + \abs{D - \widetilde{D}}\\
 \intertext{As we calculated in part a}
@@ -197,11 +199,13 @@ $\widetilde{f}(x)$ is the approximation for $f(x)$:
 \abs{D - \widetilde{D}} &= \frac{6\epsilon}{h^{3}}\\
 \end{align*}
 
-Puttin these two together
+Putting these two together
 
 \[
 \abs{f^{\prime}(x_{0}) - \widetilde{D}} = \abs{(f^{\prime}(x_{0}) - D) + (D - \widetilde{D})} \leq \abs{f^{\prime}(x_{0}) - D} + \abs{D - \widetilde{D}} \leq \frac{1}{16}h^{2}M + \frac{6\epsilon}{h^{3}}
 \]
+
+as $h\rightarrow 0$, the function blows up since there is a cubic $h$ in the denominator but a square term in the numerator.
 
 \item How would you go about obtaining a forth order formula for $f^{(3)}(x_{0})$ in general? (You don't have to actually derive it: just describe in one or two sentences.) How many points would this formula require?
 
